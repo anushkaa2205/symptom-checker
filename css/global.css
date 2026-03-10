@@ -1,0 +1,39 @@
+:root{
+
+/* PRIMARY BRAND */
+
+--primary-blue:#3B82F6;
+--primary-blue-hover:#2563EB;
+
+/* BACKGROUND */
+
+--page-bg:#F3F6FB;
+--card-bg:#FFFFFF;
+
+/* SIDEBAR */
+
+--sidebar-bg:#F5F7FA;
+--sidebar-hover:#E6EBF2;
+
+/* NAVBAR */
+
+--navbar-bg:#FFFFFF;
+
+/* TEXT */
+
+--text-primary:#1F2937;
+--text-secondary:#6B7280;
+
+/* BORDER */
+
+--border-light:#E5E7EB;
+
+/* CHAT BUBBLES */
+
+--user-chat:#4CAF50;
+--bot-chat:#EEF2F7;
+
+--user-text:#FFFFFF;
+--bot-text:#1F2937;
+
+}
