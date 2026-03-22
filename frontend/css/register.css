@@ -1,0 +1,129 @@
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--page-bg);
+}
+.main-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.card{
+    box-shadow: gray 0px 0px 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: var(--card-bg); 
+}
+.card h1{
+    font-size: 30px;
+    color: var(--text-primary);
+    margin-bottom: 0%;
+    padding-left: 20px;
+}
+.card p{
+    color: var(--text-primary);
+    padding-left: 20px;
+}
+.info-field{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    gap: 10px;
+    margin-top: 0%;
+}
+.info-field input{
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-primary);
+}
+.info-field input::placeholder{
+    color: var(--text-secondary);
+}
+.name-fields{
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+    margin-bottom: 10px;
+}
+.name-fields input{
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border-light);
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 0px;
+}
+.name-fields input::placeholder{
+    color: var(--text-secondary);
+}
+.submit-btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 0%;
+}
+.register-btn{
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    width: 440px;
+    border-radius: 5px;
+    padding: 15px;
+}
+.register-btn:hover{
+    background-color: var(--primary-blue-hover);
+    cursor: pointer;
+}
+.google-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    width: 440px;
+    padding: 10px;
+    border-radius: 5px;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.google-btn:hover{
+    background-color: var(--border-light);
+    cursor: pointer;
+}
+.divider {
+  display: flex;
+  width: 90%;
+  align-items: center;
+  text-align: center;
+  color: #888;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+.divider span {
+    background: var(--card-bg);
+  padding: 0 10px;
+}
+#mess{
+    color: red;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.confirm-group{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

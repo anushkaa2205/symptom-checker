@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/frontend/css/global.css">
+    <link rel="stylesheet" href="/frontend/css/login.css">
+</head>
+<body>
+    <main class="main">
+        <div class="card">
+            <h1>Welcome-Back!</h1>
+            <p>Sign in to continue</p>
+        <div class="main-content">
+        <button class="google-btn"><img src="/frontend/assets/google.png" height="20px" width="20px" alt="Google" class="google"> Sign in with Google</button>
+        <div class="divider">
+            <span>or</span>
+        </div>
+        <form action="/login" method="post" class="form">
+            <div>
+            <input type="email" id="email" name="email" required placeholder="Email:">
+            </div>
+            <div>
+            <input type="password" id="password" name="password" required placeholder="Password:">
+            </div>
+            <div>
+            <a href="/forgot-password" class="forget">Forgot Password?</a>
+            </div>
+            <div class="submit-btn">
+            <button type="submit" class="submit">Log In</button>
+            </div>
+        </form>
+        <p>Don't have an account? <a href="/frontend/pages/register.html">Sign Up</a></p>
+    </div>
+    </div>
+    </main>
+</body>
+</html>
