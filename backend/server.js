@@ -1,6 +1,18 @@
-const express = require ('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import dotenv from 'dotenv';
+import mongoose from "mongoose";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config();
 const app = express();
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
+
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/index.html'));
