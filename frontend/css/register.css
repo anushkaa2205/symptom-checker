@@ -5,6 +5,9 @@
     height: 100vh;
     background-color: var(--page-bg);
 }
+a{
+    text-decoration: none;
+}
 .main-content{
     display: flex;
     flex-direction: column;

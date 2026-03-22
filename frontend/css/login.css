@@ -12,7 +12,7 @@
     justify-content: center;
 }
 .card{
-    box-shadow: gray 0px 0px 10px;
+    box-shadow: rgba(173, 172, 172, 0.651) 0px 0px 10px;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
