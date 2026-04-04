@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-
-            // Basic validation
             if (!email || !password) {
                 alert("Please fill in both fields.");
                 return;
@@ -20,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    credentials: 'include', // important for cookies
+                    credentials: 'include', 
                     body: JSON.stringify({ email, password })
                 });
 
@@ -30,8 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(data.message || "Login failed");
                     return;
                 }
-
-                // Redirect after login
                 const redirectUrl = localStorage.getItem('redirectUrl');
 
                 if (redirectUrl) {
@@ -47,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
 
     const googleBtn = document.querySelector('.google-btn');
     if (googleBtn) {
