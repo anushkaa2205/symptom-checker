@@ -27,9 +27,6 @@ app.get('/register',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/register.html'));
 })
 
-app.get('/dashboard', protect, (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/dashboard.html'));
-});
 app.use("/api/auth", authRoutes);
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
