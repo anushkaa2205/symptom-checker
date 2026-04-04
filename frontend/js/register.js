@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(data.message || "Registration failed");
                 return;
             }
-            localStorage.setItem('token', data.token);
             window.location.href = '/dashboard';
 
         } catch (err) {

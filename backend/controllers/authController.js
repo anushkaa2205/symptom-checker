@@ -27,10 +27,17 @@ export const registerUser = async (req, res) => {
       password: hashedPassword
     });
 
-    res.status(201).json({
-      message: "User registered",
-      token: generateToken(user._id)
-    });
+    const token = generateToken(user._id);
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict"
+        });
+
+    res.json({
+        message: "User registered"
+        });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -53,11 +60,17 @@ export const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+    const token = generateToken(user._id);
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: false, 
+        sameSite: "strict"
+    });
 
     res.json({
-      message: "Login successful",
-      token: generateToken(user._id)
-    });
+        message: "Login successful"
+        });
 
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(data.message || "Login failed");
             return;
         }
-        localStorage.setItem('token', data.token);
         const redirectUrl = localStorage.getItem('redirectUrl');
 
         if (redirectUrl) {
