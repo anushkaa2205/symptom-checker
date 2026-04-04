@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
+
 dotenv.config();
 connectDB();
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,9 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/index.html'));
 })
+app.get('/dashboard', protect, (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/pages/dashboard.html'));
+});
 app.get('/login',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/login.html'));
 })

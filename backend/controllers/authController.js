@@ -30,10 +30,11 @@ export const registerUser = async (req, res) => {
     const token = generateToken(user._id);
 
     res.cookie("token", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "strict"
-        });
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000 
+});
 
     res.json({
         message: "User registered"
