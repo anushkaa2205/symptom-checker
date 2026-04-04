@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendBtn = document.getElementById('send-btn');
     
     let chatTurn = 0;
-
-    // Theme Toggle Logic
     if(themeToggleBtn){
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('theme-unique');
@@ -17,17 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Send Message Logic
     function sendMessage() {
         const text = chatInput.value.trim();
         if (text === '') return;
-
-        // 1. Add User Message
         appendMessage('user', text);
         chatInput.value = '';
-
-        // 2. Simulate AI Typing and Responding
         setTimeout(() => {
             if (chatTurn === 0) {
                 appendMessage('bot', "I understand. Do you have any other associated symptoms like fever, chills, or nausea?");
@@ -40,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 1200);
     }
-
-    // Helper: Append Message to Chat
     function appendMessage(sender, text, showButton = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
@@ -80,12 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(chatContainer){
             chatContainer.appendChild(messageDiv);
-            // Scroll to the bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
     }
 
-    // Event Listeners for sending message
     if(sendBtn){
         sendBtn.addEventListener('click', sendMessage);
     }
