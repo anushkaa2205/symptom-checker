@@ -1,15 +1,26 @@
 import jwt from "jsonwebtoken";
-export const protect = (req, res, next) => {
+import User from "../models/User.js";
+
+export const protect = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-    return res.redirect("/login");
-}
+        return res.redirect("/login");
+    }
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
+
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.redirect("/login");
+        }
+
+        req.user = user;
         next();
-    } catch {
-    return res.redirect("/login");
-}
+
+    } catch (error) {
+        return res.redirect("/login");
+    }
 };

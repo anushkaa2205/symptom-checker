@@ -44,18 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const googleBtn = document.querySelector('.google-btn');
-    if (googleBtn) {
-        googleBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.setItem('isLoggedIn', 'true');
-            const redirectUrl = localStorage.getItem('redirectUrl');
-            if (redirectUrl) {
-                localStorage.removeItem('redirectUrl');
-                window.location.href = redirectUrl;
-            } else {
-                window.location.href = '/dashboard';
-            }
-        });
-    }
 });
+
+const googleBtn = document.querySelector('.google-btn');
+
+if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+        window.location.href = "/auth/google";
+    });
+}

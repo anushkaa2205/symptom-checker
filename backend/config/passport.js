@@ -2,7 +2,10 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
+console.log("CHECK CLIENT ID:", process.env.GOOGLE_CLIENT_ID);
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -10,14 +13,16 @@ passport.use(new GoogleStrategy({
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
-        let user = await User.findOne({ email: profile.emails[0].value });
+        const email = profile.emails[0].value;
+
+        let user = await User.findOne({ email });
 
         if (!user) {
             user = await User.create({
                 Fname: profile.name.givenName,
                 Lname: profile.name.familyName,
-                email: profile.emails[0].value,
-                password: "google_oauth" // dummy
+                email,
+                password: "google_oauth"
             });
         }
 
@@ -25,7 +30,7 @@ async (accessToken, refreshToken, profile, done) => {
             expiresIn: "7d"
         });
 
-        return done(null, { user, token });
+        return done(null, { token });
 
     } catch (err) {
         return done(err, null);
