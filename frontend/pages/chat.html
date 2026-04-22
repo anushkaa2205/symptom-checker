@@ -7,18 +7,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/chat-premium.css">
 </head>
 <body>
     <header>
         <nav>
             <p>Symptom Checker</p>
             <ul class="nav-list">
-                <li><a href="/blogs">Blogs</a></li>
                 <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/about">About us</a></li>
-                <li><a href="/login">Log In</a></li>
+                <li id="auth-nav-item"><a href="/login">Log In</a></li>
+                <li>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </li>
             </ul>
         </nav>
     </header>
@@ -26,29 +30,15 @@
         <div class="sidebar">
             <button class="new-chat">+ New Assessment</button>
             <div class="recent">Recent Assessments</div>
-            <ul class="recent-chats">
-                <li> <img height="15px" width = "15px" src = "/assets/play-button-arrowhead.png"> Fever & Cough</li>
-                <li> <img height="15px" width = "15px" src = "/assets/play-button-arrowhead.png"> Headache issues</li>
-                <li> <img height="15px" width = "15px" src = "/assets/play-button-arrowhead.png"> Stomach pain</li>
-                <li> <img height="15px" width = "15px" src = "/assets/play-button-arrowhead.png"> Cold Symptoms</li>
+            <ul class="recent-chats" id="recent-chats-list">
+                <!-- Dynamically loaded history -->
             </ul>
         </div>
         <div class="main">
-            <div class="chat-header">
-                <div class="header-info">
-                    <h2>Clinical Triaging Assistant</h2>
-                    <span class="status-indicator"></span> <span class="status-text">Online</span>
-                </div>
-            </div>
-            
             <div class="chat-container" id="chat-container">
-                <div class="message bot-message">
-                    <div class="avatar bot-avatar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                    </div>
-                    <div class="message-content">
-                        Hello! I am your AI Symptom Checker. How can I assist you today? Please describe your symptoms in detail.
-                    </div>
+                <div class="empty-state" id="empty-state">
+                    <h2 id="greeting-text">Hello</h2>
+                    <p>How can I help you today?</p>
                 </div>
             </div>
 
@@ -62,6 +52,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/js/chat.js"></script>
 </body>
 </html>

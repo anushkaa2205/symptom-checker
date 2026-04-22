@@ -77,3 +77,19 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getMe = async (req, res) => {
+    if (req.user) {
+        res.json({ name: req.user.Fname || req.user.name || 'User' });
+    } else {
+        res.status(401).json({ message: "Not logged in" });
+    }
+};
+
+export const logoutUser = (req, res) => {
+    res.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+    res.json({ message: "Logged out" });
+};
