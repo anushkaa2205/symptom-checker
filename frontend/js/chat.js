@@ -3,34 +3,138 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-container');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
+    const recentChatsList = document.getElementById('recent-chats-list');
+    const newChatBtn = document.querySelector('.new-chat');
     
-    let chatTurn = 0;
+    let chatHistory = [];
+    let currentChatId = null;
+    let userName = 'there';
+    
+    // Set greeting
+    const greetingText = document.getElementById('greeting-text');
+    let emptyStateHTML = `
+        <div class="empty-state" id="empty-state">
+            <h2 id="greeting-text">Hello, there!</h2>
+            <p>How can I help you today?</p>
+        </div>
+    `;
+
+    async function initGreeting() {
+        try {
+            const res = await fetch('/api/auth/me');
+            if (res.ok) {
+                const data = await res.json();
+                userName = data.name;
+                
+                const authNavItem = document.getElementById('auth-nav-item');
+                if (authNavItem) {
+                    authNavItem.innerHTML = '<a href="#" id="logout-btn">Log Out</a>';
+                    document.getElementById('logout-btn').addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await fetch('/api/auth/logout', { method: 'POST' });
+                        window.location.reload();
+                    });
+                }
+            }
+        } catch (e) {
+            console.error("Could not fetch user name", e);
+        }
+        
+        const displayName = userName === 'there' ? 'there!' : `${userName}!`;
+        if (greetingText) {
+            greetingText.textContent = `Hello, ${displayName}`;
+        }
+        emptyStateHTML = `
+            <div class="empty-state" id="empty-state">
+                <h2 id="greeting-text">Hello, ${displayName}</h2>
+                <p>How can I help you today?</p>
+            </div>
+        `;
+    }
+    
+    initGreeting();
+
     if(themeToggleBtn){
         themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('theme-unique');
-            if (document.body.classList.contains('theme-unique')) {
-                themeToggleBtn.innerHTML = '✨ Switch to Familiar';
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
             } else {
-                themeToggleBtn.innerHTML = '✨ Try Unique Style';
+                document.documentElement.setAttribute('data-theme', 'dark');
             }
         });
     }
-    function sendMessage() {
+    
+    async function sendMessage() {
         const text = chatInput.value.trim();
         if (text === '') return;
+        
+        const emptyState = document.getElementById('empty-state');
+        if (emptyState) {
+            emptyState.remove();
+        }
+        
         appendMessage('user', text);
         chatInput.value = '';
-        setTimeout(() => {
-            if (chatTurn === 0) {
-                appendMessage('bot', "I understand. Do you have any other associated symptoms like fever, chills, or nausea?");
-                chatTurn++;
-            } else if (chatTurn === 1) {
-                appendMessage('bot', "Thank you for the additional details. Based on your symptoms, it seems to be a minor issue but could require medical attention if it persists. A full preliminary analysis has been generated for you.", true);
-                chatTurn++;
-            } else {
-                appendMessage('bot', "You have already generated your report. Please review it on the dashboard or start a new chat session.");
+        
+        if (sendBtn) sendBtn.disabled = true;
+        if (chatInput) chatInput.disabled = true;
+
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot-message';
+        typingDiv.id = 'typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="avatar bot-avatar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="message-content">
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        `;
+        if (chatContainer) {
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: text, history: chatHistory })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => null);
+                throw new Error(errData?.error || 'Failed to get response');
             }
-        }, 1200);
+
+            const data = await response.json();
+            
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+            
+            chatHistory.push({ sender: 'user', text: text });
+            chatHistory.push({ sender: 'bot', text: data.reply });
+            
+            appendMessage('bot', data.reply, false);
+            
+            // Auto-save the chat
+            saveCurrentChat();
+            
+        } catch (error) {
+            console.error(error);
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+            appendMessage('bot', error.message || 'Sorry, there was an error processing your request. Please try again.');
+        } finally {
+            if (sendBtn) sendBtn.disabled = false;
+            if (chatInput) chatInput.disabled = false;
+            if (chatInput) chatInput.focus();
+        }
     }
     function appendMessage(sender, text, showButton = false) {
         const messageDiv = document.createElement('div');
@@ -41,11 +145,51 @@ document.addEventListener('DOMContentLoaded', () => {
             avatarDiv.className = 'avatar bot-avatar';
             avatarDiv.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>';
             messageDiv.appendChild(avatarDiv);
+        } else if (sender === 'user') {
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'avatar user-avatar';
+            avatarDiv.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+            messageDiv.appendChild(avatarDiv);
         }
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        contentDiv.textContent = text;
+        
+        if (sender === 'bot') {
+            if (text.startsWith('VERDICT|')) {
+                // Parse verdict string
+                const parts = text.split('|');
+                const urgency = parts[1] ? parts[1].trim().toLowerCase() : 'green';
+                const issue = parts[2] || 'Assessment Complete';
+                const solutionRaw = parts[3] || 'Consult a medical professional for more details.';
+                
+                const solutionItems = solutionRaw.split('~').filter(item => item.trim() !== '');
+                let solutionHTML = '<ul class="verdict-list" style="list-style-type: disc; margin-left: 20px; margin-top: 6px; margin-bottom: 0;">';
+                solutionItems.forEach(item => {
+                    solutionHTML += `<li style="margin-bottom: 4px;">${item.trim()}</li>`;
+                });
+                solutionHTML += '</ul>';
+                
+                messageDiv.classList.add('verdict-bubble', `verdict-${urgency}`);
+                
+                contentDiv.innerHTML = `
+                    <div class="verdict-header">
+                        <span class="verdict-icon"></span>
+                        <span class="verdict-title">Triage Verdict</span>
+                    </div>
+                    <div class="verdict-section" style="margin-bottom: 12px;">
+                        <strong>Issue:</strong> <span>${issue}</span>
+                    </div>
+                    <div class="verdict-section">
+                        <strong>Action Plan:</strong> <div>${solutionHTML}</div>
+                    </div>
+                `;
+            } else {
+                contentDiv.innerHTML = typeof marked !== 'undefined' ? marked.parse(text) : text;
+            }
+        } else {
+            contentDiv.textContent = text;
+        }
 
         if (showButton) {
             const btn = document.createElement('button');
@@ -74,6 +218,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function saveCurrentChat() {
+        try {
+            const response = await fetch('/api/chat/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chatId: currentChatId, history: chatHistory })
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (!currentChatId && data.chatId) {
+                    currentChatId = data.chatId;
+                    fetchRecentChats(); // refresh sidebar to show new chat
+                }
+            }
+        } catch (err) {
+            console.error("Failed to auto-save chat", err);
+        }
+    }
+
+    async function fetchRecentChats() {
+        if (!recentChatsList) return;
+        try {
+            const response = await fetch('/api/chat/history');
+            if (response.ok) {
+                const chats = await response.json();
+                recentChatsList.innerHTML = '';
+                chats.forEach(chat => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4l2-9 5 18 3-9h6"/></svg> ${chat.title || 'Assessment'}`;
+                    li.addEventListener('click', () => loadChat(chat._id));
+                    recentChatsList.appendChild(li);
+                });
+            }
+        } catch (err) {
+            console.error("Failed to fetch history", err);
+        }
+    }
+
+    async function loadChat(chatId) {
+        try {
+            const response = await fetch(`/api/chat/${chatId}`);
+            if (response.ok) {
+                const chat = await response.json();
+                currentChatId = chat._id;
+                chatHistory = chat.messages || [];
+                
+                // Clear UI and render history
+                if (chatContainer) {
+                    chatContainer.innerHTML = '';
+                    chatHistory.forEach(msg => {
+                        appendMessage(msg.sender, msg.text, false);
+                    });
+                }
+            }
+        } catch (err) {
+            console.error("Failed to load chat", err);
+        }
+    }
+
+    if (newChatBtn) {
+        newChatBtn.addEventListener('click', () => {
+            currentChatId = null;
+            chatHistory = [];
+            if (chatContainer) {
+                chatContainer.innerHTML = emptyStateHTML;
+            }
+        });
+    }
+
     if(sendBtn){
         sendBtn.addEventListener('click', sendMessage);
     }
@@ -84,4 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Load initial history
+    fetchRecentChats();
 });

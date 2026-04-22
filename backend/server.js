@@ -8,6 +8,7 @@ import passport from "passport";
 import "./config/passport.js";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
 
@@ -19,12 +20,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "../frontend")));
-
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/index.html'));
 })
 app.get('/dashboard', protect, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/dashboard.html'));
+});
+app.get('/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/pages/chat.html'));
 });
 app.get('/login',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/login.html'));
@@ -51,6 +54,7 @@ app.get("/auth/google/callback",
     }
 );
 app.use("/api/auth", authRoutes);
+app.use("/api/chat", chatRoutes);
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });

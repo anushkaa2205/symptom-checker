@@ -5,10 +5,14 @@ const chatSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
+  title: {
+    type: String,
+    default: "New Assessment"
+  },
   messages: [
     {
-      role: String,
-      content: String
+      sender: String,
+      text: String
     }
   ]
 }, { timestamps: true });
