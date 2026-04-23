@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
             const confirmPassword = document.getElementById("confirmPassword").value.trim();
+            const googleBtn = document.getElementById("google-register-btn");
+
             if (!Fname || !Lname || !email || !password) {
                 alert("Please fill all fields");
                 return;
@@ -60,3 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+const googleBtn = document.querySelector('.google-btn');
+
+if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+        window.location.href = "/auth/google";
+    });
+}
