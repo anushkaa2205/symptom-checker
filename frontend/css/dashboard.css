@@ -1,0 +1,467 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #f8fafc;
+    --bg-glass: rgba(255, 255, 255, 0.6);
+    --border-glass: rgba(255, 255, 255, 0.5);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --card-bg: #ffffff;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --nav-bg: rgba(255, 255, 255, 0.8);
+    --scroll-thumb: #cbd5e1;
+    --btn-glass: rgba(255, 255, 255, 0.8);
+    --btn-glass-hover: #ffffff;
+    
+    /* Urgency Colors */
+    --urgency-green: #22c55e;
+    --urgency-green-bg: #dcfce7;
+    --urgency-yellow: #eab308;
+    --urgency-yellow-bg: #fef9c3;
+    --urgency-red: #ef4444;
+    --urgency-red-bg: #fee2e2;
+}
+
+[data-theme="dark"] {
+    --bg-main: #020617;
+    --bg-glass: rgba(15, 23, 42, 0.7);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --card-bg: #1e293b;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
+    --nav-bg: rgba(2, 6, 23, 0.8);
+    --scroll-thumb: #334155;
+    --btn-glass: rgba(30, 41, 59, 0.8);
+    --btn-glass-hover: #334155;
+    
+    /* Urgency Colors Dark */
+    --urgency-green-bg: rgba(22, 101, 52, 0.3);
+    --urgency-green: #4ade80;
+    --urgency-yellow-bg: rgba(133, 77, 14, 0.3);
+    --urgency-yellow: #facc15;
+    --urgency-red-bg: rgba(153, 27, 27, 0.3);
+    --urgency-red: #f87171;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    margin: 0;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 10px; }
+
+nav {
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0 30px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-glass);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+nav p {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+.nav-list {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin: 0;
+}
+.nav-list li a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.nav-list li a:hover, .nav-list li a.active {
+    color: var(--primary);
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+.theme-toggle:hover {
+    background: var(--bg-glass);
+}
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.glass-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.4s ease;
+}
+
+/* Auth Guard / Login Prompt */
+.login-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 60vh;
+    animation: fadeIn 0.5s ease forwards;
+}
+.login-prompt h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+.login-prompt p {
+    color: var(--text-muted);
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+.login-prompt .btn-primary {
+    padding: 14px 28px;
+    font-size: 16px;
+    border-radius: 12px;
+}
+
+/* Dashboard Grid */
+.dashboard-content {
+    display: none; /* hidden by default until loaded */
+    flex-direction: column;
+    gap: 30px;
+    animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Welcome Banner */
+.welcome-banner {
+    background: linear-gradient(135deg, #2563eb, #8b5cf6);
+    color: white;
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+.welcome-banner h1 {
+    font-size: 36px;
+    margin: 0 0 10px 0;
+    z-index: 2;
+    position: relative;
+}
+.welcome-banner p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin: 0 0 24px 0;
+    max-width: 600px;
+    z-index: 2;
+    position: relative;
+}
+.btn-glass {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    z-index: 2;
+    position: relative;
+    font-family: 'Outfit', sans-serif;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Stat Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+.stat-card {
+    display: flex;
+    flex-direction: column;
+}
+.stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-glass);
+    color: var(--primary);
+}
+.stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.stat-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Two-column layout */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+@media (max-width: 900px) {
+    .main-grid { grid-template-columns: 1fr; }
+}
+
+/* Urgency Breakdown Bar */
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.urgency-bar-container {
+    height: 12px;
+    border-radius: 6px;
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background: var(--bg-glass);
+}
+.urgency-segment {
+    height: 100%;
+    transition: width 1s ease;
+}
+.urgency-segment.green { background-color: var(--urgency-green); }
+.urgency-segment.yellow { background-color: var(--urgency-yellow); }
+.urgency-segment.red { background-color: var(--urgency-red); }
+
+.urgency-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 500;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.legend-dot.green { background-color: var(--urgency-green); }
+.legend-dot.yellow { background-color: var(--urgency-yellow); }
+.legend-dot.red { background-color: var(--urgency-red); }
+
+/* Recent Diagnoses List */
+.diagnoses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.diagnosis-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.diagnosis-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.diagnosis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.diagnosis-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.urgency-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.urgency-badge.green { background: var(--urgency-green-bg); color: var(--urgency-green); }
+.urgency-badge.yellow { background: var(--urgency-yellow-bg); color: var(--urgency-yellow); }
+.urgency-badge.red { background: var(--urgency-red-bg); color: var(--urgency-red); }
+
+.diagnosis-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+.diagnosis-date {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+.diagnosis-symptoms {
+    font-size: 15px;
+    color: var(--text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+}
+.diagnosis-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-action.view {
+    background: var(--bg-glass);
+    color: var(--primary);
+    border: 1px solid var(--border-glass);
+}
+.btn-action.view:hover {
+    background: var(--sidebar-hover);
+}
+.btn-action.download {
+    background: var(--primary);
+    color: white;
+}
+.btn-action.download:hover {
+    background: var(--primary-hover);
+}
+
+.empty-list-msg {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px;
+    font-size: 16px;
+}
+
+/* Background Gradients (Optional aesthetic touches) */
+.bg-glow-blue {
+    position: fixed;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    filter: blur(150px);
+    border-radius: 50%;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+.bg-glow-purple {
+    position: fixed;
+    bottom: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: #8b5cf6;
+    filter: blur(150px);
+    border-radius: 50%;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Login/Logout Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), #2563eb);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+}

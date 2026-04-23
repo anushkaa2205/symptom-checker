@@ -162,13 +162,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 const urgency = parts[1] ? parts[1].trim().toLowerCase() : 'green';
                 const issue = parts[2] || 'Assessment Complete';
                 const solutionRaw = parts[3] || 'Consult a medical professional for more details.';
+                const medicinesRaw = parts[4] || 'None';
+                const symptomsRaw = parts[5] || 'None';
                 
                 const solutionItems = solutionRaw.split('~').filter(item => item.trim() !== '');
+                const medicineItems = medicinesRaw.split('~').filter(item => item.trim() !== '' && item.trim().toLowerCase() !== 'none');
+                const symptomItems = symptomsRaw.split('~').filter(item => item.trim() !== '' && item.trim().toLowerCase() !== 'none');
+                
                 let solutionHTML = '<ul class="verdict-list" style="list-style-type: disc; margin-left: 20px; margin-top: 6px; margin-bottom: 0;">';
                 solutionItems.forEach(item => {
                     solutionHTML += `<li style="margin-bottom: 4px;">${item.trim()}</li>`;
                 });
                 solutionHTML += '</ul>';
+
+                let medicineHTML = '';
+                if (medicineItems.length > 0) {
+                    medicineHTML = '<div class="verdict-section" style="margin-top: 12px;"><strong>Medicines & Treatments:</strong><ul class="verdict-list" style="list-style-type: disc; margin-left: 20px; margin-top: 6px; margin-bottom: 0;">';
+                    medicineItems.forEach(item => {
+                        medicineHTML += `<li style="margin-bottom: 4px;">${item.trim()}</li>`;
+                    });
+                    medicineHTML += '</ul></div>';
+                }
                 
                 messageDiv.classList.add('verdict-bubble', `verdict-${urgency}`);
                 
@@ -183,7 +197,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="verdict-section">
                         <strong>Action Plan:</strong> <div>${solutionHTML}</div>
                     </div>
+                    ${medicineHTML}
                 `;
+
+                let downloadPdfBtn = document.createElement('button');
+                downloadPdfBtn.innerHTML = `<svg style="display:inline; width:16px; height:16px; margin-right:6px; vertical-align:text-bottom;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download PDF Report`;
+                downloadPdfBtn.className = "btn-secondary";
+                downloadPdfBtn.style.marginTop = "15px";
+                downloadPdfBtn.style.display = "inline-flex";
+                downloadPdfBtn.style.alignItems = "center";
+                downloadPdfBtn.style.fontSize = "14px";
+                downloadPdfBtn.style.padding = "8px 16px";
+                downloadPdfBtn.style.backgroundColor = "#4f46e5";
+                downloadPdfBtn.style.color = "white";
+                downloadPdfBtn.style.border = "none";
+                downloadPdfBtn.style.borderRadius = "6px";
+                downloadPdfBtn.style.cursor = "pointer";
+                downloadPdfBtn.style.transition = "all 0.2s ease";
+                downloadPdfBtn.onmouseover = () => { downloadPdfBtn.style.opacity = "0.9"; };
+                downloadPdfBtn.onmouseout = () => { downloadPdfBtn.style.opacity = "1"; };
+                
+                downloadPdfBtn.addEventListener('click', () => {
+                    if (typeof generatePDFReport === 'function') {
+                        generatePDFReport(issue, solutionItems, medicineItems, symptomItems);
+                    }
+                });
+                
+                contentDiv.appendChild(downloadPdfBtn);
             } else {
                 contentDiv.innerHTML = typeof marked !== 'undefined' ? marked.parse(text) : text;
             }
@@ -300,4 +340,100 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load initial history
     fetchRecentChats();
+
+    function generatePDFReport(issue, solutionItems, medicineItems, symptomItems) {
+        // Collect user symptoms from AI summary (if available), otherwise fallback to raw chat history
+        let userSymptomsList = '';
+        if (symptomItems && symptomItems.length > 0) {
+            symptomItems.forEach(item => {
+                userSymptomsList += `<li style="margin-bottom: 6px;">${item.trim()}</li>`;
+            });
+        } else {
+            userSymptomsList = chatHistory
+                .filter(msg => msg.sender === 'user')
+                .map(msg => `<li style="margin-bottom: 6px;">${msg.text}</li>`)
+                .join('');
+        }
+
+        const dateStr = new Date().toLocaleString();
+
+        let solutionsHTML = '<ul style="padding-left: 20px; margin-top: 10px;">';
+        solutionItems.forEach(item => {
+            solutionsHTML += `<li style="margin-bottom: 8px;">${item.trim()}</li>`;
+        });
+        solutionsHTML += '</ul>';
+
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const isDark = currentTheme === 'dark';
+
+        const bgColor = isDark ? '#111827' : '#ffffff';
+        const textColor = isDark ? '#f3f4f6' : '#000000';
+        const mutedTextColor = isDark ? '#9ca3af' : '#555555';
+        const borderColor = isDark ? '#374151' : '#cccccc';
+
+        let medicinesSection = '';
+        if (medicineItems && medicineItems.length > 0) {
+            let medicinesHTML = '<ul style="padding-left: 20px; margin-top: 10px;">';
+            medicineItems.forEach(item => {
+                medicinesHTML += `<li style="margin-bottom: 8px;">${item.trim()}</li>`;
+            });
+            medicinesHTML += '</ul>';
+            
+            medicinesSection = `
+            <div style="margin-bottom: 20px;">
+                <h2 style="color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 4px; margin-top: 0; font-size: 14px;">4. Recommended Medicines / Treatments</h2>
+                <div style="line-height: 1.4; color: ${textColor};">${medicinesHTML}</div>
+            </div>`;
+        }
+
+        // Create a hidden div for the PDF content
+        const reportDiv = document.createElement('div');
+        reportDiv.style.fontFamily = 'Georgia, "Times New Roman", serif';
+        reportDiv.style.fontSize = '11px';
+        reportDiv.innerHTML = `
+            <div style="background-color: ${bgColor}; padding: 40px; min-height: 100vh;">
+                <div style="text-align: center; border-bottom: 2px solid ${textColor}; padding-bottom: 12px; margin-bottom: 20px;">
+                    <h1 style="color: ${textColor}; margin: 0; font-size: 20px; text-transform: uppercase;">Medical Triage Report</h1>
+                    <p style="color: ${mutedTextColor}; margin-top: 6px; font-size: 11px;">Date Generated: ${dateStr}</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h2 style="color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 4px; margin-top: 0; font-size: 14px;">1. Reported Symptoms</h2>
+                    <ul style="padding-left: 15px; margin-top: 6px; line-height: 1.4; color: ${textColor};">
+                        ${userSymptomsList || '<li>No symptoms explicitly provided in this session.</li>'}
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h2 style="color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 4px; margin-top: 0; font-size: 14px;">2. AI Triage Verdict</h2>
+                    <p style="line-height: 1.4; font-weight: bold; margin-bottom: 0; color: ${textColor};">${issue}</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h2 style="color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 4px; margin-top: 0; font-size: 14px;">3. Recommended Action Plan & Solutions</h2>
+                    <div style="line-height: 1.4; color: ${textColor};">${solutionsHTML}</div>
+                </div>
+                
+                ${medicinesSection}
+                
+                <div style="margin-top: 50px; padding-top: 15px; border-top: 1px solid ${borderColor}; font-size: 10px; color: ${mutedTextColor}; text-align: justify; line-height: 1.4;">
+                    <p><strong>Disclaimer:</strong> This report is generated by an AI triage system and is for informational purposes only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of emergency, immediately contact local emergency services.</p>
+                </div>
+            </div>
+        `;
+
+        const opt = {
+            margin:       0.75,
+            filename:     'Medical_Triage_Report.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        if (typeof html2pdf !== 'undefined') {
+            html2pdf().set(opt).from(reportDiv).save();
+        } else {
+            alert('PDF generation library is not loaded. Please try again later.');
+        }
+    }
 });
