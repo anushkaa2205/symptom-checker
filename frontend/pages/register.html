@@ -3,45 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register - Symptom Checker</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Base premium styles (variables, navbar, glows) -->
+    <link rel="stylesheet" href="/css/chat-premium.css">
+    <!-- Auth specific styles -->
+    <link rel="stylesheet" href="/css/auth-premium.css">
     <script src="/js/register.js"></script>
-    <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
-    <main class="main">
-        <div class="card">
+    <!-- Background Glows -->
+    <div class="bg-glow-blue"></div>
+    <div class="bg-glow-purple"></div>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <p>Symptom Checker</p>
+        <ul class="nav-list">
+            <li><a href="/">Home</a></li>
+            <li><a href="/chat">Assessment</a></li>
+            <li>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Auth Area -->
+    <main class="auth-main">
+        <div class="auth-card" style="max-width: 500px;">
             <h1>Create an Account</h1>
-            <p>Get started with an account on <a href="#" style="text-decoration: none;">SymptomChecker</a></p>
-        <div class="main-content">
-            <button type="button" class="google-btn"><img src="/assets/google.png" height="20px" width="20px" alt="Google" class="google"> Sign up with Google</button>
-            <div class="divider">
-                <span>or</span>
-            </div>
-            <form action="/register" method="post" class="form">
-                <div class="name-fields">
-                    <input type="text" id="Fname" name="Fname" required placeholder="First Name:">
-                    <input type="text" id="Lname" name="Lname" required placeholder="Last Name:">
-                </div>
-                <div class="info-field">
-                    <input type="email" id="email" name="email" required placeholder="Email:">
-                    <input type="password" id="password" name="password" required placeholder="Password:">
-                    <div class="confirm-group">
-                    <input type="password" id="confirmPassword" name="confirmPassword"
-                    placeholder="Confirm Password:" onkeyup="checkPassword()" required>
-                    <span id="mess"></span>
+            <p>Get started with your personal health dashboard</p>
+            
+            <button type="button" class="google-btn">
+                <img src="/assets/google.png" alt="Google"> 
+                Sign up with Google
+            </button>
+            
+            <div class="auth-divider">or register with email</div>
+            
+            <form action="/register" method="post" class="auth-form">
+                <div class="name-row">
+                    <div class="input-group">
+                        <input type="text" id="Fname" name="Fname" class="auth-input" required placeholder="First Name">
                     </div>
-                    <label for="check">
+                    <div class="input-group">
+                        <input type="text" id="Lname" name="Lname" class="auth-input" required placeholder="Last Name">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <input type="email" id="email" name="email" class="auth-input" required placeholder="Email Address">
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="password" name="password" class="auth-input" required placeholder="Password">
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="auth-input" placeholder="Confirm Password" onkeyup="checkPassword()" required>
+                    <span id="mess" style="font-size: 0.85rem; margin-top: 4px; margin-left: 8px;"></span>
+                </div>
+                
+                <div class="checkbox-group">
                     <input type="checkbox" id="check" name="check" required>
-                    By registering you agree with our <a href="/terms" target="_blank">Terms & Conditions</a></label>
+                    <label for="check">By registering you agree with our <a href="/terms" target="_blank">Terms & Conditions</a></label>
                 </div>
-                <div class="submit-btn">
-                    <button type="submit" class="register-btn">Create Account</button>
-                </div>
+                
+                <button type="submit" class="auth-btn" style="margin-top: 1rem;">Create Account</button>
             </form>
-            <p class="p">Already have an account? <a href="/login">Log In</a></p>
-        </div>
+            
+            <div class="auth-footer">
+                Already have an account? <a href="/login">Log In</a>
+            </div>
         </div>
     </main>
+
+    <!-- Basic Theme Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    if (currentTheme === 'dark') {
+                        document.documentElement.removeAttribute('data-theme');
+                    } else {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

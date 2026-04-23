@@ -10,6 +10,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import newsRoutes from "./routes/newsRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
 
@@ -36,6 +37,9 @@ app.get('/login',(req,res)=>{
 app.get('/register',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/register.html'));
 })
+app.get('/blogs', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/pages/blogs.html'));
+});
 app.get("/auth/google",
     passport.authenticate("google", { scope: ["profile", "email"] })
 );
@@ -57,6 +61,7 @@ app.get("/auth/google/callback",
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/news", newsRoutes);
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });

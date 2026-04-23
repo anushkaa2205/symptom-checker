@@ -17,6 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2 id="greeting-text">Hello, there!</h2>
             <p>How can I help you today?</p>
         </div>
+        <div class="message bot-message" style="opacity: 1; margin-top: 2rem; align-self: flex-start; max-width: 80%;">
+            <div class="avatar bot-avatar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="message-content">
+                <p>Please enter your symptoms below so I can begin your assessment.</p>
+            </div>
+        </div>
     `;
 
     async function initGreeting() {
@@ -48,6 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="empty-state" id="empty-state">
                 <h2 id="greeting-text">Hello, ${displayName}</h2>
                 <p>How can I help you today?</p>
+            </div>
+            <div class="message bot-message" style="opacity: 1; margin-top: 2rem; align-self: flex-start; max-width: 80%;">
+                <div class="avatar bot-avatar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="message-content">
+                    <p>Please enter your symptoms below so I can begin your assessment.</p>
+                </div>
             </div>
         `;
     }
@@ -143,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sender === 'bot') {
             const avatarDiv = document.createElement('div');
             avatarDiv.className = 'avatar bot-avatar';
-            avatarDiv.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>';
+            avatarDiv.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
             messageDiv.appendChild(avatarDiv);
         } else if (sender === 'user') {
             const avatarDiv = document.createElement('div');

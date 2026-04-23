@@ -40,11 +40,19 @@
                     <h2 id="greeting-text">Hello</h2>
                     <p>How can I help you today?</p>
                 </div>
+                <div class="message bot-message" style="opacity: 1; margin-top: 2rem; align-self: flex-start; max-width: 80%;">
+                    <div class="avatar bot-avatar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <div class="message-content">
+                        <p>Please enter your symptoms below so I can begin your assessment.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="chat-input-area">
                 <div class="input-wrapper">
-                    <input type="text" id="chat-input" placeholder="Type your symptoms here..." autocomplete="off">
+                    <input type="text" id="chat-input" placeholder="e.g. I have had a sharp pain in my lower back since yesterday..." autocomplete="off">
                     <button id="send-btn" class="send-btn" aria-label="Send message">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
