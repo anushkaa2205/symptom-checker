@@ -47,12 +47,16 @@ app.get("/auth/google/callback",
             httpOnly: true,
             sameSite: "strict",
             secure: false,
-            maxAge: 60*1000
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         res.redirect("/dashboard");
     }
 );
+app.post("/logout", (req, res) => {
+    res.clearCookie("token");
+    res.json({ message: "Logged out successfully" });
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.listen(3000, () => {
