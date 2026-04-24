@@ -4,8 +4,6 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-
-console.log("CHECK CLIENT ID:", process.env.GOOGLE_CLIENT_ID);
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -19,10 +17,10 @@ async (accessToken, refreshToken, profile, done) => {
 
         if (!user) {
             user = await User.create({
-                Fname: profile.name.givenName,
-                Lname: profile.name.familyName,
-                email,
-                password: "google_oauth"
+            Fname: profile.name.givenName,
+            Lname: profile.name.familyName,
+            email,
+            googleId: profile.id
             });
         }
 

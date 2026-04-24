@@ -12,10 +12,32 @@ export const registerUser = async (req, res) => {
   const { Fname, Lname, email, password } = req.body;
 
   try {
+    if (!Fname || !Lname || !email || !password) {
+      return res.status(400).json({
+        message: "Please fill all fields"
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Invalid email format"
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters"
+      });
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({
+        message: "User already exists"
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,7 +53,7 @@ export const registerUser = async (req, res) => {
 
     res.cookie("token", token, {
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000
 });
@@ -64,10 +86,11 @@ export const loginUser = async (req, res) => {
     const token = generateToken(user._id);
 
     res.cookie("token", token, {
-        httpOnly: true,
-        secure: false, 
-        sameSite: "strict"
-    });
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+});
 
     res.json({
         message: "Login successful"

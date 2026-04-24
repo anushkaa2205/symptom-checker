@@ -3,7 +3,6 @@ import path from 'path';
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
-console.log("ENV CHECK:", process.env.GOOGLE_CLIENT_ID);
 import passport from "passport";
 import "./config/passport.js";
 import connectDB from "./config/db.js";
@@ -13,11 +12,26 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import newsRoutes from "./routes/newsRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
-
+import rateLimit from "express-rate-limit";
 connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 mins
+  max: 10,
+  message: {
+    error: "Too many auth attempts. Please try again later."
+  }
+});
+
+const chatLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  message: {
+    error: "Too many chat requests. Calm down and try again later."
+  }
+});
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -25,10 +39,10 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/index.html'));
 })
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', protect, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/dashboard.html'));
 });
-app.get('/chat', (req, res) => {
+app.get('/chat', protect, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/chat.html'));
 });
 app.get('/login',(req,res)=>{
@@ -39,7 +53,7 @@ app.get('/register',(req,res)=>{
 })
 app.get('/blogs', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/blogs.html'));
-});
+}); 
 app.get("/auth/google",
     passport.authenticate("google", { scope: ["profile", "email"] })
 );
@@ -51,7 +65,7 @@ app.get("/auth/google/callback",
         res.cookie("token", token, {
             httpOnly: true,
             sameSite: "strict",
-            secure: false,
+            secure: process.env.NODE_ENV === "production",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
@@ -62,8 +76,8 @@ app.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out successfully" });
 });
-app.use("/api/auth", authRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/chat", chatLimiter, chatRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/news", newsRoutes);
 app.listen(3000, () => {
