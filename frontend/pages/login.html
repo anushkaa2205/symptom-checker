@@ -3,88 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In - Symptom Checker</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Base premium styles (variables, navbar, glows) -->
-    <link rel="stylesheet" href="/css/chat-premium.css">
-    <!-- Auth specific styles -->
-    <link rel="stylesheet" href="/css/auth-premium.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <script defer src="/js/login.js"></script>
 </head>
 <body>
-    <!-- Background Glows -->
-    <div class="bg-glow-blue"></div>
-    <div class="bg-glow-purple"></div>
-
-    <!-- Navigation Bar -->
-    <nav>
-        <p>Symptom Checker</p>
-        <ul class="nav-list">
-            <li><a href="/">Home</a></li>
-            <li><a href="/chat">Assessment</a></li>
-            <li>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main Auth Area -->
-    <main class="auth-main">
-        <div class="auth-card">
-            <h1>Welcome Back!</h1>
-            <p>Sign in to continue to your dashboard</p>
-            
-            <button type="button" class="google-btn">
-                <img src="/assets/google.png" alt="Google"> 
-                Sign in with Google
-            </button>
-            
-            <div class="auth-divider">or log in with email</div>
-            
-            <form action="/login" method="post" class="auth-form">
-                <div class="input-group">
-                    <input type="email" id="email" name="email" class="auth-input" required placeholder="Email Address">
-                </div>
-                
-                <div class="input-group">
-                    <input type="password" id="password" name="password" class="auth-input" required placeholder="Password">
-                </div>
-                
-                <div class="forgot-password">
-                    <a href="/forgot-password">Forgot Password?</a>
-                </div>
-                
-                <button type="submit" class="auth-btn">Log In</button>
-            </form>
-            
-            <div class="auth-footer">
-                Don't have an account? <a href="/register">Sign Up</a>
-            </div>
+    <main class="main">
+        <div class="card">
+            <h1>Welcome-Back!</h1>
+            <p>Sign in to continue</p>
+        <div class="main-content">
+        <button type="button" class="google-btn"><img src="/assets/google.png" height="20px" width="20px" alt="Google" class="google"> Sign in with Google</button>
+        <div class="divider">
+            <span>or</span>
         </div>
+        <form action="/login" method="post" class="form">
+            <div>
+            <input type="email" id="email" name="email" required placeholder="Email:">
+            </div>
+            <div>
+            <input type="password" id="password" name="password" required placeholder="Password:">
+            </div>
+            <div>
+            <a href="/forgot-password" class="forget">Forgot Password?</a>
+            </div>
+            <div class="submit-btn">
+            <button type="submit" class="submit">Log In</button>
+            </div>
+        </form>
+        <p>Don't have an account? <a href="/register">Sign Up</a></p>
+    </div>
+    </div>
     </main>
-
-    <!-- Basic Theme Toggle Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            if (themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', () => {
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    if (currentTheme === 'dark') {
-                        document.documentElement.removeAttribute('data-theme');
-                    } else {
-                        document.documentElement.setAttribute('data-theme', 'dark');
-                    }
-                });
-            }
-        });
-    </script>
-    <script src="/js/login.js"></script>
 </body>
 </html>

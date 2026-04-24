@@ -14,7 +14,7 @@ function checkPassword(){
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.auth-form');
+    const form = document.querySelector('.form');
 
     if (form) {
         form.addEventListener('submit', async (e) => {

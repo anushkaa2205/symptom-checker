@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
     httpOnly: true,
     secure: false,
     sameSite: "strict",
-    maxAge: 60 * 1000 
+    maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
     res.json({

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.querySelector('.auth-form');
+    const loginForm = document.querySelector('.form');
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
