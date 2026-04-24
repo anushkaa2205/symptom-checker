@@ -1,282 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Symptom Checker - Modern AI Triage</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Medora | Premium AI Healthcare</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            900: '#134e4a',
-                        },
-                        brand: {
-                            light: '#f8fafc',
-                            purple: '#8b5cf6',
-                            blue: '#3b82f6'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .gradient-text {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-bg {
-            background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-float-slow {
-            animation: floatSlow 35s infinite linear;
-        }
-        .animate-float-medical {
-            animation: floatMedical 20s infinite ease-in-out alternate;
-        }
-        @keyframes floatSlow {
-            from { transform: translateX(-50%) translateY(0); }
-            to { transform: translateX(100vw) translateY(0); }
-        }
-        @keyframes floatMedical {
-            0% { transform: translate(0, 0) rotate(-5deg) scale(1); }
-            50% { transform: translate(8vw, -8vh) rotate(5deg) scale(1.1); }
-            100% { transform: translate(-4vw, 4vh) rotate(-10deg) scale(0.9); }
-        }
-    </style>
+    <script src="js/tailwind-config.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/index.css">
 </head>
-<body class="bg-brand-light text-slate-800 antialiased overflow-x-hidden">
 
-    <!-- Navigation -->
-    <header class="fixed w-full top-0 z-50 glass-card transition-all duration-300 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center cursor-pointer">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </div>
-                    <span class="ml-3 font-bold text-xl tracking-tight text-slate-900">Symptom<span class="text-blue-500"> Checker</span></span>
+<body class="bg-brandLight text-gray-900 transition-colors duration-500 dark:bg-brandDark dark:text-white overflow-x-hidden font-sans antialiased">
+    
+    <!-- Animated Sexy Background Gradients -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <!-- Huge strong glows for WOW factor -->
+        <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-500/30 dark:bg-blue-600/20 blur-[100px] lg:blur-[120px] animate-float-1"></div>
+        <div class="absolute bottom-[10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-purple-500/30 dark:bg-purple-600/20 blur-[100px] lg:blur-[120px] animate-float-2"></div>
+        <!-- Core glow right behind the hero text to make it pop -->
+        <div class="absolute top-[20%] left-[5%] w-[30vw] h-[30vw] rounded-full bg-cyan-400/30 dark:bg-cyan-500/10 blur-[80px] lg:blur-[100px] animate-pulse"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-50 dark:opacity-30"></div>
+    </div>
+
+    <!-- 3D DNA Container -->
+    <!-- Removed mix-blend modes to ensure particles render perfectly in both light and dark themes -->
+    <div id="dna-container" class="fixed inset-0 w-full h-full pointer-events-none z-0 lg:left-[25%] overflow-hidden"></div>
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/70 dark:bg-brandDark/50 backdrop-blur-2xl border-b border-gray-200/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center relative">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer relative z-10 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                 </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="/dashboard" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Dashboard</a>
-                    <a href="#features" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Features</a>
-                    <a href="#how-it-works" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">How it works</a>
-                    <a href="/blogs" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Blogs</a>
-                </nav>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="/login" class="text-slate-600 hover:text-slate-900 font-medium transition-colors">Log In</a>
-                    <a href="/register" class="bg-slate-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-slate-800 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Get Started</a>
-                </div>
+                <span class="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">Medora</span>
+            </div>
+
+            <!-- Links (Absolutely Centered) -->
+            <nav class="hidden lg:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 glass-panel rounded-full px-8 py-3 gap-10 text-sm font-semibold text-gray-700 dark:text-gray-200 z-10">
+                <a href="#features" class="hover:text-blue-500 transition-colors">Features</a>
+                <a href="#how-it-works" class="hover:text-blue-500 transition-colors">How It Works</a>
+                <a href="/blogs" class="hover:text-blue-500 transition-colors">Blogs</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-5 relative z-10">
+                <button id="themeToggle" class="p-2.5 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 transition backdrop-blur-md">
+                    <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                <a href="/login" class="text-sm font-semibold text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400 transition">Login</a>
+                <a href="/register" class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-7 py-3 rounded-full text-sm font-bold hover:shadow-lg hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all">Get Started</a>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-bg pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden relative">
-        <div id="particles-js" class="absolute inset-0 z-0 pointer-events-auto"></div>
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-100 mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-purple-100 mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+    <!-- HERO SECTION -->
+    <main class="relative z-10 pt-32 pb-32 lg:pt-44 lg:pb-48 flex items-center min-h-[95vh]">
+        <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            
+            <!-- Left Content with structural WOW element -->
+            <div class="relative flex flex-col items-start gsap-hero z-20">
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs font-bold uppercase tracking-widest mb-8 shadow-sm">
+                    <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                    AI Powered Healthcare
+                </div>
+                
+                <h1 class="text-6xl lg:text-[5.5rem] font-black leading-[1.05] tracking-tighter mb-8 text-gray-900 dark:text-white drop-shadow-sm">
+                    Reimagine <br/>
+                    <span class="text-gradient">Healthcare</span> with AI
+                </h1>
+                
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-lg leading-relaxed font-medium">
+                    Get highly accurate symptom analysis, personalized insights, and real-time triage guidance instantly.
+                </p>
+
+                <!-- Input Pill (Premium Glassmorphism) -->
+                <div class="w-full max-w-xl glass-panel p-2.5 rounded-full flex items-center justify-between mb-8 group hover:shadow-[0_8px_32px_rgba(59,130,246,0.3)] transition-all duration-500 bg-white/40 dark:bg-white/5">
+                    <input type="text" placeholder="Describe how you feel today..." class="bg-transparent border-none outline-none pl-6 text-base w-full text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 font-medium" readonly>
+                    <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-sm font-bold whitespace-nowrap hover:shadow-lg hover:shadow-blue-500/50 hover:scale-105 transition-all duration-300">
+                        Start Assessment
+                    </button>
+                </div>
+
+                <!-- Popular Symptoms (Functional Density) -->
+                <div class="flex items-center gap-3 w-full max-w-xl flex-wrap">
+                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mr-2">Try:</span>
+                    <button class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 hover:text-blue-600 dark:hover:text-blue-400 transition-colors shadow-sm">Headache</button>
+                    <button class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 hover:text-blue-600 dark:hover:text-blue-400 transition-colors shadow-sm">Fever & Chills</button>
+                    <button class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 hover:text-blue-600 dark:hover:text-blue-400 transition-colors shadow-sm">Skin Rash</button>
+                </div>
+            </div>
+
+            <!-- Right Visual Spacer for DNA -->
+            <div class="hidden lg:block"></div>
+        </div>
+    </main>
+
+    <!-- SECTIONS BELOW HERO -->
+    <div class="relative z-20">
         
-        <!-- Animated Background Elements -->
-        <div class="absolute top-1/4 left-10 w-[600px] opacity-[0.03] pointer-events-none z-0 animate-float-medical">
-            <svg fill="currentColor" class="text-blue-900 w-full h-full" viewBox="0 0 24 24"><path d="M19 10.5h-5.5V5c0-1.1-.9-2-2-2s-2 .9-2 2v5.5H4c-1.1 0-2 .9-2 2s.9 2 2 2h5.5V22c0 1.1.9 2 2 2s2-.9 2-2v-5.5H19c1.1 0 2-.9 2-2s-.9-2-2-2z"/></svg>
-        </div>
-        <div class="absolute top-1/2 left-0 w-[1200px] opacity-[0.02] pointer-events-none z-0 animate-float-slow">
-            <svg fill="none" class="text-slate-900 w-full h-full" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M0 12h5l3 9L14 3l3 9h7"/></svg>
-        </div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up">
-            <span class="inline-block py-1 px-3 rounded-full bg-blue-50 text-blue-600 text-sm font-semibold mb-6 border border-blue-100">🚀 Next-Generation AI Triage</span>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 leading-tight">
-                Understand your symptoms in <br class="hidden md:block" />
-                <span class="gradient-text">seconds, not hours.</span>
-            </h1>
-            <p class="mt-4 max-w-2xl text-lg md:text-xl text-slate-600 mx-auto mb-10">
-                A premium, AI-powered health assistant that provides instant, reliable clinical triaging and actionable insights based on your unique symptoms.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="/chat" class="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-1">Start Assessment</a>
-                <a href="#how-it-works" class="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-full font-semibold text-lg hover:bg-slate-50 transition-all shadow-sm">See How It Works</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-blue-600 font-semibold tracking-wide uppercase text-sm mb-2">Features</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Everything you need to stay healthy</h3>
-                <p class="text-slate-600 text-lg">Designed to deliver an exceptional user experience while providing accurate, preliminary health insights.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Feature 1 -->
-                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Intelligent Chatbot</h4>
-                    <p class="text-slate-600">Interact with a highly advanced AI that asks targeted questions to understand your symptoms perfectly.</p>
-                </div>
-                <!-- Feature 2 -->
-                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-purple-100 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Insightful Dashboard</h4>
-                    <p class="text-slate-600">View detailed reports, graphical insights, and historical data all in one beautifully designed portal.</p>
-                </div>
-                <!-- Feature 3 -->
-                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-teal-100 hover:shadow-xl transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Secure & Private</h4>
-                    <p class="text-slate-600">Your health data is safe. We use minimal, modern authentication to ensure complete privacy.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it Works Section -->
-    <section id="how-it-works" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center gap-16">
-                <div class="w-full md:w-1/2">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-3xl transform rotate-3 opacity-20"></div>
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000" alt="Dashboard Preview" class="relative rounded-3xl shadow-2xl object-cover h-96 w-full">
-                    </div>
-                </div>
-                <div class="w-full md:w-1/2">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Simple, Fast, and Accurate</h2>
-                    <div class="space-y-8">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 font-bold text-xl border-4 border-white shadow-sm">1</div>
-                            </div>
-                            <div class="ml-6">
-                                <h4 class="text-xl font-bold text-slate-900">Sign Up / Log In</h4>
-                                <p class="mt-2 text-slate-600">Create an account in seconds to securely save your health history.</p>
-                            </div>
+        <!-- FEATURES (Pulled up with negative margin to overlap hero) -->
+        <section id="features" class="relative -mt-24 pb-32 z-30">
+            <div class="max-w-[1400px] mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Premium Glass Cards -->
+                    <div class="gsap-scroll glass-panel p-8 rounded-[32px] hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(59,130,246,0.15)] transition duration-500 group overflow-hidden relative">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 rounded-full blur-[30px] group-hover:bg-blue-500/40 transition-colors"></div>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                         </div>
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 font-bold text-xl border-4 border-white shadow-sm">2</div>
-                            </div>
-                            <div class="ml-6">
-                                <h4 class="text-xl font-bold text-slate-900">Start an Assessment</h4>
-                                <p class="mt-2 text-slate-600">Chat naturally with our AI assistant about what you're feeling.</p>
-                            </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">AI Symptom Analysis</h3>
+                        <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed font-medium">Describe symptoms naturally and get an instant, intelligent breakdown of potential causes.</p>
+                    </div>
+
+                    <div class="gsap-scroll glass-panel p-8 rounded-[32px] hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(168,85,247,0.15)] transition duration-500 group overflow-hidden relative">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/20 rounded-full blur-[30px] group-hover:bg-purple-500/40 transition-colors"></div>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         </div>
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 font-bold text-xl border-4 border-white shadow-sm">3</div>
-                            </div>
-                            <div class="ml-6">
-                                <h4 class="text-xl font-bold text-slate-900">Get Insights</h4>
-                                <p class="mt-2 text-slate-600">Receive a detailed preliminary report and recommended next steps immediately.</p>
-                            </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Personalized Reports</h3>
+                        <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed font-medium">Receive highly actionable insights and comprehensive reports tailored strictly to your profile.</p>
+                    </div>
+
+                    <div class="gsap-scroll glass-panel p-8 rounded-[32px] hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(16,185,129,0.15)] transition duration-500 group overflow-hidden relative">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-green-500/20 rounded-full blur-[30px] group-hover:bg-green-500/40 transition-colors"></div>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-green-500/30 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">History Tracking</h3>
+                        <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed font-medium">Monitor your health journey. Securely track and visualize previous assessments dynamically.</p>
+                    </div>
+
+                    <div class="gsap-scroll glass-panel p-8 rounded-[32px] hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(236,72,153,0.15)] transition duration-500 group overflow-hidden relative">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-pink-500/20 rounded-full blur-[30px] group-hover:bg-pink-500/40 transition-colors"></div>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-pink-500/30 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Health Insights</h3>
+                        <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed font-medium">Stay ahead with the latest medical advancements and automated health tips directly on your dash.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 py-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center mb-4 md:mb-0">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-3">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+        <!-- HOW IT WORKS -->
+        <section id="how-it-works" class="py-32 bg-gray-50 dark:bg-brandDark/50 border-t border-gray-200 dark:border-white/5 relative overflow-hidden">
+            <!-- Background detail -->
+            <div class="absolute left-1/2 top-0 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-gradient-to-b from-blue-500/5 to-transparent blur-[100px] pointer-events-none"></div>
+            
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="text-center mb-24 gsap-scroll">
+                    <h2 class="text-5xl font-black mb-6 tracking-tight">Simple Steps to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Better Health</span></h2>
+                    <p class="text-xl text-gray-500 dark:text-gray-400 font-medium max-w-2xl mx-auto">Intelligent tools engineered to empower your health journey with absolute precision.</p>
                 </div>
-                <span class="text-white font-bold text-lg">Symptom Checker</span>
-            </div>
-            <p class="text-slate-400 text-sm">© 2026 Symptom Checker. All rights reserved.</p>
-            <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" class="text-slate-400 hover:text-white transition-colors">Privacy</a>
-                <a href="/terms" class="text-slate-400 hover:text-white transition-colors">Terms</a>
-                <a href="/contact" class="text-slate-400 hover:text-white transition-colors">Contact</a>
-            </div>
-        </div>
-    </footer>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-12 relative">
+                    <!-- Step 1 -->
+                    <div class="gsap-scroll flex-1 flex flex-col items-center text-center group">
+                        <div class="w-24 h-24 rounded-full glass-panel shadow-[0_0_40px_rgba(59,130,246,0.2)] flex items-center justify-center font-black text-3xl text-blue-500 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500">1</div>
+                        <h3 class="font-bold text-2xl mb-4">Describe Symptoms</h3>
+                        <p class="text-base text-gray-500 dark:text-gray-400 max-w-xs font-medium leading-relaxed">Chat naturally about how you feel in our secure, encrypted assessment portal.</p>
+                    </div>
 
-    <!-- Particles.js Script and Config -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            if(typeof particlesJS !== 'undefined') {
-                particlesJS('particles-js', {
-                    "particles": {
-                        "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
-                        "color": { "value": "#8b5cf6" },
-                        "shape": { "type": "circle" },
-                        "opacity": { "value": 0.4, "random": false },
-                        "size": { "value": 3, "random": true },
-                        "line_linked": {
-                            "enable": true,
-                            "distance": 150,
-                            "color": "#3b82f6",
-                            "opacity": 0.2,
-                            "width": 1
-                        },
-                        "move": {
-                            "enable": true,
-                            "speed": 1.5,
-                            "direction": "none",
-                            "random": true,
-                            "straight": false,
-                            "out_mode": "out",
-                            "bounce": false,
-                        }
-                    },
-                    "interactivity": {
-                        "detect_on": "window",
-                        "events": {
-                            "onhover": { "enable": true, "mode": "grab" },
-                            "onclick": { "enable": false },
-                            "resize": true
-                        },
-                        "modes": {
-                            "grab": { "distance": 140, "line_linked": { "opacity": 0.6 } }
-                        }
-                    },
-                    "retina_detect": true
-                });
-            }
-        });
-    </script>
+                    <!-- Step 2 -->
+                    <div class="gsap-scroll flex-1 flex flex-col items-center text-center group">
+                        <div class="w-24 h-24 rounded-full glass-panel shadow-[0_0_40px_rgba(168,85,247,0.2)] flex items-center justify-center font-black text-3xl text-purple-500 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500">2</div>
+                        <h3 class="font-bold text-2xl mb-4">AI Processing</h3>
+                        <p class="text-base text-gray-500 dark:text-gray-400 max-w-xs font-medium leading-relaxed">Our advanced neural engine processes your medical data instantly and accurately.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="gsap-scroll flex-1 flex flex-col items-center text-center group">
+                        <div class="w-24 h-24 rounded-full glass-panel shadow-[0_0_40px_rgba(34,211,238,0.2)] flex items-center justify-center font-black text-3xl text-cyan-400 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500">3</div>
+                        <h3 class="font-bold text-2xl mb-4">Get Actionable Insights</h3>
+                        <p class="text-base text-gray-500 dark:text-gray-400 max-w-xs font-medium leading-relaxed">Receive personalized clinical guidance and highly detailed health reports.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-16 border-t border-gray-200 dark:border-white/10 bg-white dark:bg-[#02050A]">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400 gap-6 font-medium">
+                <p>© 2026 Medora Healthcare. All rights reserved.</p>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-blue-500 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-blue-500 transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="js/dna-animation.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>
