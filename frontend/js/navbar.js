@@ -1,12 +1,16 @@
 async function loadNavbar() {
-    const navbar = document.getElementById("navbar");
+    const response = await fetch(`/pages/navbar.html?v=${Date.now()}`, {
+    cache: "no-store"
+});
+    if (!navbar) return;
 
     try {
         const response = await fetch('/pages/navbar.html');
         const html = await response.text();
+        navbar.innerHTML = "";
         navbar.innerHTML = html;
 
-        // Ensure navbar.css is loaded
+        // Load CSS if missing
         if (!document.querySelector('link[href="/css/navbar.css"]')) {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
@@ -14,17 +18,42 @@ async function loadNavbar() {
             document.head.appendChild(link);
         }
 
+        await checkAuthStatus();
         setupTheme();
         setupLogout();
         highlightActiveLink();
     } catch (error) {
-        console.error("Error loading navbar:", error);
+        console.error("Navbar Load Error:", error);
     }
 }
+async function checkAuthStatus() {
+    const navbar = document.getElementById("navbar");
 
+    try {
+        const res = await fetch('/api/auth/me', {
+            method: "GET",
+            credentials: "include",
+            cache: "no-store"
+        });
+
+        if (res.ok) {
+            navbar.classList.add("auth-logged-in");
+            navbar.classList.remove("auth-logged-out");
+        } else {
+            navbar.classList.add("auth-logged-out");
+            navbar.classList.remove("auth-logged-in");
+        }
+
+    } catch (err) {
+        console.error("Auth check failed:", err);
+
+        navbar.classList.add("auth-logged-out");
+        navbar.classList.remove("auth-logged-in");
+    }
+}
 function highlightActiveLink() {
     const path = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav-center a');
+    const navLinks = document.querySelectorAll('.nav-item');
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (href === path || (path === '/' && href === '/dashboard')) {
@@ -37,17 +66,16 @@ function setupTheme() {
     const themeToggle = document.getElementById("themeToggle");
     if (!themeToggle) return;
 
+    const sunIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+    const moonIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
     function updateIcon() {
-        if(document.body.classList.contains("dark") || document.documentElement.getAttribute('data-theme') === 'dark'){
-            themeToggle.textContent = "☀️";
-        } else {
-            themeToggle.textContent = "🌙";
-        }
+        const isDark = document.body.classList.contains("dark") || document.documentElement.getAttribute('data-theme') === 'dark';
+        themeToggle.innerHTML = isDark ? sunIcon : moonIcon;
     }
 
-    // Set initial state based on localStorage or document attribute
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || document.documentElement.getAttribute('data-theme') === 'dark') {
+    if (savedTheme === 'dark') {
         document.body.classList.add("dark");
         document.documentElement.setAttribute('data-theme', 'dark');
     }
@@ -66,7 +94,6 @@ function setupTheme() {
             document.documentElement.removeAttribute('data-theme');
             localStorage.setItem("theme", "light");
         }
-
         updateIcon();
     });
 }
@@ -77,27 +104,18 @@ function setupLogout() {
 
     logoutBtn.addEventListener("click", async () => {
         try {
-            await fetch("/api/auth/logout", {
+            const res = await fetch("/api/auth/logout", {
                 method: "POST",
                 credentials: "include"
             });
-            window.location.href = "/login";
+            if (res.ok) {
+                localStorage.removeItem("theme"); // optional cleanup
+                window.location.href = "/";
+                }
         } catch (error) {
-            console.error(error);
-            // Fallback for different API routes just in case
-            try {
-                await fetch("/logout", {
-                    method: "POST",
-                    credentials: "include"
-                });
-                window.location.href = "/login";
-            } catch (err) {
-                console.error(err);
-            }
+            console.error("Logout failed", error);
         }
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadNavbar();
-});
+document.addEventListener("DOMContentLoaded", loadNavbar);

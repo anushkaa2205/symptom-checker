@@ -1,19 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medora Navbar</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
 <nav class="main-navbar">
+
+    <!-- Logo -->
     <div class="nav-left">
-        <a href="/dashboard" class="logo">
+        <a href="/" class="logo">
             ✦ <span>Medora</span>
         </a>
     </div>
 
+    <!-- Center Navigation -->
     <div class="nav-center">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/chat">Assessment</a>
-        <a href="/blogs">Blogs</a>
-        <a href="/profile">Profile</a>
+
+        <!-- Logged In Links -->
+        <a href="/dashboard" class="nav-item" data-auth="logged-in">
+            Dashboard
+        </a>
+
+        <a href="/chat" class="nav-item" data-auth="logged-in">
+            Assessment
+        </a>
+
+        <!-- Always visible -->
+        <a href="/blogs" class="nav-item">
+            Blogs
+        </a>
+
+        <a href="/profile" class="nav-item" data-auth="logged-in">
+            Profile
+        </a>
+
+        <!-- Logged Out Links -->
+        <a href="/login" class="nav-item" data-auth="logged-out">
+            Log In
+        </a>
+
+        <a href="/register" class="nav-item" data-auth="logged-out">
+            Register
+        </a>
     </div>
 
+    <!-- Right Side -->
     <div class="nav-right">
-        <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">🌙</button>
-        <button id="logoutBtn" class="logout-btn">Logout</button>
+
+        <!-- Theme Toggle -->
+        <button 
+            id="themeToggle" 
+            class="theme-btn"
+            aria-label="Toggle Theme">
+            🌙
+        </button>
+
+        <!-- Logout -->
+        <button 
+            id="logoutBtn"
+            class="logout-btn"
+            data-auth="logged-in">
+            Logout
+        </button>
+
+        <!-- Get Started -->
+        <a 
+            href="/chat"
+            class="cta-btn"
+            data-auth="logged-out">
+            Get Started
+        </a>
+
     </div>
+
 </nav>
+
+</body>
+</html>

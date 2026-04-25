@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Redirect logic based on profile completion is handled by dashboard/onboarding routes
-                window.location.href = '/dashboard';
+                window.location.replace("/onboarding");
 
             } catch (error) {
                 console.error("Register error:", error);

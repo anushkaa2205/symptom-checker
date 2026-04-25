@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('redirectUrl');
                     window.location.href = redirectUrl;
                 } else {
-                    window.location.href = '/dashboard';
+                    window.location.replace("/dashboard");
                 }
 
             } catch (error) {

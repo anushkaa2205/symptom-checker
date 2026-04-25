@@ -36,7 +36,21 @@ const chatLimiter = rateLimit({
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.disable("etag");
+
+app.use(express.static(path.join(__dirname, "../frontend"), {
+    etag: false,
+    lastModified: false,
+    setHeaders: (res) => {
+        res.setHeader(
+            "Cache-Control",
+            "no-store, no-cache, must-revalidate, proxy-revalidate"
+        );
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
+        res.setHeader("Surrogate-Control", "no-store");
+    }
+}));
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/index.html'));
 })
