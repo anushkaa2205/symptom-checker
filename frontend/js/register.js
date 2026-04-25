@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const btn = form.querySelector('.register-btn');
+            const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
             btn.innerHTML = "Creating Account...";
             btn.disabled = true;
