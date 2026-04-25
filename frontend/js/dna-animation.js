@@ -97,103 +97,104 @@ if (container) {
     }
     
     // angle the DNA to the right
-    // moved it slightly closer
-    dnaGroup.rotation.z = -Math.PI / 5; 
-    dnaGroup.position.x = 6;
+    dnaGroup.rotation.z = -Math.PI / 6; 
+    dnaGroup.position.x = 8;
     dnaGroup.position.y = 0;
     scene.add(dnaGroup);
     
-    // background particles
-    const particleCount = 500;
+    // background particles (stars)
+    const particleCount = 800;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     
     for(let i = 0; i < particleCount * 3; i += 3) {
-        // Spread particles across the background
-        particlePositions[i] = (Math.random() - 0.5) * 80;     // x
-        particlePositions[i+1] = (Math.random() - 0.5) * 80;   // y
-        particlePositions[i+2] = (Math.random() - 0.5) * 50 - 10; // z (slightly pushed back)
+        particlePositions[i] = (Math.random() - 0.5) * 140;
+        particlePositions[i+1] = (Math.random() - 0.5) * 140;
+        particlePositions[i+2] = (Math.random() - 0.5) * 60 - 20;
     }
     
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
     const particleMaterial = new THREE.PointsMaterial({
-        color: 0x8b5cf6, // Subtle purple tint matching the theme
-        size: 0.2,
+        color: 0xffffff, // Pure white for sparkle
+        size: 0.22,
         transparent: true,
-        opacity: 0.4,
-        depthWrite: false
-        // Blending is set dynamically in the render loop based on theme
+        opacity: 0.8,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
     });
     
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
     // lighting setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Brighter base
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
     
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2.0); // Stronger highlights
-    dirLight.position.set(20, 30, 20);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(10, 20, 10);
     scene.add(dirLight);
 
-    const blueLight = new THREE.PointLight(0x60a5fa, 3, 100); // Intense blue core light
-    blueLight.position.set(0, 0, 15);
+    const blueLight = new THREE.PointLight(0x3b82f6, 2, 80);
+    blueLight.position.set(5, 5, 10);
     scene.add(blueLight);
-
-    const tealLight = new THREE.PointLight(0x0ea5e9, 2, 100); // Professional teal backlight
-    tealLight.position.set(10, -10, -10);
-    scene.add(tealLight);
     
+    // Scroll Handling
+    let scrollY = 0;
+    window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+        
+        // Stabilize position (no horizontal drift)
+        const scrollProgress = Math.min(scrollY / 800, 1);
+        
+        // Only subtle fade: from 0.9 down to 0.7 for clear branding
+        dnaGroup.children.forEach(child => {
+            if (child.material) {
+                child.material.opacity = Math.max(0.9 - (scrollProgress * 0.2), 0.7);
+            }
+        });
+    });
+
     // Mouse Interaction
     let mouseX = 0;
     let mouseY = 0;
-    const windowHalfX = window.innerWidth / 2;
-    const windowHalfY = window.innerHeight / 2;
-
-    document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX - windowHalfX) * 0.0005;
-        mouseY = (event.clientY - windowHalfY) * 0.0005;
+    window.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - window.innerWidth / 2) * 0.0005;
+        mouseY = (event.clientY - window.innerHeight / 2) * 0.0005;
     });
     
     // Animation
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
-        time += 0.002;
+        time += 0.001;
         
-        // Slow rotation for DNA
-        dnaGroup.rotation.y += 0.0015;
+        dnaGroup.rotation.y += 0.002;
+        dnaGroup.rotation.x += 0.02 * (mouseY - dnaGroup.rotation.x);
         
-        // Interactive tilt
-        dnaGroup.rotation.x += 0.05 * (mouseY * 0.5 - dnaGroup.rotation.x);
-        
-        // subtle pulse effect
-        const scale = 1 + Math.sin(time * 1.5) * 0.03;
+        const scale = 1 + Math.sin(time * 2) * 0.02;
         dnaGroup.scale.set(scale, scale, scale);
         
-        // Animate floating particles
-        particles.rotation.y = time * 0.5;
-        particles.rotation.x = time * 0.2;
-        
-        // Adjust particle blending and opacity for light/dark mode dynamically
         const isDark = document.documentElement.classList.contains('dark');
+        
+        // Adjust particles for theme
         if (isDark) {
-            particleMaterial.blending = THREE.AdditiveBlending;
-            particleMaterial.color.setHex(0x8b5cf6); // Light purple
+            particleMaterial.color.setHex(0xffffff); // White sparkle
             particleMaterial.opacity = 0.6;
+            particleMaterial.blending = THREE.AdditiveBlending;
         } else {
-            // Additive blending is invisible on white backgrounds
+            particleMaterial.color.setHex(0x3b82f6); // Soft blue sparkle
+            particleMaterial.opacity = 0.4;
             particleMaterial.blending = THREE.NormalBlending;
-            particleMaterial.color.setHex(0x2563eb); // Deeper blue for contrast
-            particleMaterial.opacity = 0.8; // Higher opacity for light mode
         }
+        
+        particles.rotation.y = time * 0.2;
+        particles.rotation.x = time * 0.1;
         
         renderer.render(scene, camera);
     }
     
     animate();
     
-    // Handle resize
     window.addEventListener("resize", () => {
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();

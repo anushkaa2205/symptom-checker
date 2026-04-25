@@ -1,45 +1,134 @@
-/* hero text gradient */
-/* hero text gradient */
+/* Global Layout Fixes */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Hide Scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+html {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Theme Gradients */
 .gradient-text {
-    background: linear-gradient(to right, #3b82f6, #a855f7, #ec4899, #3b82f6);
-    background-size: 200% auto;
+    background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777, #2563eb);
+    background-size: 300% auto;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shine 4s linear infinite;
+    color: transparent;
+    display: inline-block;
+    animation: shine 6s linear infinite;
 }
 
 .dark .gradient-text {
-    background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6, #60a5fa);
-    background-size: 200% auto;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6, #60a5fa);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shine 4s linear infinite;
+    color: transparent;
 }
 
 @keyframes shine {
-    to { background-position: 200% center; }
+    to { background-position: 300% center; }
 }
 
-/* card hover stuff */
+/* Body Backgrounds */
+body {
+    background: radial-gradient(circle at 50% -20%, #f1f5f9, #fafafa 80%);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+body.dark, .dark body {
+    background: radial-gradient(circle at 50% -20%, #0c1222, #02050a 80%);
+}
+
+/* Hero Section Refinements */
+.hero-section {
+    position: relative;
+    z-index: 20; /* Ensure text is above DNA */
+}
+
+h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+}
+
+.hero-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #4b5563;
+    max-width: 580px;
+    margin-bottom: 2.5rem;
+}
+
+.dark .hero-description {
+    color: #9ca3af;
+}
+
+/* DNA Canvas Layering */
+#canvas-bg {
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Feature Card Hovers (Original Style) */
 .feature-card {
-    perspective: 1000px;
-}
-.card-box {
-    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
-    transform-style: preserve-3d;
-}
-.card-content {
-    transform: translateZ(30px);
+    perspective: 1500px;
 }
 
-/* background floats */
+.card-box {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover .card-box {
+    transform: translateY(-12px) rotateX(4deg);
+    border-color: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.dark .feature-card:hover .card-box {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Background Blobs */
 @keyframes float1 {
     0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-20px) scale(1.05); }
+    50% { transform: translateY(-30px) scale(1.05); }
 }
+
 @keyframes float2 {
     0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(20px) scale(0.95); }
+    50% { transform: translateY(30px) scale(0.95); }
 }
-.blob-1 { animation: float1 8s ease-in-out infinite; }
-.blob-2 { animation: float2 10s ease-in-out infinite; }
+
+.blob-1 { animation: float1 15s ease-in-out infinite; }
+.blob-2 { animation: float2 18s ease-in-out infinite; }
+
+/* Selection */
+::selection {
+    background: rgba(59, 130, 246, 0.2);
+    color: #2563eb;
+}
+
+.dark ::selection {
+    background: rgba(59, 130, 246, 0.3);
+    color: white;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    #canvas-bg {
+        left: 0 !important;
+        opacity: 0.3;
+    }
+}

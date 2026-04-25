@@ -74,11 +74,17 @@ function setupTheme() {
         themeToggle.innerHTML = isDark ? sunIcon : moonIcon;
     }
 
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.body.classList.add("dark");
-        document.documentElement.setAttribute('data-theme', 'dark');
-    }
+    const savedTheme = localStorage.getItem("theme");
+
+// Default = dark mode
+if (!savedTheme || savedTheme === "dark") {
+    document.body.classList.add("dark");
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+} else {
+    document.body.classList.remove("dark");
+    document.documentElement.removeAttribute("data-theme");
+}
     
     updateIcon();
 

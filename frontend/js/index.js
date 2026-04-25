@@ -1,9 +1,13 @@
-// dark mode toggle
-// dark mode toggle
 const themeBtn = document.getElementById('theme-btn');
 const html = document.documentElement;
 
-if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+// Default = DARK mode always
+if (!localStorage.theme) {
+    localStorage.theme = 'dark';
+}
+
+// Apply saved theme
+if (localStorage.theme === 'dark') {
     html.classList.add('dark');
 } else {
     html.classList.remove('dark');
