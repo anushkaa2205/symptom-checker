@@ -357,6 +357,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load initial history
     fetchRecentChats();
 
+    // Check for chat ID in URL and load it
+    const urlParams = new URLSearchParams(window.location.search);
+    const chatIdFromUrl = urlParams.get('id');
+    if (chatIdFromUrl) {
+        loadChat(chatIdFromUrl);
+    }
+
     function generatePDFReport(issue, solutionItems, medicineItems, symptomItems) {
         // Collect user symptoms from AI summary (if available), otherwise fallback to raw chat history
         let userSymptomsList = '';

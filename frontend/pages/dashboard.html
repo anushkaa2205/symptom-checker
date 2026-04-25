@@ -3,90 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Symptom Checker</title>
+    <title>Health Dashboard - Medora</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/dashboard.css">   
     <link rel="stylesheet" href="/css/global.css">
-
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <div class="glow-blue"></div>
-    <div class="glow-purple"></div>
+    <!-- Background Ambient Effects -->
+    <div class="ambient-bg"></div>
 
-   <div id="navbar"></div>
+    <!-- Navigation Header -->
+    <div id="navbar"></div>
 
-    <div class="container">
-        <!-- login prompt -->
+    <main class="dashboard-container">
+        <!-- Authentication Prompt -->
         <div id="login-prompt" class="login-prompt" style="display: none;">
-            <h2>Your Health Dashboard</h2>
-            <p>Please log in to view your past assessments, health history, and AI triage summaries.</p>
-            <a href="/login" class="btn-primary">Log In Now</a>
-        </div>
-
-        <!-- main dashboard -->
-        <div id="dashboard-content" class="dashboard-content">
-            <!-- greeting banner -->
-            <div class="welcome-banner">
-                <h1 id="welcome-name">Hello, there! 👋</h1>
-                <p>Welcome to your personal health dashboard. View your assessment history and health insights below.</p>
-                <a href="/chat" class="btn-glass">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    Start New Assessment
-                </a>
-            </div>
-
-            <!-- stat counters -->
-            <div class="stats-grid">
-                <!-- first stat card -->
-                <div class="glass-panel stat-card">
-                    <div class="stat-card-header">
-                        <span>Total Assessments</span>
-                        <div class="stat-icon">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="stat-total">0</div>
-                    <div class="stat-subtitle">Symptom checks completed</div>
-                </div>
-
-                <!-- second stat card -->
-                <div class="glass-panel stat-card">
-                    <div class="stat-card-header">
-                        <span>Most Frequent Symptom</span>
-                        <div class="stat-icon" style="color: var(--primary);">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="stat-symptom" style="font-size: 28px;">N/A</div>
-                    <div class="stat-subtitle">Based on your assessment history</div>
-                </div>
-            </div>
-
-            <!-- diagnoses layout -->
-            <div style="margin-top: 30px;">
-                <!-- history list -->
-                <div class="glass-panel">
-                    <h2 class="section-title">
-                        <svg width="24" height="24" fill="none" stroke="var(--primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                        Recent Assessment Log
-                    </h2>
-                    <div class="diagnoses-list" id="diagnoses-list">
-                        <!-- JS injects diagnosis cards here -->
-                        <div class="empty-list-msg">Loading history...</div>
-                    </div>
-                </div>
+            <div class="prompt-card glass-panel">
+                <h2>Welcome to Medora</h2>
+                <p>Please log in to view your personalized health dashboard, assessment history, and AI triage summaries.</p>
+                <a href="/login" class="btn btn-primary">Log In to Continue</a>
             </div>
         </div>
-    </div>
 
-    <!-- pdf export container -->
+        <!-- Dashboard Main Content -->
+        <div id="dashboard-content" class="dashboard-content" style="display: none;">
+            
+            <!-- Health Insight Hero Banner -->
+            <header class="hero-card glass-panel">
+                <div class="hero-bg-graphic">
+                    <svg viewBox="0 0 400 150" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 75C50 75 80 20 120 20C160 20 180 130 220 130C260 130 280 50 320 50C360 50 380 75 400 75" stroke="var(--brand-primary)" stroke-opacity="0.15" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M0 85C40 85 70 40 110 40C150 40 170 110 210 110C250 110 270 60 310 60C350 60 380 85 400 85" stroke="var(--brand-accent)" stroke-opacity="0.1" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 id="welcome-name" class="greeting">Hello! 👋</h1>
+                        <p class="hero-insight" id="hero-insight-text">Analyzing your recent health data...</p>
+                        <div class="risk-badge" id="hero-risk-badge">
+                            <span class="pulse-dot"></span> <span id="hero-risk-text">Calculating Risk</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <a href="/chat" class="btn btn-primary new-assessment-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                            New Assessment
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Key Metrics Overview Grid -->
+            <section class="metrics-grid">
+                
+                <div class="metric-card glass-panel">
+                    <div class="metric-icon blue-icon">
+                        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Total Assessments</span>
+                        <h3 class="metric-value" id="stat-total">0</h3>
+                    </div>
+                </div>
+
+                <div class="metric-card glass-panel">
+                    <div class="metric-icon purple-icon">
+                        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">This Month</span>
+                        <h3 class="metric-value" id="stat-monthly">0</h3>
+                    </div>
+                </div>
+
+                <div class="metric-card glass-panel">
+                    <div class="metric-icon orange-icon">
+                        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Frequent Symptom</span>
+                        <h3 class="metric-value truncate-text" id="stat-symptom" title="None">None</h3>
+                    </div>
+                </div>
+                
+                <div class="metric-card glass-panel">
+                    <div class="metric-icon green-icon">
+                        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Common Urgency</span>
+                        <h3 class="metric-value capitalize" id="stat-urgency">Low</h3>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Secondary Analytics Row -->
+            <div class="dashboard-secondary-grid">
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions-panel glass-panel">
+                    <h2>Quick Actions</h2>
+                    <div class="action-buttons">
+                        <a href="/chat" class="btn-action-card">
+                            <div class="action-icon blue-bg"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></div>
+                            <span>Start Assessment</span>
+                        </a>
+                        <a href="/profile" class="btn-action-card">
+                            <div class="action-icon purple-bg"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
+                            <span>Update Profile</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Triage Donut Chart -->
+                <div class="triage-card glass-panel">
+                    <h2>Triage Overview</h2>
+                    <p class="triage-desc">Distribution of your health urgency levels.</p>
+                    
+                    <div class="donut-chart-container">
+                        <div class="donut-chart" id="triage-donut"></div>
+                        <div class="donut-legend">
+                            <div class="legend-item">
+                                <span class="dot red-dot"></span> 
+                                <span class="legend-label">Critical</span>
+                                <span class="legend-val" id="donut-val-red">0%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot yellow-dot"></span> 
+                                <span class="legend-label">Moderate</span>
+                                <span class="legend-val" id="donut-val-yellow">0%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot green-dot"></span> 
+                                <span class="legend-label">Routine</span>
+                                <span class="legend-val" id="donut-val-green">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Insights Summary -->
+                <div class="insights-summary glass-panel">
+                    <h2>Health Insights</h2>
+                    <div class="insights-content">
+                        <p class="insight-row">
+                            <span class="insight-label">Last Checked:</span>
+                            <span class="insight-val" id="insight-last-date">-</span>
+                        </p>
+                        <p class="insight-row">
+                            <span class="insight-label">Recurring Issue:</span>
+                            <span class="insight-val capitalize truncate-text" id="insight-freq-issue">-</span>
+                        </p>
+                        <div class="recommendation-box" id="insight-recommendation">
+                            Analyzing recommendations...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Full Width History Section -->
+            <div class="history-section glass-panel">
+                <div class="section-header">
+                    <h2>Recent Assessments</h2>
+                </div>
+                
+                <div class="history-scroll-container">
+                    <div class="history-list" id="diagnoses-list">
+                        <!-- Content dynamically injected here -->
+                        <div class="empty-state">
+                            <p>Loading your history...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hidden export container for PDF rendering -->
     <div id="hidden-pdf-container" style="display: none;"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="/js/dashboard.js"></script>
     <script src="/js/navbar.js"></script>
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>

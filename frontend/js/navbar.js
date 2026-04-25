@@ -16,9 +16,21 @@ async function loadNavbar() {
 
         setupTheme();
         setupLogout();
+        highlightActiveLink();
     } catch (error) {
         console.error("Error loading navbar:", error);
     }
+}
+
+function highlightActiveLink() {
+    const path = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-center a');
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === path || (path === '/' && href === '/dashboard')) {
+            link.classList.add('active');
+        }
+    });
 }
 
 function setupTheme() {
