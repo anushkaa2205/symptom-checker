@@ -8,23 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/chat-premium.css">
+    <link rel="stylesheet" href="/css/global.css">
 </head>
 <body>
     <header>
-        <nav>
-            <p>Symptom Checker</p>
-            <ul class="nav-list">
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li id="auth-nav-item"><a href="/login">Log In</a></li>
-                <li>
-                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                    </button>
-                </li>
-            </ul>
-        </nav>
+        <div id="navbar"></div>
+
     </header>
     <div class="container">
         <div class="sidebar">
@@ -60,6 +49,7 @@
             </div>
         </div>
     </div>
+    <script src="/js/navbar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="/js/chat.js?v=8"></script>

@@ -1,5 +1,6 @@
-// Theme Toggle Logic
-const themeToggleBtn = document.getElementById('themeToggle');
+// dark mode toggle
+// dark mode toggle
+const themeBtn = document.getElementById('theme-btn');
 const html = document.documentElement;
 
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -8,19 +9,19 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
     html.classList.remove('dark');
 }
 
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
         html.classList.toggle('dark');
         localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
     });
 }
 
-// GSAP Animations
+// animations
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof gsap !== 'undefined') {
         gsap.from("header", { y: -20, opacity: 0, duration: 1, ease: "power3.out", delay: 0.1 });
         
-        gsap.from(".gsap-hero > *", {
+        gsap.from(".hero-section > *", {
             y: 30,
             opacity: 0,
             duration: 1,
@@ -41,6 +42,32 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.gsap-scroll').forEach(el => observer.observe(el));
+        document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
     }
+
+    // card tilt effect
+    const tiltElements = document.querySelectorAll('.feature-card');
+    
+    tiltElements.forEach(wrapper => {
+        const element = wrapper.querySelector('.card-box');
+        
+        wrapper.addEventListener('mousemove', (e) => {
+            const rect = wrapper.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Calculate rotation based on mouse position relative to center
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -15; // Max 15 degree tilt
+            const rotateY = ((x - centerX) / centerX) * 15;
+            
+            element.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        
+        wrapper.addEventListener('mouseleave', () => {
+            element.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    });
 });

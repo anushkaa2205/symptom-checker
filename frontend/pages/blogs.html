@@ -9,29 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/blogs-premium.css">
+    <link rel="stylesheet" href="/css/global.css">
 </head>
 <body>
     <div class="bg-glow-blue"></div>
     <div class="bg-glow-purple"></div>
 
     <!-- Nav -->
-    <nav>
-        <p>Symptom Checker</p>
-        <ul class="nav-list">
-            <li><a href="/">Home</a></li>
-            <li><a href="/chat">Assessment</a></li>
-            <li><a href="/blogs" class="active">Blogs</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li id="auth-nav-item"><a href="/login" class="btn-primary">Log In</a></li>
-            <li>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </nav>
+    <div id="navbar"></div>
 
     <div class="container">
         <!-- Hero Banner -->
@@ -185,5 +170,6 @@
     </div>
 
     <script src="/js/blogs.js"></script>
+    <script src="/js/navbar.js"></script>
 </body>
 </html>

@@ -8,41 +8,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard.css">   
+    <link rel="stylesheet" href="/css/global.css">
+
 </head>
 <body>
-    <div class="bg-glow-blue"></div>
-    <div class="bg-glow-purple"></div>
+    <div class="glow-blue"></div>
+    <div class="glow-purple"></div>
 
-    <nav>
-        <p>Symptom Checker</p>
-        <ul class="nav-list">
-            <li><a href="/" class="active">Home</a></li>
-            <li><a href="/chat">Assessment</a></li>
-            <li><a href="/blogs">Blogs</a></li>
-            <li><a href="/about">About</a></li>
-            <li id="auth-nav-item"><a href="/login" class="btn-primary">Log In</a></li>
-            <li>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </nav>
+   <div id="navbar"></div>
 
     <div class="container">
-        <!-- Auth Guard State -->
+        <!-- login prompt -->
         <div id="login-prompt" class="login-prompt" style="display: none;">
             <h2>Your Health Dashboard</h2>
             <p>Please log in to view your past assessments, health history, and AI triage summaries.</p>
             <a href="/login" class="btn-primary">Log In Now</a>
         </div>
 
-        <!-- Authenticated Dashboard -->
+        <!-- main dashboard -->
         <div id="dashboard-content" class="dashboard-content">
-            <!-- Welcome Banner -->
+            <!-- greeting banner -->
             <div class="welcome-banner">
                 <h1 id="welcome-name">Hello, there! 👋</h1>
                 <p>Welcome to your personal health dashboard. View your assessment history and health insights below.</p>
@@ -52,9 +38,9 @@
                 </a>
             </div>
 
-            <!-- Stats Grid -->
+            <!-- stat counters -->
             <div class="stats-grid">
-                <!-- Stat Card 1 -->
+                <!-- first stat card -->
                 <div class="glass-panel stat-card">
                     <div class="stat-card-header">
                         <span>Total Assessments</span>
@@ -66,7 +52,7 @@
                     <div class="stat-subtitle">Symptom checks completed</div>
                 </div>
 
-                <!-- Stat Card 2 -->
+                <!-- second stat card -->
                 <div class="glass-panel stat-card">
                     <div class="stat-card-header">
                         <span>Most Frequent Symptom</span>
@@ -79,9 +65,9 @@
                 </div>
             </div>
 
-            <!-- Main Layout (Diagnoses) -->
+            <!-- diagnoses layout -->
             <div style="margin-top: 30px;">
-                <!-- Recent Diagnoses -->
+                <!-- history list -->
                 <div class="glass-panel">
                     <h2 class="section-title">
                         <svg width="24" height="24" fill="none" stroke="var(--primary)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
@@ -96,10 +82,11 @@
         </div>
     </div>
 
-    <!-- Hidden div for PDF generation -->
+    <!-- pdf export container -->
     <div id="hidden-pdf-container" style="display: none;"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="/js/dashboard.js"></script>
+    <script src="/js/navbar.js"></script>
 </body>
 </html>

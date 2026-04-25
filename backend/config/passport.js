@@ -28,7 +28,10 @@ async (accessToken, refreshToken, profile, done) => {
             expiresIn: "7d"
         });
 
-        return done(null, { token });
+        return done(null, {
+    token,
+    userId: user._id
+});
 
     } catch (err) {
         return done(err, null);

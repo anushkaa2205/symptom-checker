@@ -1,4 +1,4 @@
-const container = document.getElementById("dna-container");
+const container = document.getElementById("canvas-bg");
 
 if (container) {
     const scene = new THREE.Scene();
@@ -14,7 +14,7 @@ if (container) {
 
     const dnaGroup = new THREE.Group();
 
-    // Premium solid materials for luxury healthcare look
+    // materials for the nodes
     const nodeMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x2563eb, // blue-600
         metalness: 0.1,
@@ -96,13 +96,14 @@ if (container) {
         dnaGroup.add(link);
     }
     
-    // Position and angle the DNA diagonally across the screen to fit right-side SaaS layout
+    // angle the DNA to the right
+    // moved it slightly closer
     dnaGroup.rotation.z = -Math.PI / 5; 
-    dnaGroup.position.x = 10;
+    dnaGroup.position.x = 6;
     dnaGroup.position.y = 0;
     scene.add(dnaGroup);
     
-    // Background Floating Particles (Sexy and Attractive effect)
+    // background particles
     const particleCount = 500;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -127,17 +128,21 @@ if (container) {
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
-    // Lighting for glass/premium effect
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    // lighting setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Brighter base
     scene.add(ambientLight);
     
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2.0); // Stronger highlights
     dirLight.position.set(20, 30, 20);
     scene.add(dirLight);
 
-    const blueLight = new THREE.PointLight(0x60a5fa, 2, 100);
-    blueLight.position.set(-10, -10, 20);
+    const blueLight = new THREE.PointLight(0x60a5fa, 3, 100); // Intense blue core light
+    blueLight.position.set(0, 0, 15);
     scene.add(blueLight);
+
+    const tealLight = new THREE.PointLight(0x0ea5e9, 2, 100); // Professional teal backlight
+    tealLight.position.set(10, -10, -10);
+    scene.add(tealLight);
     
     // Mouse Interaction
     let mouseX = 0;
@@ -161,6 +166,10 @@ if (container) {
         
         // Interactive tilt
         dnaGroup.rotation.x += 0.05 * (mouseY * 0.5 - dnaGroup.rotation.x);
+        
+        // subtle pulse effect
+        const scale = 1 + Math.sin(time * 1.5) * 0.03;
+        dnaGroup.scale.set(scale, scale, scale);
         
         // Animate floating particles
         particles.rotation.y = time * 0.5;

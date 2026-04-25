@@ -9,10 +9,8 @@ export const getDashboardStats = async (req, res) => {
         let recentDiagnoses = [];
         let symptomCounts = {};
 
-        // Process chats to extract verdicts and urgencies
         for (const chat of chats) {
-            // Find the bot's VERDICT message
-            const verdictMsg = chat.messages.find(m => m.sender === 'bot' && m.text.startsWith('VERDICT|'));
+            const verdictMsg = chat.messages.find(m => m.sender === 'assistant' && m.text.startsWith('VERDICT|'));
             
             let urgency = 'green';
             let issue = chat.title;
@@ -20,36 +18,60 @@ export const getDashboardStats = async (req, res) => {
             let solutionItems = [];
             let medicineItems = [];
 
-            if (verdictMsg) {
-                const parts = verdictMsg.text.split('|');
-                urgency = parts[1] ? parts[1].trim().toLowerCase() : 'green';
-                issue = parts[2] || chat.title;
-                const solutionRaw = parts[3] || '';
-                const medicinesRaw = parts[4] || 'None';
-                const symptomsRaw = parts[5] || 'None';
+            if (verdictMsg && verdictMsg.text.startsWith("VERDICT|")) {
+    const parts = verdictMsg.text.split('|');
 
-                solutionItems = solutionRaw.split('~').filter(item => item.trim() !== '');
-                medicineItems = medicinesRaw.split('~').filter(item => item.trim() !== '' && item.trim().toLowerCase() !== 'none');
-                symptomsSummary = symptomsRaw.split('~').filter(item => item.trim() !== '' && item.trim().toLowerCase() !== 'none');
+    if (parts.length >= 6) {
+        urgency = parts[1]?.trim().toLowerCase() || 'green';
+        issue = parts[2]?.trim() || chat.title;
 
-                if (urgencyBreakdown[urgency] !== undefined) {
-                    urgencyBreakdown[urgency]++;
-                } else {
-                    urgencyBreakdown['green']++; // fallback
-                }
-                
-                // Track symptom frequency
-                for (const symptom of symptomsSummary) {
-                    const s = symptom.trim().toLowerCase();
-                    if (s) {
-                        symptomCounts[s] = (symptomCounts[s] || 0) + 1;
-                    }
-                }
-            } else {
-                urgencyBreakdown['green']++; // Assume green if no verdict found
+        const solutionRaw = parts[3] || '';
+        const medicinesRaw = parts[4] || 'None';
+        const symptomsRaw = parts[5] || 'None';
+
+        solutionItems = solutionRaw
+            .split('~')
+            .filter(item => item.trim() !== '');
+
+        medicineItems = medicinesRaw
+            .split('~')
+            .filter(item =>
+                item.trim() !== '' &&
+                item.trim().toLowerCase() !== 'none'
+            );
+
+        symptomsSummary = symptomsRaw
+            .split('~')
+            .filter(item =>
+                item.trim() !== '' &&
+                item.trim().toLowerCase() !== 'none'
+            );
+
+        if (urgencyBreakdown[urgency] !== undefined) {
+            urgencyBreakdown[urgency]++;
+        } else {
+            urgencyBreakdown['green']++;
+        }
+
+        for (const symptom of symptomsSummary) {
+            const s = symptom.trim().toLowerCase();
+
+            if (s) {
+                symptomCounts[s] =
+                    (symptomCounts[s] || 0) + 1;
             }
+        }
 
-            // Keep only the 5 most recent for the diagnoses list
+    } else {
+        console.log("Invalid verdict format:", verdictMsg.text);
+
+        urgencyBreakdown['green']++;
+    }
+
+} else {
+    urgencyBreakdown['green']++;
+}
+
             if (recentDiagnoses.length < 5) {
                 recentDiagnoses.push({
                     _id: chat._id,
@@ -63,7 +85,6 @@ export const getDashboardStats = async (req, res) => {
             }
         }
         
-        // Determine most frequent symptom
         let mostFrequentSymptom = 'N/A';
         let maxCount = 0;
         for (const s in symptomCounts) {
@@ -72,6 +93,25 @@ export const getDashboardStats = async (req, res) => {
                 mostFrequentSymptom = s.charAt(0).toUpperCase() + s.slice(1);
             }
         }
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+
+        const monthlyAssessments = chats.filter(chat => {
+            const date = new Date(chat.createdAt);
+
+            return (
+                date.getMonth() === currentMonth &&
+                date.getFullYear() === currentYear
+            );
+        }).length;
+
+        const lastAssessmentDate =
+            chats.length > 0 ? chats[0].updatedAt : null;
+
+        const mostCommonUrgency =
+            Object.keys(urgencyBreakdown).reduce((a, b) =>
+                urgencyBreakdown[a] > urgencyBreakdown[b] ? a : b
+            );
 
         res.json({
             user: {
@@ -80,7 +120,10 @@ export const getDashboardStats = async (req, res) => {
             },
             stats: {
                 totalAssessments,
-                mostFrequentSymptom
+                mostFrequentSymptom,
+                monthlyAssessments,
+                lastAssessmentDate,
+                mostCommonUrgency
             },
             urgencyBreakdown,
             recentDiagnoses

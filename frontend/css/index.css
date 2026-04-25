@@ -1,17 +1,38 @@
-.text-gradient {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+/* hero text gradient */
+/* hero text gradient */
+.gradient-text {
+    background: linear-gradient(to right, #3b82f6, #a855f7, #ec4899, #3b82f6);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    animation: shine 4s linear infinite;
 }
 
-.dark .text-gradient {
-    background: linear-gradient(135deg, #60a5fa, #c084fc);
+.dark .gradient-text {
+    background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6, #60a5fa);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: shine 4s linear infinite;
 }
 
-/* Floating background elements */
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+/* card hover stuff */
+.feature-card {
+    perspective: 1000px;
+}
+.card-box {
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    transform-style: preserve-3d;
+}
+.card-content {
+    transform: translateZ(30px);
+}
+
+/* background floats */
 @keyframes float1 {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-20px) scale(1.05); }
@@ -20,5 +41,5 @@
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(20px) scale(0.95); }
 }
-.animate-float-1 { animation: float1 8s ease-in-out infinite; }
-.animate-float-2 { animation: float2 10s ease-in-out infinite; }
+.blob-1 { animation: float1 8s ease-in-out infinite; }
+.blob-2 { animation: float2 10s ease-in-out infinite; }

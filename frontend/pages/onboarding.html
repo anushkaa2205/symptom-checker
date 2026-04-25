@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Profile | Medora</title>
+    <link rel="stylesheet" href="/css/onboarding.css">
+    <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+    <div id="navbar"></div>
+<script src="/js/navbar.js"></script>
+    <div class="onboarding-container">
+
+        <div class="left-panel">
+    <div class="theme-toggle" id="themeToggle">
+        ☀️
+    </div>
+
+    <span class="tag">AI HEALTH PROFILE</span>
+
+    <h1>
+        Complete Your
+        <span class="gradient-text">Health Profile</span>
+    </h1>
+
+    <p>
+        Help Medora personalize symptom assessments
+        based on your health history and medical profile.
+    </p>
+
+    <div class="floating-orb"></div>
+</div>
+        <div class="right-panel">
+            <form id="onboardingForm">
+
+                <input type="number" id="age" placeholder="Age" required>
+
+                <select id="gender" required>
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+
+                <input type="number" id="height" placeholder="Height (cm)" required>
+
+                <input type="number" id="weight" placeholder="Weight (kg)" required>
+
+                <input type="text" id="bloodGroup" placeholder="Blood Group">
+
+                <input type="text" id="allergies"
+                    placeholder="Allergies (comma separated)">
+
+                <input type="text" id="medications"
+                    placeholder="Current Medications (comma separated)">
+
+                <input type="text" id="chronicConditions"
+                    placeholder="Chronic Conditions (comma separated)">
+
+                <input type="text" id="previousMedicalHistory"
+                    placeholder="Previous Medical History (comma separated)">
+
+                <input type="text" id="emergencyContact"
+                    placeholder="Emergency Contact Number">
+
+                <button type="submit">
+                    Complete Profile
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+<script src="/js/onboarding.js"></script>
+</body>
+</html>

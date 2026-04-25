@@ -10,11 +10,33 @@ const chatSchema = new mongoose.Schema({
     default: "New Assessment"
   },
   messages: [
-    {
-      sender: String,
-      text: String
-    }
-  ]
+  {
+    sender: {
+      type: String,
+      enum: ["user", "ai"]
+    },
+
+    text: {
+      type: String,
+      required: true
+    },
+
+    messageType: {
+      type: String,
+      enum: ["text", "report-analysis", "recommendation"],
+      default: "text"
+    },
+
+    timestamp: {
+      type: Date,
+      default: Date.now
+    },
+    reportId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Report"
+}
+  }
+]
 }, { timestamps: true });
 
 export default mongoose.model("Chat", chatSchema);

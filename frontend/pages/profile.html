@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Medora</title>
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <div class="profile-container">
+
+        <div class="profile-header">
+            <h1>Your Health Profile</h1>
+            <p>Manage your personal health information</p>
+        </div>
+
+        <div class="profile-grid">
+
+            <div class="profile-card main-card">
+                <h2 id="userName">Loading...</h2>
+                <p id="userEmail">Loading...</p>
+            </div>
+
+            <div class="profile-card">
+                <h3>Basic Info</h3>
+                <p>Age: <span id="age"></span></p>
+                <p>Gender: <span id="gender"></span></p>
+                <p>Height: <span id="height"></span> cm</p>
+                <p>Weight: <span id="weight"></span> kg</p>
+                <p>Blood Group: <span id="bloodGroup"></span></p>
+            </div>
+
+            <div class="profile-card">
+                <h3>Medical Info</h3>
+                <p><strong>Allergies:</strong></p>
+                <ul id="allergies"></ul>
+
+                <p><strong>Medications:</strong></p>
+                <ul id="medications"></ul>
+            </div>
+
+            <div class="profile-card">
+                <h3>Health History</h3>
+                <p><strong>Chronic Conditions:</strong></p>
+                <ul id="conditions"></ul>
+
+                <p><strong>Previous History:</strong></p>
+                <ul id="history"></ul>
+            </div>
+
+            <div class="profile-card emergency-card">
+                <h3>Emergency Contact</h3>
+                <p id="emergencyContact"></p>
+            </div>
+
+        </div>
+
+    </div>
+
+<script src="/js/profile.js"></script>
+<script src="/js/navbar.js"></script>
+</body>
+</html>

@@ -426,7 +426,7 @@ nav p {
 }
 
 /* Background Gradients (Optional aesthetic touches) */
-.bg-glow-blue {
+.glow-blue {
     position: fixed;
     top: -100px;
     right: -100px;
@@ -439,7 +439,7 @@ nav p {
     z-index: -1;
     pointer-events: none;
 }
-.bg-glow-purple {
+.glow-purple {
     position: fixed;
     bottom: -100px;
     left: -100px;

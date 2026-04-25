@@ -1,5 +1,13 @@
 import express from 'express';
-import {registerUser, loginUser, getMe, logoutUser} from "../controllers/authController.js";
+import {
+  registerUser,
+  loginUser,
+  getMe,
+  logoutUser,
+  completeProfile,
+  getProfile
+} from "../controllers/authController.js";
+
 import { apiProtect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -8,5 +16,8 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/me", apiProtect, getMe);
+
+router.post("/complete-profile", apiProtect, completeProfile);
+router.get("/profile", apiProtect, getProfile);
 
 export default router;

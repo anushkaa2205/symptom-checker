@@ -1,0 +1,61 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
+}
+
+body{
+    background:#07152f;
+    color:white;
+    min-height:100vh;
+    padding:40px;
+}
+
+.profile-header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.profile-header h1{
+    font-size:3rem;
+}
+
+.profile-header p{
+    color:#94a3b8;
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.profile-card{
+    background:rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:20px;
+    backdrop-filter:blur(20px);
+}
+
+.main-card{
+    grid-column:span 2;
+    background:linear-gradient(
+        90deg,
+        #3b82f6,
+        #8b5cf6
+    );
+}
+
+.emergency-card{
+    border:1px solid #ef4444;
+}
+
+ul{
+    margin-top:10px;
+    padding-left:20px;
+}
+
+li{
+    margin-bottom:6px;
+}

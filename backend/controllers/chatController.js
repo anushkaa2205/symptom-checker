@@ -85,6 +85,27 @@ const tryGemini = async (message, history) => {
 
 export const generateChatResponse = async (req, res) => {
     const { message, history } = req.body;
+    const emergencyKeywords = [
+  "chest pain",
+  "can't breathe",
+  "difficulty breathing",
+  "seizure",
+  "unconscious",
+  "stroke",
+  "heavy bleeding",
+  "heart attack"
+];
+const isEmergency = emergencyKeywords.some(keyword =>
+   message.toLowerCase().includes(keyword)
+);
+
+if (isEmergency) {
+   return res.json({
+      reply:
+      "Your symptoms may require immediate medical attention. Please go to the nearest hospital or call emergency services immediately.",
+      source: "emergency_override"
+   });
+}
 
     if (!message) {
         return res.status(400).json({ error: 'Message is required.' });

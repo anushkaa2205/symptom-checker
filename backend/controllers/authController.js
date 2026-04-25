@@ -59,8 +59,9 @@ export const registerUser = async (req, res) => {
 });
 
     res.json({
-        message: "User registered"
-        });
+    message: "User registered",
+    profileCompleted: user.profileCompleted
+});
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -93,8 +94,9 @@ export const loginUser = async (req, res) => {
 });
 
     res.json({
-        message: "Login successful"
-        });
+    message: "Login successful",
+    profileCompleted: user.profileCompleted
+});
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -115,4 +117,65 @@ export const logoutUser = (req, res) => {
         expires: new Date(0)
     });
     res.json({ message: "Logged out" });
+};
+export const completeProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    const {
+  age,
+  gender,
+  height,
+  weight,
+  allergies,
+  medications,
+  chronicConditions,
+  previousMedicalHistory,
+  bloodGroup,
+  emergencyContact
+} = req.body;
+
+    user.healthProfile = {
+  age,
+  gender,
+  height,
+  weight,
+  allergies,
+  medications,
+  chronicConditions,
+  previousMedicalHistory,
+  bloodGroup,
+  emergencyContact
+};
+    user.profileCompleted = true;
+
+    await user.save();
+
+    res.json({
+      message: "Profile completed successfully"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
+};
+export const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+
+    res.json(user);
+
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    });
+  }
 };

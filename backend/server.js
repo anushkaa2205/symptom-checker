@@ -13,6 +13,7 @@ import newsRoutes from "./routes/newsRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
+import User from "./models/User.js";
 connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,6 +52,16 @@ app.get('/login',(req,res)=>{
 app.get('/register',(req,res)=>{
     res.sendFile(path.join(__dirname, '../frontend/pages/register.html'));
 })
+app.get('/onboarding', protect, (req,res)=>{
+    res.sendFile(
+        path.join(__dirname, '../frontend/pages/onboarding.html')
+    );
+});
+app.get('/profile', protect, (req, res) => {
+    res.sendFile(
+        path.join(__dirname, '../frontend/pages/profile.html')
+    );
+});
 app.get('/blogs', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/blogs.html'));
 }); 
@@ -59,17 +70,29 @@ app.get("/auth/google",
 );
 app.get("/auth/google/callback",
     passport.authenticate("google", { session: false }),
-    (req, res) => {
-        const { token } = req.user;
+    async (req, res) => {
+        try {
+            const { token, userId } = req.user;
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
+            const user = await User.findById(userId);
 
-        res.redirect("/dashboard");
+            res.cookie("token", token, {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            if (user.profileCompleted) {
+                return res.redirect("/dashboard");
+            } else {
+                return res.redirect("/onboarding");
+            }
+
+        } catch (error) {
+            console.error(error);
+            res.redirect("/login");
+        }
     }
 );
 app.post("/logout", (req, res) => {
