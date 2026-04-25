@@ -1,66 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | Medora</title>
-    <link rel="stylesheet" href="/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
+
 <body>
+    <div class="ambient-bg"></div>
     <div id="navbar"></div>
 
-    <div class="profile-container">
+    <main class="profile-container reveal">
+        <!-- Hero Profile Card -->
+        <section class="hero-profile-card card-glass">
+            <div class="hero-left">
+                <div class="profile-avatar">
+                    <span id="avatarInitials">--</span>
+                </div>
+                <div class="profile-meta">
+                    <h1 id="userName">Loading...</h1>
+                    <p id="userEmail" class="email-muted">Loading...</p>
+                    <button class="btn-edit" id="editProfileBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="stat-item">
+                    <span class="stat-label">Age</span>
+                    <span class="stat-value" id="age">--</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Blood Group</span>
+                    <span class="stat-value" id="bloodGroup">--</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Height</span>
+                    <span class="stat-value"><span id="height">--</span> <small>cm</small></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Weight</span>
+                    <span class="stat-value"><span id="weight">--</span> <small>kg</small></span>
+                </div>
+            </div>
+        </section>
 
-        <div class="profile-header">
-            <h1>Your Health Profile</h1>
-            <p>Manage your personal health information</p>
+        <div class="dashboard-grid">
+            <!-- Left Content Area -->
+            <div class="main-content">
+                <!-- Medical Overview Card -->
+                <section class="card-glass medical-overview">
+                    <div class="card-header">
+                        <h2>Medical Profile & History</h2>
+                    </div>
+                    <div class="medical-sections">
+                        <div class="med-section">
+                            <h3>Allergies</h3>
+                            <ul id="allergies" class="pill-list"></ul>
+                        </div>
+                        <div class="med-section">
+                            <h3>Current Medications</h3>
+                            <ul id="medications" class="pill-list"></ul>
+                        </div>
+                        <div class="med-section">
+                            <h3>Chronic Conditions</h3>
+                            <ul id="conditions" class="pill-list"></ul>
+                        </div>
+                        <div class="med-section">
+                            <h3>Surgical & Past History</h3>
+                            <ul id="history" class="content-list"></ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent Assessments Section -->
+                <section class="card-glass">
+                    <div class="card-header">
+                        <h2>Recent Health Assessments</h2>
+                    </div>
+                    <div id="assessmentGrid" class="assessment-mini-grid">
+                        <!-- Assessments will be dynamically injected here -->
+                        <p class="empty-msg">Fetching assessment history...</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar Content -->
+            <aside class="sidebar">
+                <!-- Emergency Contact Card -->
+                <div class="card-glass emergency-sidebar" id="emergencyCard">
+                    <div class="card-header">
+                        <h3>Emergency Contact</h3>
+                    </div>
+                    <div class="emergency-info" id="emergencyContent">
+                        <div class="emergency-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+                                stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div id="contactDisplay">
+                            <p id="emergencyContact" class="emergency-number">--</p>
+                        </div>
+                        <div id="noContactDisplay" style="display: none;">
+                            <p class="empty-contact">No emergency contact added</p>
+                            <button class="btn-add">+ Add Contact</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Summary Card -->
+                <div class="card-glass health-summary-sidebar">
+                    <div class="card-header">
+                        <h3>Health Summary</h3>
+                    </div>
+                    <div class="summary-metrics">
+                        <div class="summary-metric">
+                            <div class="metric-icon">📊</div>
+                            <div class="metric-info">
+                                <span class="label">Total Assessments</span>
+                                <span class="val" id="totalAssessments">0</span>
+                            </div>
+                        </div>
+                        <div class="summary-metric">
+                            <div class="metric-icon">📅</div>
+                            <div class="metric-info">
+                                <span class="label">Last Activity</span>
+                                <span class="val" id="lastCheckDate">Never</span>
+                            </div>
+                        </div>
+                        <div class="summary-metric">
+                            <div class="metric-icon">🧠</div>
+                            <div class="metric-info">
+                                <span class="label">Top Symptom</span>
+                                <span class="val" id="topSymptom">General Checkup</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
         </div>
+    </main>
 
-        <div class="profile-grid">
-
-            <div class="profile-card main-card">
-                <h2 id="userName">Loading...</h2>
-                <p id="userEmail">Loading...</p>
-            </div>
-
-            <div class="profile-card">
-                <h3>Basic Info</h3>
-                <p>Age: <span id="age"></span></p>
-                <p>Gender: <span id="gender"></span></p>
-                <p>Height: <span id="height"></span> cm</p>
-                <p>Weight: <span id="weight"></span> kg</p>
-                <p>Blood Group: <span id="bloodGroup"></span></p>
-            </div>
-
-            <div class="profile-card">
-                <h3>Medical Info</h3>
-                <p><strong>Allergies:</strong></p>
-                <ul id="allergies"></ul>
-
-                <p><strong>Medications:</strong></p>
-                <ul id="medications"></ul>
-            </div>
-
-            <div class="profile-card">
-                <h3>Health History</h3>
-                <p><strong>Chronic Conditions:</strong></p>
-                <ul id="conditions"></ul>
-
-                <p><strong>Previous History:</strong></p>
-                <ul id="history"></ul>
-            </div>
-
-            <div class="profile-card emergency-card">
-                <h3>Emergency Contact</h3>
-                <p id="emergencyContact"></p>
-            </div>
-
-        </div>
-
-    </div>
-
-<script src="/js/profile.js"></script>
-<script src="/js/navbar.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/profile.js"></script>
 </body>
+
 </html>
