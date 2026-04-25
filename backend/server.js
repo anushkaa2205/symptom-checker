@@ -13,7 +13,7 @@ import newsRoutes from "./routes/newsRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
-import User from "./models/User.js";
+import User from "./models/user.js";
 connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
