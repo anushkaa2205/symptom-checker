@@ -1,95 +1,30 @@
-:root{
+:root {
+    /* PRIMARY BRAND */
+    --primary-blue: #3B82F6;
+    --primary-blue-hover: #2563EB;
 
-/* PRIMARY BRAND */
+    /* BACKGROUND */
+    --page-bg: #F3F6FB;
+    --card-bg: #FFFFFF;
 
---primary-blue:#3B82F6;
---primary-blue-hover:#2563EB;
+    /* SIDEBAR */
+    --sidebar-bg: #F5F7FA;
+    --sidebar-hover: #E6EBF2;
 
-/* BACKGROUND */
+    /* NAVBAR */
+    --navbar-bg: #FFFFFF;
 
---page-bg:#F3F6FB;
---card-bg:#FFFFFF;
+    /* TEXT */
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
 
-/* SIDEBAR */
+    /* BORDER */
+    --border-light: #E5E7EB;
 
---sidebar-bg:#F5F7FA;
---sidebar-hover:#E6EBF2;
+    /* CHAT BUBBLES */
+    --user-chat: #4CAF50;
+    --bot-chat: #EEF2F7;
 
-/* NAVBAR */
-
---navbar-bg:#FFFFFF;
-
-/* TEXT */
-
---text-primary:#1F2937;
---text-secondary:#6B7280;
-
-/* BORDER */
-
---border-light:#E5E7EB;
-
-/* CHAT BUBBLES */
-
---user-chat:#4CAF50;
---bot-chat:#EEF2F7;
-
---user-text:#FFFFFF;
---bot-text:#1F2937;
-
-}
-.main-navbar{
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 50px;
-    background: rgba(7,21,47,0.8);
-    backdrop-filter: blur(20px);
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.nav-left .logo{
-    text-decoration:none;
-    color:white;
-    font-size:1.5rem;
-    font-weight:700;
-}
-
-.nav-center{
-    display:flex;
-    gap:30px;
-}
-
-.nav-center a{
-    text-decoration:none;
-    color:#cbd5e1;
-    font-weight:500;
-}
-
-.nav-center a:hover{
-    color:#3b82f6;
-}
-
-.nav-right{
-    display:flex;
-    gap:15px;
-}
-
-.theme-btn,
-.logout-btn{
-    border:none;
-    padding:10px 18px;
-    border-radius:30px;
-    cursor:pointer;
-}
-
-.logout-btn{
-    background:linear-gradient(
-        to right,
-        #3b82f6,
-        #8b5cf6
-    );
-    color:white;
+    --user-text: #FFFFFF;
+    --bot-text: #1F2937;
 }

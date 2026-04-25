@@ -10,7 +10,7 @@ export const getDashboardStats = async (req, res) => {
         let symptomCounts = {};
 
         for (const chat of chats) {
-            const verdictMsg = chat.messages.find(m => m.sender === 'assistant' && m.text.startsWith('VERDICT|'));
+            const verdictMsg = chat.messages.find(m => m.sender === 'bot' && m.text.startsWith('VERDICT|'));
             
             let urgency = 'green';
             let issue = chat.title;

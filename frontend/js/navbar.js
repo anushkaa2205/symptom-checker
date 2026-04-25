@@ -1,73 +1,91 @@
-function loadNavbar() {
+async function loadNavbar() {
     const navbar = document.getElementById("navbar");
 
-    navbar.innerHTML = `
-        <nav class="main-navbar">
-            <div class="nav-left">
-                <a href="/dashboard" class="logo">
-                    ✦ <span>Medora</span>
-                </a>
-            </div>
+    try {
+        const response = await fetch('/pages/navbar.html');
+        const html = await response.text();
+        navbar.innerHTML = html;
 
-            <div class="nav-center">
-                <a href="/dashboard">Dashboard</a>
-                <a href="/chat">Assessment</a>
-                <a href="/blogs">Blogs</a>
-                <a href="/profile">Profile</a>
-            </div>
+        // Ensure navbar.css is loaded
+        if (!document.querySelector('link[href="/css/navbar.css"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '/css/navbar.css';
+            document.head.appendChild(link);
+        }
 
-            <div class="nav-right">
-                <button id="themeToggle" class="theme-btn">🌙</button>
-                <button id="logoutBtn" class="logout-btn">Logout</button>
-            </div>
-        </nav>
-    `;
-
-    setupTheme();
-    setupLogout();
+        setupTheme();
+        setupLogout();
+    } catch (error) {
+        console.error("Error loading navbar:", error);
+    }
 }
+
 function setupTheme() {
     const themeToggle = document.getElementById("themeToggle");
+    if (!themeToggle) return;
 
     function updateIcon() {
-        if(document.body.classList.contains("dark")){
+        if(document.body.classList.contains("dark") || document.documentElement.getAttribute('data-theme') === 'dark'){
             themeToggle.textContent = "☀️";
         } else {
             themeToggle.textContent = "🌙";
         }
     }
 
+    // Set initial state based on localStorage or document attribute
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || document.documentElement.getAttribute('data-theme') === 'dark') {
+        document.body.classList.add("dark");
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
     updateIcon();
 
     themeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark");
-
-        if(document.body.classList.contains("dark")){
+        const isDark = document.body.classList.contains("dark") || document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        if (!isDark) {
+            document.body.classList.add("dark");
+            document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem("theme", "dark");
         } else {
+            document.body.classList.remove("dark");
+            document.documentElement.removeAttribute('data-theme');
             localStorage.setItem("theme", "light");
         }
 
         updateIcon();
     });
 }
-async function setupLogout() {
+
+function setupLogout() {
     const logoutBtn = document.getElementById("logoutBtn");
+    if (!logoutBtn) return;
 
     logoutBtn.addEventListener("click", async () => {
         try {
-            await fetch("/logout", {
+            await fetch("/api/auth/logout", {
                 method: "POST",
                 credentials: "include"
             });
-
             window.location.href = "/login";
-
         } catch (error) {
             console.error(error);
+            // Fallback for different API routes just in case
+            try {
+                await fetch("/logout", {
+                    method: "POST",
+                    credentials: "include"
+                });
+                window.location.href = "/login";
+            } catch (err) {
+                console.error(err);
+            }
         }
     });
 }
+
 document.addEventListener("DOMContentLoaded", () => {
     loadNavbar();
 });

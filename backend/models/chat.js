@@ -13,7 +13,7 @@ const chatSchema = new mongoose.Schema({
   {
     sender: {
       type: String,
-      enum: ["user", "ai"]
+      enum: ["user", "bot"]
     },
 
     text: {
@@ -30,11 +30,7 @@ const chatSchema = new mongoose.Schema({
     timestamp: {
       type: Date,
       default: Date.now
-    },
-    reportId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "Report"
-}
+    }
   }
 ]
 }, { timestamps: true });
