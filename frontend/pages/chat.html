@@ -3,55 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Symptom Checker</title>
+    <title>Symptom Checker | Medora</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/chat-premium.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/chat-premium.css">
 </head>
 <body>
-    <header>
-        <div id="navbar"></div>
+    <div id="navbar"></div>
 
-    </header>
-    <div class="container">
-        <div class="sidebar">
-            <button class="new-chat">+ New Assessment</button>
-            <div class="recent">Recent Assessments</div>
-            <ul class="recent-chats" id="recent-chats-list">
-                <!-- Dynamically loaded history -->
-            </ul>
-        </div>
-        <div class="main">
-            <div class="chat-container" id="chat-container">
-                <div class="empty-state" id="empty-state">
-                    <h2 id="greeting-text">Hello</h2>
-                    <p>How can I help you today?</p>
-                </div>
-                <div class="message bot-message" style="opacity: 1; margin-top: 2rem; align-self: flex-start; max-width: 80%;">
-                    <div class="avatar bot-avatar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+    <div class="container reveal">
+        <aside class="sidebar">
+            <button class="new-chat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                New Assessment
+            </button>
+            
+            <div class="sidebar-section">
+                <span class="section-label">RECENT ASSESSMENTS</span>
+                <ul class="recent-chats" id="recent-chats-list">
+                    <!-- Loaded dynamically -->
+                </ul>
+            </div>
+        </aside>
+
+        <main class="chat-main">
+            <div class="chat-viewport" id="chat-container">
+                <!-- Welcome Hero State -->
+                <div class="chat-hero" id="chat-hero">
+                    <div class="ai-orb-wrap">
+                        <div class="ai-orb">
+                            <div class="orb-core"></div>
+                            <div class="orb-wave"></div>
+                            <div class="orb-wave"></div>
+                        </div>
                     </div>
-                    <div class="message-content">
-                        <p>Please enter your symptoms below so I can begin your assessment.</p>
+                    
+                    <div class="hero-content">
+                        <h2 id="greeting-text">Hello, there!</h2>
+                        <p>I'm your AI health assistant. Describe your symptoms in detail to begin your triage assessment.</p>
+                    </div>
+
+                    <div class="symptom-chips">
+                        <button class="chip" data-symptom="I have a high fever and body ache">🌡️ Fever</button>
+                        <button class="chip" data-symptom="I have a persistent dry cough">😷 Cough</button>
+                        <button class="chip" data-symptom="I have a severe headache">🤕 Headache</button>
+                        <button class="chip" data-symptom="I'm feeling a sharp pain in my chest">🫀 Chest Pain</button>
+                        <button class="chip" data-symptom="I feel constantly tired and fatigued">😴 Fatigue</button>
                     </div>
                 </div>
             </div>
 
-            <div class="chat-input-area">
-                <div class="input-wrapper">
-                    <input type="text" id="chat-input" placeholder="e.g. I have had a sharp pain in my lower back since yesterday..." autocomplete="off">
-                    <button id="send-btn" class="send-btn" aria-label="Send message">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
+            <div class="input-container">
+                <div class="input-box-wrap">
+                    <div class="input-wrapper">
+                        <input type="text" id="chat-input" placeholder="Describe your symptoms (e.g. Sharp pain in lower back)..." autocomplete="off">
+                        <button id="send-btn" class="send-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                    <p class="input-disclaimer">Medora AI provides informational assessments and is not a substitute for professional medical advice.</p>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
+
     <script src="/js/navbar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="/js/chat.js?v=8"></script>
+    <script src="/js/chat.js"></script>
 </body>
 </html>
