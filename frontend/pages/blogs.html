@@ -11,147 +11,68 @@
     <link rel="stylesheet" href="/css/blogs-premium.css">
     <link rel="stylesheet" href="/css/global.css">
 </head>
-<body>
-    <div class="bg-glow-blue"></div>
-    <div class="bg-glow-purple"></div>
+    <!-- Background Ambient Effects -->
+    <div class="ambient-bg"></div>
 
-    <!-- Nav -->
+    <!-- Navigation Header -->
     <div id="navbar"></div>
 
-    <div class="container">
-        <!-- Hero Banner -->
-        <div class="blog-hero" id="blog-hero">
-            <h1>Health Insights & Articles</h1>
-            <p>Stay informed with trending health news and expert-written articles on diseases, wellness, and preventive care.</p>
-        </div>
-
-        <!-- Trending Section -->
-        <div class="trending-section">
-            <h2 class="section-title">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                Trending Health News
-            </h2>
-            <div class="ticker-wrapper">
-                <div class="ticker-track" id="ticker-track">
-                    <!-- JS injects trending cards here -->
+    <main class="blogs-container">
+        <!-- Hero Section: Editorial Style -->
+        <header class="blog-hero reveal">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Health Resources & Insights</h1>
+                    <p>Trusted articles, medical awareness guides, and wellness resources curated for you.</p>
+                    
+                    <div class="category-pills">
+                        <button class="pill active" data-category="all">All</button>
+                        <button class="pill" data-category="Heart Health">Heart Health</button>
+                        <button class="pill" data-category="Mental Health">Mental Health</button>
+                        <button class="pill" data-category="Nutrition">Nutrition</button>
+                        <button class="pill" data-category="Immunity">Immunity</button>
+                        <button class="pill" data-category="Emergency Care">Emergency Care</button>
+                        <button class="pill" data-category="Wellness">Wellness</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <!-- Static Articles Grid -->
-        <div class="articles-section">
-            <h2 class="section-title">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                Featured Articles
-            </h2>
+        <!-- Recommended For You Section -->
+        <section class="recommended-section reveal" id="recommended-section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Recommended For You</h2>
+                <p class="section-subtitle">Based on your recent health activity</p>
+            </div>
+            <div class="recommended-grid" id="recommended-grid">
+                <!-- JS injects personalized cards here -->
+            </div>
+        </section>
 
+        <!-- Trending News Section: Horizontal Carousel -->
+        <section class="trending-section reveal">
+            <div class="section-header">
+                <h2 class="section-title">Trending Medical News</h2>
+                <div class="carousel-controls">
+                    <button id="prev-news" class="btn-icon" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                    <button id="next-news" class="btn-icon" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                </div>
+            </div>
+            <div class="trending-carousel" id="trending-carousel">
+                <div class="trending-track" id="trending-track">
+                    <!-- JS injects compact trending cards here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Articles Grid -->
+        <section class="articles-section reveal">
+            <h2 class="section-title">Featured Articles</h2>
             <div class="article-grid" id="article-grid">
-
-                <!-- Article 1: Diabetes -->
-                <div class="article-card" data-article="diabetes">
-                    <img src="/images/blog-diabetes.png" alt="Understanding Diabetes" class="article-card-img" onerror="this.src='https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400&h=250&fit=crop'">
-                    <div class="article-card-body">
-                        <span class="article-category category-diabetes">Diabetes</span>
-                        <h3 class="article-card-title">Understanding Diabetes: Types, Symptoms & Management</h3>
-                        <p class="article-card-excerpt">Diabetes affects over 400 million people worldwide. Learn how to recognize early warning signs and manage blood sugar levels effectively through lifestyle changes and medical care.</p>
-                        <div class="article-card-footer">
-                            <span class="article-read-time">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                6 min read
-                            </span>
-                            <button class="article-read-btn">Read More <span>→</span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Article 2: Heart Disease -->
-                <div class="article-card" data-article="heart">
-                    <img src="/images/blog-heart.png" alt="Heart Disease Warning Signs" class="article-card-img" onerror="this.src='https://images.unsplash.com/photo-1628348070889-cb656235b4eb?w=400&h=250&fit=crop'">
-                    <div class="article-card-body">
-                        <span class="article-category category-cardiology">Cardiology</span>
-                        <h3 class="article-card-title">Heart Disease: Warning Signs You Should Never Ignore</h3>
-                        <p class="article-card-excerpt">Heart disease remains the leading cause of death globally. Recognizing subtle warning signs like chest tightness, fatigue, and shortness of breath can save your life.</p>
-                        <div class="article-card-footer">
-                            <span class="article-read-time">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                7 min read
-                            </span>
-                            <button class="article-read-btn">Read More <span>→</span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Article 3: Mental Health -->
-                <div class="article-card" data-article="mental">
-                    <img src="/images/blog-mental.png" alt="Mental Health Matters" class="article-card-img" onerror="this.src='https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=400&h=250&fit=crop'">
-                    <div class="article-card-body">
-                        <span class="article-category category-mental-health">Mental Health</span>
-                        <h3 class="article-card-title">Mental Health Matters: Recognizing Anxiety & Depression</h3>
-                        <p class="article-card-excerpt">Mental health is just as important as physical health. Learn to identify symptoms of anxiety and depression, and discover effective coping strategies that actually work.</p>
-                        <div class="article-card-footer">
-                            <span class="article-read-time">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                8 min read
-                            </span>
-                            <button class="article-read-btn">Read More <span>→</span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Article 4: Cold vs Flu -->
-                <div class="article-card" data-article="coldflu">
-                    <img src="/images/blog-coldflu.png" alt="Cold vs Flu" class="article-card-img" onerror="this.src='https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&h=250&fit=crop'">
-                    <div class="article-card-body">
-                        <span class="article-category category-respiratory">Respiratory</span>
-                        <h3 class="article-card-title">Common Cold vs. Flu: How to Tell the Difference</h3>
-                        <p class="article-card-excerpt">Both share similar symptoms, but the flu can be far more dangerous. Learn the key differences, when to see a doctor, and how to protect yourself during flu season.</p>
-                        <div class="article-card-footer">
-                            <span class="article-read-time">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                5 min read
-                            </span>
-                            <button class="article-read-btn">Read More <span>→</span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Article 5: Nutrition -->
-                <div class="article-card" data-article="nutrition">
-                    <img src="/images/blog-nutrition.png" alt="Nutrition and Immunity" class="article-card-img" onerror="this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop'">
-                    <div class="article-card-body">
-                        <span class="article-category category-nutrition">Nutrition</span>
-                        <h3 class="article-card-title">Nutrition & Immunity: Foods That Boost Your Defenses</h3>
-                        <p class="article-card-excerpt">Your diet plays a crucial role in immune function. Discover the top immune-boosting foods, essential vitamins, and dietary habits that keep your body's defenses strong.</p>
-                        <div class="article-card-footer">
-                            <span class="article-read-time">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                6 min read
-                            </span>
-                            <button class="article-read-btn">Read More <span>→</span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Article 6: Sleep -->
-                <div class="article-card" data-article="sleep">
-                    <img src="/images/blog-sleep.png" alt="Importance of Sleep" class="article-card-img" onerror="this.src='https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400&h=250&fit=crop'">
-                    <div class="article-card-body">
-                        <span class="article-category category-wellness">Wellness</span>
-                        <h3 class="article-card-title">The Science of Sleep: Why Rest Is Your Best Medicine</h3>
-                        <p class="article-card-excerpt">Sleep deprivation affects every system in your body. Learn why 7-9 hours matters, how to build a sleep routine, and the link between poor sleep and chronic disease.</p>
-                        <div class="article-card-footer">
-                            <span class="article-read-time">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                7 min read
-                            </span>
-                            <button class="article-read-btn">Read More <span>→</span></button>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Static Articles (Content from JS articleData) -->
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- Article Modal Overlay -->
     <div class="article-modal-overlay" id="article-modal-overlay">
@@ -172,4 +93,5 @@
     <script src="/js/blogs.js"></script>
     <script src="/js/navbar.js"></script>
 </body>
+</html>
 </html>

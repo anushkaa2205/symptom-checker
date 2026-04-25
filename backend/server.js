@@ -43,7 +43,7 @@ app.get('/',(req,res)=>{
 app.get('/dashboard', protect, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/dashboard.html'));
 });
-app.get('/chat', protect, (req, res) => {
+app.get('/chat', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/chat.html'));
 });
 app.get('/login',(req,res)=>{
