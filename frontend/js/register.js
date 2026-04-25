@@ -1,20 +1,35 @@
 function checkPassword(){
-    const pass=document.getElementById("password").value;
-    const confirmpass=document.getElementById("confirmPassword").value;
-    const mess=document.getElementById("mess");
-    if(confirmpass.length==0){
-        mess.innerHTML="";
-    }
-    if(pass===confirmpass){
-        mess.innerHTML="";
-    }
-    else{
-        mess.innerHTML="Password does not match";
-        mess.style.color="red";
+    const pass = document.getElementById("password").value;
+    const confirmpass = document.getElementById("confirmPassword").value;
+    const mess = document.getElementById("mess");
+    
+    if (confirmpass.length === 0) {
+        mess.innerHTML = "";
+    } else if (pass === confirmpass) {
+        mess.innerHTML = "";
+    } else {
+        mess.innerHTML = "Passwords do not match";
+        mess.style.color = "#f87171";
     }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.form');
+    const form = document.getElementById('registerForm');
+
+    // Password Toggle Logic
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🔒'; // Change icon to locked
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        });
+    });
 
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -25,10 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
             const confirmPassword = document.getElementById("confirmPassword").value.trim();
-            const googleBtn = document.getElementById("google-register-btn");
 
             if (!Fname || !Lname || !email || !password) {
-                alert("Please fill all fields");
+                alert("Please fill all required fields");
                 return;
             }
 
@@ -36,6 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Passwords do not match");
                 return;
             }
+
+            const btn = form.querySelector('.register-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Creating Account...";
+            btn.disabled = true;
 
             try {
                 const res = await fetch('/api/auth/register', {
@@ -51,21 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!res.ok) {
                     alert(data.message || "Registration failed");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                     return;
                 }
+
+                // Redirect logic based on profile completion is handled by dashboard/onboarding routes
                 window.location.href = '/dashboard';
 
             } catch (error) {
                 console.error("Register error:", error);
-                alert("Something went wrong. Try again.");
+                alert("Something went wrong. Please try again.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         });
     }
-});
-const googleBtn = document.querySelector('.google-btn');
 
-if (googleBtn) {
-    googleBtn.addEventListener('click', () => {
-        window.location.href = "/auth/google";
-    });
-}
+    const googleBtn = document.querySelector('.google-btn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', () => {
+            window.location.href = "/auth/google";
+        });
+    }
+});

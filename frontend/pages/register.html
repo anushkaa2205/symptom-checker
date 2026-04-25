@@ -3,45 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="/js/register.js" defer></script>
+    <title>Create Account | Medora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
-    <main class="main">
-        <div class="card">
-            <h1>Create an Account</h1>
-            <p>Get started with an account on <a href="#" style="text-decoration: none;">SymptomChecker</a></p>
-        <div class="main-content">
-            <button type="button" class="google-btn"><img src="/assets/google.png" height="20px" width="20px" alt="Google" class="google"> Sign up with Google</button>
-            <div class="divider">
-                <span>or</span>
+    <div class="page-wrapper">
+        <main class="register-container">
+            <!-- Left Side: Visual Panel -->
+            <div class="visual-panel">
+                <div class="panel-header">
+                    <a href="/" class="panel-logo">✦ Medora</a>
+                    <a href="/" class="back-link">Back to website <span>→</span></a>
+                </div>
+                
+                <div class="panel-footer">
+                    <h2>AI-Powered <br>Symptom Analysis</h2>
+                    <p>Get instant health insights with Medora.</p>
+                </div>
             </div>
-            <form action="/register" method="post" class="form">
-                <div class="name-fields">
-                    <input type="text" id="Fname" name="Fname" required placeholder="First Name:">
-                    <input type="text" id="Lname" name="Lname" required placeholder="Last Name:">
+
+            <!-- Right Side: Form Panel -->
+            <div class="form-panel">
+                <div class="form-content">
+                    <header class="form-header">
+                        <h1>Create an account</h1>
+                        <p>Already have an account? <a href="/login">Log in</a></p>
+                    </header>
+
+                    <form class="register-form" id="registerForm">
+                        <div class="row">
+                            <div class="input-group">
+                                <input type="text" id="Fname" required placeholder="First Name">
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="Lname" required placeholder="Last Name">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="email" id="email" required placeholder="Email Address">
+                        </div>
+
+                        <div class="input-group password-group">
+                            <input type="password" id="password" required placeholder="Create Password">
+                            <button type="button" class="toggle-password" data-target="password">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="input-group password-group">
+                            <input type="password" id="confirmPassword" required placeholder="Confirm Password" onkeyup="checkPassword()">
+                            <button type="button" class="toggle-password" data-target="confirmPassword">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                            <span id="mess"></span>
+                        </div>
+
+                        <div class="terms-wrap">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="check" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="/terms">Terms & Conditions</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Create account</button>
+
+                        <div class="divider">
+                            <span>Or register with</span>
+                        </div>
+
+                        <div class="social-btns">
+                            <button type="button" class="social-btn google-btn full-width">
+                                <img src="/assets/google.png" alt="Google">
+                                Continue with Google
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="info-field">
-                    <input type="email" id="email" name="email" required placeholder="Email:">
-                    <input type="password" id="password" name="password" required placeholder="Password:">
-                    <div class="confirm-group">
-                    <input type="password" id="confirmPassword" name="confirmPassword"
-                    placeholder="Confirm Password:" onkeyup="checkPassword()" required>
-                    <span id="mess"></span>
-                    </div>
-                    <label for="check">
-                    <input type="checkbox" id="check" name="check" required>
-                    By registering you agree with our <a href="/terms" target="_blank">Terms & Conditions</a></label>
-                </div>
-                <div class="submit-btn">
-                    <button type="submit" class="register-btn">Create Account</button>
-                </div>
-            </form>
-            <p class="p">Already have an account? <a href="/login">Log In</a></p>
-        </div>
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/register.js"></script>
 </body>
 </html>
