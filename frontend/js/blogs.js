@@ -163,8 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const articleGrid = document.getElementById('article-grid');
     const categoryPills = document.querySelectorAll('.pill');
     const trendingTrack = document.getElementById('trending-track');
-    const prevBtn = document.getElementById('prev-news');
-    const nextBtn = document.getElementById('next-news');
     const carousel = document.getElementById('trending-carousel');
 
     // ─── Initialization ───
@@ -213,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderTrending(news) {
-        trendingTrack.innerHTML = news.map(n => `
+        const cardsHTML = news.map(n => `
             <a href="${n.url}" target="_blank" class="trending-card-compact">
                 <img src="${n.image || 'https://images.unsplash.com/photo-1505751172107-573225a91200?w=100&h=100&fit=crop'}" class="trending-thumb" onerror="this.src='https://via.placeholder.com/100x100?text=Health'">
                 <div class="trending-info">
@@ -223,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </a>
         `).join('');
+        // Duplicate content for seamless marquee scrolling
+        trendingTrack.innerHTML = cardsHTML + cardsHTML;
     }
 
     // ─── Event Handlers ───
@@ -234,9 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderArticles();
         });
     });
-
-    if (nextBtn) nextBtn.addEventListener('click', () => carousel.scrollBy({ left: 400, behavior: 'smooth' }));
-    if (prevBtn) prevBtn.addEventListener('click', () => carousel.scrollBy({ left: -400, behavior: 'smooth' }));
 
     // ─── Modal Logic ───
     const overlay = document.getElementById('article-modal-overlay');
