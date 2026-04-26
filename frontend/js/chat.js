@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 contentDiv.innerHTML = `
                     <div class="verdict-header">
                         <span class="verdict-icon"></span>
-                        <span class="verdict-title">Triage Verdict</span>
+                        <span class="verdict-title">Assessment Verdict</span>
                     </div>
                     <div class="verdict-section">
                         <strong>Identified Issue</strong> <span>${issue}</span>
@@ -330,33 +330,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reuse generatePDFReport logic (unchanged)
     function generatePDFReport(issue, solutionItems, medicineItems, symptomItems) {
+        const dateStr = new Date().toLocaleString(undefined, {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
         let userSymptomsList = '';
         if (symptomItems && symptomItems.length > 0) {
-            symptomItems.forEach(item => { userSymptomsList += `<li style="margin-bottom: 6px;">${item.trim()}</li>`; });
+            symptomItems.forEach(item => { userSymptomsList += `<li style="margin-bottom: 8px;">${item.trim()}</li>`; });
         } else {
-            userSymptomsList = chatHistory.filter(msg => msg.sender === 'user').map(msg => `<li style="margin-bottom: 6px;">${msg.text}</li>`).join('');
+            userSymptomsList = chatHistory.filter(msg => msg.sender === 'user').map(msg => `<li style="margin-bottom: 8px;">${msg.text}</li>`).join('');
+            if (!userSymptomsList) userSymptomsList = '<li>No symptoms explicitly provided.</li>';
         }
 
-        const dateStr = new Date().toLocaleString();
-        let solutionsHTML = '<ul style="padding-left: 20px; margin-top: 10px;">';
-        solutionItems.forEach(item => { solutionsHTML += `<li style="margin-bottom: 8px;">${item.trim()}</li>`; });
-        solutionsHTML += '</ul>';
+        let solutionsHTML = '';
+        if (solutionItems && solutionItems.length > 0) {
+            solutionItems.forEach(item => { solutionsHTML += `<li style="margin-bottom: 8px;">${item.trim()}</li>`; });
+        } else {
+            solutionsHTML = '<li>No solutions recorded.</li>';
+        }
 
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const bgColor = isDark ? '#0b0f1a' : '#ffffff';
-        const textColor = isDark ? '#f8fafc' : '#000000';
+        let medicinesSection = '';
+        if (medicineItems && medicineItems.length > 0 && medicineItems[0] !== 'None') {
+            let medList = '';
+            medicineItems.forEach(item => { medList += `<li style="margin-bottom: 8px;">${item.trim()}</li>`; });
+            medicinesSection = `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Medicines / Treatments</h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
+                        ${medList}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // We don't have urgency explicitly passed here in this older function signature, 
+        // so we'll default to a neutral blue/grey or try to infer it. Let's use neutral blue.
+        const urgencyColor = '#0ea5e9';
+        const urgencyText = 'Assessment';
+
         const reportDiv = document.createElement('div');
         reportDiv.innerHTML = `
-            <div style="background-color: ${bgColor}; padding: 40px; color: ${textColor}; font-family: sans-serif;">
-                <h1 style="text-align: center; border-bottom: 2px solid ${textColor}; padding-bottom: 10px;">Medical Triage Report</h1>
-                <p>Date: ${dateStr}</p>
-                <h3>Symptoms:</h3><ul>${userSymptomsList}</ul>
-                <h3>Verdict:</h3><p><strong>${issue}</strong></p>
-                <h3>Plan:</h3>${solutionsHTML}
+            <div style="font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 20px; background: #fff;">
+                <!-- Header -->
+                <div style="border-bottom: 3px solid #0ea5e9; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h1 style="color: #0ea5e9; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px;">MEDORA</h1>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #64748b; font-weight: 500;">AI Medical Assessment Report</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Generated on</p>
+                        <p style="margin: 2px 0 0; font-size: 13px; color: #334155; font-weight: 600;">${dateStr}</p>
+                    </div>
+                </div>
+
+                <!-- Assessment Verdict Banner -->
+                <div style="background-color: #f8fafc; border-left: 4px solid ${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="flex: 1;">
+                        <h2 style="margin: 0 0 6px; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Assessment Verdict</h2>
+                        <p style="margin: 0; font-size: 18px; color: #0f172a; font-weight: 600; line-height: 1.3;">${issue || 'Unknown'}</p>
+                    </div>
+                    <div style="margin-left: 20px; text-align: right;">
+                        <span style="display: inline-block; padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; background-color: ${urgencyColor}20; color: ${urgencyColor}; border: 1px solid ${urgencyColor}40;">
+                            ${urgencyText} Priority
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                    <!-- Symptoms Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Reported Symptoms</h3>
+                        <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
+                            ${userSymptomsList}
+                        </ul>
+                    </div>
+
+                    <!-- Action Plan Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Action Plan</h3>
+                        <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
+                            ${solutionsHTML}
+                        </ul>
+                    </div>
+                    
+                    <!-- Medicines Section -->
+                    ${medicinesSection}
+                </div>
+
+                <!-- Footer Disclaimer -->
+                <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; line-height: 1.6; text-align: justify; background-color: #f8fafc; padding: 15px; border-radius: 6px;">
+                    <p style="margin: 0;"><strong>Disclaimer:</strong> This report is generated by Medora's AI assessment system and is intended for informational purposes only. It is <strong>NOT</strong> a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of a medical emergency, immediately contact your local emergency services.</p>
+                </div>
             </div>
         `;
 
-        const opt = { margin: 0.5, filename: 'Medora_Triage_Report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+        const opt = { 
+            margin: 0.5, 
+            filename: 'Medora_Assessment_Report.pdf', 
+            image: { type: 'jpeg', quality: 0.98 }, 
+            html2canvas: { scale: 2, useCORS: true }, 
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
+        };
         if (typeof html2pdf !== 'undefined') html2pdf().set(opt).from(reportDiv).save();
     }
 });
