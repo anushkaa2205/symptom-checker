@@ -40,12 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (welcomeNameEl) welcomeNameEl.textContent = `Hello, ${firstName} 👋`;
         
         const total = (urgencyBreakdown.green || 0) + (urgencyBreakdown.yellow || 0) + (urgencyBreakdown.red || 0);
-        let dominantUrgency = 'green';
-        if (urgencyBreakdown.red > urgencyBreakdown.yellow && urgencyBreakdown.red > urgencyBreakdown.green) {
-            dominantUrgency = 'red';
-        } else if (urgencyBreakdown.yellow > urgencyBreakdown.green) {
-            dominantUrgency = 'yellow';
-        }
+        let dominantUrgency = null;
+
+if (total > 0) {
+    if (
+        urgencyBreakdown.red > urgencyBreakdown.yellow &&
+        urgencyBreakdown.red > urgencyBreakdown.green
+    ) {
+        dominantUrgency = 'red';
+    } else if (
+        urgencyBreakdown.yellow > urgencyBreakdown.green
+    ) {
+        dominantUrgency = 'yellow';
+    } else {
+        dominantUrgency = 'green';
+    }
+}
 
         const insightTextEl = document.getElementById('hero-insight-text');
         const riskTextEl = document.getElementById('hero-risk-text');
@@ -81,8 +91,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const symptomEl = document.getElementById('stat-symptom');
         if (symptomEl) symptomEl.setAttribute('title', freqSymptom);
         
-        safeText('stat-urgency', stats.mostCommonUrgency || 'Low');
+        const urgencyMap = {
+    red: "Critical",
+    yellow: "Moderate",
+    green: "Routine"
+};
 
+let urgencyDisplay = "None";
+
+// Only show urgency if assessments actually exist
+if (stats.totalAssessments > 0 && stats.mostCommonUrgency) {
+    urgencyDisplay = urgencyMap[stats.mostCommonUrgency] || "None";
+}
+
+const urgencyEl = document.getElementById('stat-urgency');
+
+if (urgencyEl) {
+    urgencyEl.textContent = urgencyDisplay;
+
+    urgencyEl.classList.remove('text-red', 'text-yellow', 'text-green');
+
+    if (stats.totalAssessments > 0) {
+        if (stats.mostCommonUrgency === 'red') {
+            urgencyEl.classList.add('text-red');
+        } else if (stats.mostCommonUrgency === 'yellow') {
+            urgencyEl.classList.add('text-yellow');
+        } else if (stats.mostCommonUrgency === 'green') {
+            urgencyEl.classList.add('text-green');
+        }
+    }
+}
         let lastDateStr = 'Never';
         if (stats.lastAssessmentDate) {
             lastDateStr = new Date(stats.lastAssessmentDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });

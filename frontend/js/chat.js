@@ -189,10 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!authRes.ok) {
     const goLogin = confirm(
-        "Please login to download your medical report.\n\nClick OK to go to login page."
+        "Please login to download your medical report.\n\nYour current assessment will be saved."
     );
 
     if (goLogin) {
+        // save guest chat before redirect
+        localStorage.setItem(
+            "pendingGuestChat",
+            JSON.stringify({
+                history: chatHistory,
+                timestamp: Date.now()
+            })
+        );
+
+        localStorage.setItem("redirectAfterLogin", "/chat");
+
         window.location.href = "/login";
     }
 
@@ -231,20 +242,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function saveCurrentChat() {
-        try {
-            await fetch('/api/chat/save', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chatId: currentChatId, history: chatHistory })
-            }).then(res => res.json()).then(data => {
-                if (!currentChatId && data.chatId) {
-                    currentChatId = data.chatId;
-                    fetchRecentChats();
-                }
-            });
-        } catch (err) { console.error("Failed to auto-save chat", err); }
+    try {
+        await fetch('/api/chat/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                chatId: currentChatId,
+                history: chatHistory
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!currentChatId && data.chatId) {
+                currentChatId = data.chatId;
+                fetchRecentChats();
+            }
+        });
+    } catch (err) {
+        console.error("Failed to auto-save chat", err);
     }
+}
+    async function restoreGuestChatAfterLogin() {
+    try {
+        const authRes = await fetch('/api/auth/me', {
+            credentials: 'include'
+        });
 
+        if (!authRes.ok) return;
+
+        const pendingChat = localStorage.getItem("pendingGuestChat");
+
+        if (!pendingChat) return;
+
+        const parsed = JSON.parse(pendingChat);
+
+        console.log("Pending chat being restored:", parsed.history);
+
+        const saveRes = await fetch('/api/chat/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                history: parsed.history
+            })
+        });
+
+        if (saveRes.ok) {
+            const savedData = await saveRes.json();
+
+            localStorage.removeItem("pendingGuestChat");
+            localStorage.removeItem("redirectAfterLogin");
+
+            window.location.href = "/dashboard";
+        }
+
+    } catch (err) {
+        console.error("Failed to restore guest chat:", err);
+    }
+}
     async function fetchRecentChats() {
         if (!recentChatsList) return;
         try {
@@ -322,8 +382,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') sendMessage();
         });
     }
-
+    (async () => {
+    await restoreGuestChatAfterLogin();
     fetchRecentChats();
+})();
     const urlParams = new URLSearchParams(window.location.search);
     const chatIdFromUrl = urlParams.get('id');
     if (chatIdFromUrl) loadChat(chatIdFromUrl);

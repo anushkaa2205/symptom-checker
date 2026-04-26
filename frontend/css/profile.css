@@ -196,9 +196,18 @@ body {
 /* Dashboard Grid */
 .dashboard-grid { 
     display: grid; 
-    grid-template-columns: 1fr 340px; 
+    grid-template-columns: 2fr 1fr; 
+    grid-template-areas: 
+        "overview emergency"
+        "assessments summary";
     gap: 32px; 
+    align-items: stretch;
 }
+
+.medical-overview { grid-area: overview; margin-bottom: 0; }
+.recent-assessments { grid-area: assessments; }
+.emergency-sidebar { grid-area: emergency; }
+.health-summary-sidebar { grid-area: summary; }
 
 /* Section Styling */
 .card-header { 
@@ -216,9 +225,6 @@ body {
     letter-spacing: -0.02em;
     color: var(--text-primary);
 }
-
-/* Medical Info */
-.medical-overview { margin-bottom: 24px; }
 
 .medical-sections { 
     padding: 20px 24px; 
@@ -354,12 +360,7 @@ body {
 }
 
 /* Sidebar Styling */
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: stretch;
-}
+
 
 .emergency-icon { 
     width: 64px; 
@@ -416,9 +417,8 @@ body {
 /* Health Summary Sidebar */
 .health-summary-sidebar {
     padding: 20px;
-    height: fit-content;
-    align-self: start;
-    padding-top: 0%;
+    height: 100%;
+    padding-top: 0;
 }
 
 .summary-metrics {
@@ -475,7 +475,8 @@ body {
 .emergency-sidebar { 
     padding: 20px; 
     text-align: center;
-    padding-top: none;
+    padding-top: 0;
+    height: 100%;
 }
 
 .emergency-icon { 
@@ -513,7 +514,15 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 1100px) {
-    .dashboard-grid { grid-template-columns: 1fr; }
+    .dashboard-grid { 
+        grid-template-columns: 1fr; 
+        grid-template-areas: 
+            "overview"
+            "assessments"
+            "emergency"
+            "summary";
+        gap: 24px;
+    }
 }
 
 @media (max-width: 768px) {

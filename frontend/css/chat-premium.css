@@ -105,9 +105,14 @@ body {
     padding-right: 4px;
 }
 
-/* Custom Scrollbar for sidebar */
-.recent-chats::-webkit-scrollbar { width: 4px; }
-.recent-chats::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+/* Hide Scrollbar */
+.recent-chats::-webkit-scrollbar {
+    display: none;
+}
+.recent-chats {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
 
 .recent-chats li {
     padding: 14px;
@@ -186,6 +191,14 @@ body {
     flex-direction: column;
     gap: 32px;
     scroll-behavior: smooth;
+    
+    /* Hide Scrollbar */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.chat-viewport::-webkit-scrollbar {
+    display: none;
 }
 
 /* Welcome Hero State */

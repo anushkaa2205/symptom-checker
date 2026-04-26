@@ -114,7 +114,7 @@ async function loadProfile() {
             hp?.chronicConditions || []
         );
 
-        renderSimpleList(
+        renderPills(
             "history",
             hp?.previousMedicalHistory || []
         );
@@ -266,23 +266,6 @@ function renderPills(id, items) {
 
     if (!items.length) {
         list.innerHTML = "<li>None</li>";
-        return;
-    }
-
-    items.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        list.appendChild(li);
-    });
-}
-
-function renderSimpleList(id, items) {
-    const list = document.getElementById(id);
-    list.innerHTML = "";
-
-    if (!items.length) {
-        list.innerHTML =
-            "<li>No significant history reported.</li>";
         return;
     }
 
