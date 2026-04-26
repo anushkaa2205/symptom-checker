@@ -154,17 +154,28 @@ body {
     height: 20px;
 }
 
-/* Trending Carousel */
+/* Trending Marquee */
 .trending-carousel {
-    overflow-x: auto;
+    overflow: hidden;
     padding: 10px 0 30px 0;
-    scrollbar-width: none;
+    width: 100%;
+    position: relative;
 }
-.trending-carousel::-webkit-scrollbar { display: none; }
 
 .trending-track {
     display: flex;
     gap: 20px;
+    width: max-content;
+    animation: scroll-marquee 40s linear infinite;
+}
+
+.trending-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 10px)); }
 }
 
 .trending-card-compact {
