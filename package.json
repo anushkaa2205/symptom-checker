@@ -1,10 +1,17 @@
 {
   "dependencies": {
+    "@google/genai": "^1.50.1",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.4.1",
-    "mongodb": "^7.1.1",
-    "mongoose": "^9.4.1"
+    "fast-xml-parser": "^5.7.2",
+    "groq-sdk": "^1.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.5.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   }
 }

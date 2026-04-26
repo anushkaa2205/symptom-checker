@@ -252,7 +252,7 @@ async function handleSubmit(e) {
 
         if (res.ok) {
             window.location.href =
-                "/dashboard";
+                "/profile";
         } else {
             alert(
                 result.message ||
