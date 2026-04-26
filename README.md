@@ -1,6 +1,6 @@
 # 🩺 Medora - AI Health Assistant
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=render)](https://symptom-checker-b53o.onrender.com)
+**Deployed URL:** [https://symptom-checker-b53o.onrender.com](https://symptom-checker-b53o.onrender.com)
 
 Medora is a modern, AI-powered health assessment platform that provides instant symptom analysis and personalized health insights. Built with a premium aesthetic and advanced AI integrations, it redefines healthcare with intelligence.
 
