@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch dashboard stats from backend
     async function fetchDashboardData() {
         try {
-            const res = await fetch('/api/dashboard/stats');
+            const res = await fetch('/api/dashboard/stats', { cache: 'no-store' });
             
             if (res.status === 401 || res.status === 403) {
                 showLoginPrompt();

@@ -272,6 +272,15 @@ body {
 }
 
 /* Assessments Section */
+.empty-state {
+    padding: 32px 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+.empty-state p {
+    margin-bottom: 16px;
+    font-size: 15px;
+}
 .history-list {
     display: flex;
     flex-direction: column;

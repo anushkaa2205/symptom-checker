@@ -21,7 +21,8 @@ async function loadProfile() {
     try {
         const res = await fetch("/api/auth/profile", {
             method: "GET",
-            credentials: "include"
+            credentials: "include",
+            cache: "no-store"
         });
 
         if (res.status === 401) {
@@ -141,7 +142,8 @@ async function loadRecentAssessments() {
     try {
         const res = await fetch("/api/chat/history", {
             method: "GET",
-            credentials: "include"
+            credentials: "include",
+            cache: "no-store"
         });
 
         if (res.status === 401) {
