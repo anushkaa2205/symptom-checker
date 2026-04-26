@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pulseDot = riskBadgeEl ? riskBadgeEl.querySelector('.pulse-dot') : null;
 
         if (total === 0) {
-            if (insightTextEl) insightTextEl.textContent = "Start your first health assessment to get personalized insights and AI-driven triage.";
+            if (insightTextEl) insightTextEl.textContent = "Start your first health assessment to get personalized insights and AI-driven analysis.";
             if (riskTextEl) riskTextEl.textContent = "No Data";
         } else if (dominantUrgency === 'red') {
             if (insightTextEl) insightTextEl.textContent = "Your recent assessments indicate mostly critical symptoms. Please prioritize professional medical consultation.";
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const recommendationEl = document.getElementById('insight-recommendation');
         if (recommendationEl) {
             if (total === 0) {
-                recommendationEl.textContent = "Welcome to Medora. We are ready to assist you when you need health triage.";
+                recommendationEl.textContent = "Welcome to Medora. We are ready to assist you when you need a health assessment.";
             } else if (dominantUrgency === 'red') {
                 recommendationEl.textContent = "Important: Multiple critical assessments detected. We strongly recommend scheduling a professional medical consultation immediately.";
             } else if (dominantUrgency === 'yellow') {
@@ -207,11 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Standard PDF Generator Function
     function generatePDFReport(diag) {
-        const dateStr = new Date(diag.date).toLocaleString();
+        const dateStr = new Date(diag.date).toLocaleString(undefined, {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
 
         const buildList = (arr, fallback) => {
             if (!arr || arr.length === 0) return `<li>${fallback}</li>`;
-            return arr.map(item => `<li style="margin-bottom: 6px;">${item.trim()}</li>`).join('');
+            return arr.map(item => `<li style="margin-bottom: 8px;">${item.trim()}</li>`).join('');
         };
 
         const userSymptomsList = buildList(diag.symptomsSummary, 'No symptoms explicitly provided.');
@@ -221,53 +223,79 @@ document.addEventListener('DOMContentLoaded', () => {
         if (diag.medicineItems && diag.medicineItems.length > 0) {
             const medList = buildList(diag.medicineItems, '');
             medicinesSection = `
-                <div style="margin-bottom: 20px;">
-                    <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 4px; font-size: 14px;">4. Recommended Medicines / Treatments</h2>
-                    <ul style="padding-left: 20px; margin-top: 10px; line-height: 1.4;">${medList}</ul>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Medicines / Treatments</h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
+                        ${medList}
+                    </ul>
                 </div>
             `;
         }
 
+        const urgencyColor = diag.urgency === 'red' ? '#ef4444' : (diag.urgency === 'yellow' ? '#f59e0b' : '#10b981');
+        const urgencyText = diag.urgency === 'red' ? 'Critical' : (diag.urgency === 'yellow' ? 'Moderate' : 'Routine');
+
         const reportDiv = document.createElement('div');
-        reportDiv.style.fontFamily = 'Georgia, "Times New Roman", serif';
-        reportDiv.style.fontSize = '12px';
-        reportDiv.style.color = '#000';
-        reportDiv.style.backgroundColor = '#fff';
-        reportDiv.style.padding = '40px';
-
         reportDiv.innerHTML = `
-            <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 24px;">
-                <h1 style="margin: 0; font-size: 22px; text-transform: uppercase;">Medical Triage Report</h1>
-                <p style="color: #555; margin-top: 6px; font-size: 12px;">Generated on: ${dateStr}</p>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 4px; font-size: 14px;">1. Reported Symptoms</h2>
-                <ul style="padding-left: 20px; margin-top: 10px; line-height: 1.4;">${userSymptomsList}</ul>
-            </div>
+            <div style="font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 20px; background: #fff;">
+                <!-- Header -->
+                <div style="border-bottom: 3px solid #0ea5e9; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h1 style="color: #0ea5e9; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px;">MEDORA</h1>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #64748b; font-weight: 500;">AI Medical Assessment Report</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Generated on</p>
+                        <p style="margin: 2px 0 0; font-size: 13px; color: #334155; font-weight: 600;">${dateStr}</p>
+                    </div>
+                </div>
 
-            <div style="margin-bottom: 20px;">
-                <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 4px; font-size: 14px;">2. AI Triage Verdict</h2>
-                <p style="line-height: 1.4; font-weight: bold; margin-top: 10px;">${diag.title || 'Unknown'}</p>
-            </div>
+                <!-- Assessment Verdict Banner -->
+                <div style="background-color: #f8fafc; border-left: 4px solid ${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="flex: 1;">
+                        <h2 style="margin: 0 0 6px; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Assessment Verdict</h2>
+                        <p style="margin: 0; font-size: 18px; color: #0f172a; font-weight: 600; line-height: 1.3;">${diag.title || 'Unknown'}</p>
+                    </div>
+                    <div style="margin-left: 20px; text-align: right;">
+                        <span style="display: inline-block; padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; background-color: ${urgencyColor}20; color: ${urgencyColor}; border: 1px solid ${urgencyColor}40;">
+                            ${urgencyText} Priority
+                        </span>
+                    </div>
+                </div>
 
-            <div style="margin-bottom: 20px;">
-                <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 4px; font-size: 14px;">3. Recommended Action Plan</h2>
-                <ul style="padding-left: 20px; margin-top: 10px; line-height: 1.4;">${solutionsList}</ul>
-            </div>
-            
-            ${medicinesSection}
-            
-            <div style="margin-top: 50px; padding-top: 15px; border-top: 1px solid #ccc; font-size: 10px; color: #666; line-height: 1.4; text-align: justify;">
-                <p><strong>Disclaimer:</strong> This report is generated by an AI triage system and is for informational purposes only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of emergency, immediately contact local emergency services.</p>
+                <div style="display: flex; flex-direction: column;">
+                    <!-- Symptoms Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Reported Symptoms</h3>
+                        <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
+                            ${userSymptomsList}
+                        </ul>
+                    </div>
+
+                    <!-- Action Plan Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Action Plan</h3>
+                        <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
+                            ${solutionsList}
+                        </ul>
+                    </div>
+                    
+                    <!-- Medicines Section -->
+                    ${medicinesSection}
+                </div>
+
+                <!-- Footer Disclaimer -->
+                <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; line-height: 1.6; text-align: justify; background-color: #f8fafc; padding: 15px; border-radius: 6px;">
+                    <p style="margin: 0;"><strong>Disclaimer:</strong> This report is generated by Medora's AI assessment system and is intended for informational purposes only. It is <strong>NOT</strong> a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of a medical emergency, immediately contact your local emergency services.</p>
+                </div>
             </div>
         `;
 
         const opt = {
-            margin: 0.75,
-            filename: 'Triage_Report.pdf',
+            margin: 0.5,
+            filename: 'Medora_Assessment_Report.pdf',
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
+            html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
 
