@@ -10,6 +10,13 @@
     <script src="js/tailwind-config.js"></script>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="/css/global.css">
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 </head>
 
 <body class="bg-[#fafafa] dark:bg-[#02050A] text-gray-900 dark:text-white transition-colors duration-500 overflow-x-hidden font-sans antialiased">
@@ -150,8 +157,8 @@
             </div>
             <p class="text-sm text-gray-500 font-medium">© 2026 Medora Healthcare. Professional AI Assessment.</p>
             <div class="flex gap-6 text-sm font-semibold text-gray-500">
-                <a href="#" class="hover:text-blue-500 transition-colors">Privacy</a>
-                <a href="#" class="hover:text-blue-500 transition-colors">Terms</a>
+                <a href="/privacy" class="hover:text-blue-500 transition-colors">Privacy</a>
+                <a href="/terms" class="hover:text-blue-500 transition-colors">Terms</a>
             </div>
         </div>
     </footer>

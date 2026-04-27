@@ -79,6 +79,12 @@ app.get('/profile', protect, (req, res) => {
 app.get('/blogs', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/blogs.html'));
 }); 
+app.get('/terms', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/pages/terms.html'));
+});
+app.get('/privacy', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/pages/privacy.html'));
+});
 app.get("/auth/google",
     passport.authenticate("google", { scope: ["profile", "email"] })
 );

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions | Medora</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/css/global.css">
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <style>
+        .terms-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        .dark .terms-content h2 {
+            color: #ffffff;
+        }
+        .terms-content p, .terms-content ul {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: #4b5563;
+            margin-bottom: 1.25rem;
+        }
+        .dark .terms-content p, .dark .terms-content ul {
+            color: #9ca3af;
+        }
+        .terms-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-[#fafafa] dark:bg-[#02050A] text-gray-900 dark:text-white transition-colors duration-500 overflow-x-hidden font-sans antialiased">
+    
+    <!-- Background Glows -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-blue-400/10 dark:bg-blue-600/10 blur-[150px]"></div>
+        <div class="absolute bottom-[10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-400/10 dark:bg-purple-600/10 blur-[150px]"></div>
+        
+        <!-- Subtle Grid overlay -->
+        <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-40 dark:opacity-20"></div>
+    </div>
+
+    <!-- Global Navbar -->
+    <div id="navbar"></div>
+
+    <main class="relative z-10 pt-32 pb-24 min-h-[90vh]">
+        <div class="max-w-4xl mx-auto px-6 w-full">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 text-[11px] font-bold uppercase tracking-widest mb-6">
+                    ✦ Legal Information
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4">Terms and <span class="text-blue-500">Conditions</span></h1>
+                <p class="text-gray-500 dark:text-gray-400 font-medium">Last updated: April 2026</p>
+            </div>
+
+            <div class="glass-panel p-8 md:p-12 rounded-[32px] border border-gray-100 dark:border-white/5 bg-white/70 dark:bg-white/5 backdrop-blur-xl shadow-sm dark:shadow-none terms-content">
+                <p>Welcome to Medora. Please read these Terms and Conditions carefully before using our AI-powered symptom analysis platform. By accessing or using our services, you agree to be bound by these terms.</p>
+
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing Medora's website and utilizing our AI assessment tools, you acknowledge that you have read, understood, and agree to comply with all aspects of these terms.</p>
+
+                <h2>2. Not Medical Advice</h2>
+                <p><strong>Medora is an AI-powered informational tool, not a diagnostic or medical service.</strong></p>
+                <ul>
+                    <li>The information and triaging advice provided are for educational and informational purposes only.</li>
+                    <li>Medora should never be used as a substitute for professional medical advice, diagnosis, or treatment.</li>
+                    <li>Always consult your physician or other qualified healthcare provider regarding any medical condition or emergency.</li>
+                    <li>Call emergency services immediately if you believe you are experiencing a medical emergency.</li>
+                </ul>
+
+                <h2>3. User Account and Data Privacy</h2>
+                <p>To use our platform, you must create an account. You are responsible for maintaining the confidentiality of your login credentials.</p>
+                <ul>
+                    <li>We process your data securely, employing encryption protocols for symptom assessments and health history.</li>
+                    <li>You agree that all information provided during an assessment is as accurate as possible to ensure the best possible AI interpretation.</li>
+                    <li>We do not share identifiable health information with third-party advertisers.</li>
+                </ul>
+
+                <h2>4. Intellectual Property</h2>
+                <p>All content, features, functionalities, algorithms, and design elements within Medora are the exclusive property of Medora Healthcare and are protected by international copyright and intellectual property laws.</p>
+
+                <h2>5. Limitation of Liability</h2>
+                <p>Medora Healthcare, its developers, and affiliates shall not be held liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use our services, or any actions taken based on the information provided by the AI.</p>
+
+                <h2>6. Changes to Terms</h2>
+                <p>We reserve the right to modify these Terms at any time. We will notify users of any significant changes via email or an alert on the dashboard.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-[#02050A] relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 font-bold text-lg text-gray-900 dark:text-white">
+                <span class="text-blue-500">✦</span> Medora
+            </div>
+            <p class="text-sm text-gray-500 font-medium">© 2026 Medora Healthcare. Professional AI Assessment.</p>
+            <div class="flex gap-6 text-sm font-semibold text-gray-500">
+                <a href="/privacy" class="hover:text-blue-500 transition-colors">Privacy</a>
+                <a href="/terms" class="hover:text-blue-500 transition-colors">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/navbar.js"></script>
+</body>
+</html>

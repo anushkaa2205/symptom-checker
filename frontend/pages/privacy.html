@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | Medora</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwind-config.js"></script>
+    <script>
+        // Inline theme script to prevent FOUC
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <link rel="stylesheet" href="/css/global.css">
+    <style>
+        .policy-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        .dark .policy-content h2 {
+            color: #ffffff;
+        }
+        .policy-content p, .policy-content ul {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: #4b5563;
+            margin-bottom: 1.25rem;
+        }
+        .dark .policy-content p, .dark .policy-content ul {
+            color: #9ca3af;
+        }
+        .policy-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-[#fafafa] dark:bg-[#02050A] text-gray-900 dark:text-white transition-colors duration-500 overflow-x-hidden font-sans antialiased">
+    
+    <!-- Background Glows -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-blue-400/10 dark:bg-blue-600/10 blur-[150px]"></div>
+        <div class="absolute bottom-[10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-400/10 dark:bg-purple-600/10 blur-[150px]"></div>
+        
+        <!-- Subtle Grid overlay -->
+        <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-40 dark:opacity-20"></div>
+    </div>
+
+    <!-- Global Navbar -->
+    <div id="navbar"></div>
+
+    <main class="relative z-10 pt-32 pb-24 min-h-[90vh]">
+        <div class="max-w-4xl mx-auto px-6 w-full">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 text-[11px] font-bold uppercase tracking-widest mb-6">
+                    ✦ Your Privacy Matters
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4">Privacy <span class="text-blue-500">Policy</span></h1>
+                <p class="text-gray-500 dark:text-gray-400 font-medium">Last updated: April 2026</p>
+            </div>
+
+            <div class="glass-panel p-8 md:p-12 rounded-[32px] border border-gray-100 dark:border-white/5 bg-white/70 dark:bg-white/5 backdrop-blur-xl shadow-sm dark:shadow-none policy-content">
+                <p>At Medora, we take your privacy and the security of your health data extremely seriously. This Privacy Policy outlines how we collect, use, and protect your information.</p>
+
+                <h2>1. Data We Collect</h2>
+                <p>We collect information necessary to provide accurate symptom analysis and maintain your health history:</p>
+                <ul>
+                    <li><strong>Account Information:</strong> Name, email address, and authentication details.</li>
+                    <li><strong>Health Data:</strong> Symptoms, health history, and assessment results provided during chat sessions.</li>
+                    <li><strong>Usage Data:</strong> Information on how you interact with our platform to improve our AI models.</li>
+                </ul>
+
+                <h2>2. How We Use Your Data</h2>
+                <p>Your data is used specifically for:</p>
+                <ul>
+                    <li>Providing personalized AI-powered health insights.</li>
+                    <li>Generating downloadable health reports for your doctors.</li>
+                    <li>Improving the accuracy of our clinical triaging algorithms.</li>
+                    <li>Maintaining your assessment history for long-term tracking.</li>
+                </ul>
+
+                <h2>3. Data Security & Encryption</h2>
+                <p>We implement enterprise-grade security measures to protect your sensitive information:</p>
+                <ul>
+                    <li>All health data is encrypted at rest and during transit using industry-standard protocols.</li>
+                    <li>We use secure authentication methods to ensure only you can access your history.</li>
+                    <li>Regular security audits are conducted to identify and mitigate potential vulnerabilities.</li>
+                </ul>
+
+                <h2>4. Sharing of Information</h2>
+                <p><strong>We do not sell your personal health data to third parties.</strong> Information is only shared:</p>
+                <ul>
+                    <li>When you explicitly choose to export and share a report with a healthcare provider.</li>
+                    <li>With essential service providers who help us maintain the platform (e.g., secure cloud hosting).</li>
+                    <li>If required by law to comply with legal obligations.</li>
+                </ul>
+
+                <h2>5. Your Rights</h2>
+                <p>You have full control over your data on Medora:</p>
+                <ul>
+                    <li>You can access and download your entire assessment history at any time.</li>
+                    <li>You can request the deletion of your account and all associated health data.</li>
+                    <li>You can update your personal information through your profile settings.</li>
+                </ul>
+
+                <h2>6. Cookies and Tracking</h2>
+                <p>We use essential cookies to maintain your session and remember your theme preferences. We do not use invasive tracking for advertising purposes.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-[#02050A] relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 font-bold text-lg text-gray-900 dark:text-white">
+                <span class="text-blue-500">✦</span> Medora
+            </div>
+            <p class="text-sm text-gray-500 font-medium">© 2026 Medora Healthcare. Professional AI Assessment.</p>
+            <div class="flex gap-6 text-sm font-semibold text-gray-500">
+                <a href="/privacy" class="hover:text-blue-500 transition-colors">Privacy</a>
+                <a href="/terms" class="hover:text-blue-500 transition-colors">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/navbar.js"></script>
+</body>
+</html>
