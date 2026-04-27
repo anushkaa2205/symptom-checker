@@ -1,7 +1,6 @@
 /* Layout & Base */
 html, body {
     overflow-x: hidden;
-    width: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -31,29 +30,15 @@ body {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 1.5rem;
-    width: 100%;
 }
 
 .container-sm {
     max-width: 1024px;
     margin: 0 auto;
     padding: 0 1.5rem;
-    width: 100%;
 }
 
-.relative { position: relative; }
-.fixed { position: fixed; }
-.absolute { position: absolute; }
-.inset-0 { top: 0; left: 0; right: 0; bottom: 0; }
-.z-0 { z-index: 0; }
-.z-10 { z-index: 10; }
-.z-20 { z-index: 20; }
-.hidden { display: none; }
-.lg-block { display: block; }
 
-@media (max-width: 1023px) {
-    .lg-block { display: none; }
-}
 
 /* Gradients */
 .gradient-text {
@@ -80,11 +65,15 @@ body {
 
 /* Background Effects */
 .bg-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
     pointer-events: none;
     overflow: hidden;
 }
 
 .blob {
+    position: absolute;
     border-radius: 50%;
     filter: blur(150px);
     opacity: 0.1;
@@ -109,6 +98,8 @@ body {
 }
 
 .grid-bg {
+    position: absolute;
+    inset: 0;
     background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
     background-size: 40px 40px;
     opacity: 0.4;
@@ -129,8 +120,9 @@ body {
     50% { transform: translateY(30px) scale(0.95); }
 }
 
-/* Hero Section */
 .hero {
+    position: relative;
+    z-index: 10;
     padding: 3rem 0 5rem;
     display: flex;
     align-items: center;
@@ -218,7 +210,11 @@ body {
 .dark .btn-outline:hover { background: rgba(255, 255, 255, 0.05); }
 
 /* Features */
-.features { padding: 6rem 0; }
+.features {
+    position: relative;
+    z-index: 10;
+    padding: 6rem 0;
+}
 
 .feature-grid {
     display: grid;
@@ -305,6 +301,7 @@ body {
 
 /* Steps */
 .steps {
+    position: relative;
     padding: 6rem 0;
     border-top: 1px solid #f3f4f6;
     border-bottom: 1px solid #f3f4f6;
@@ -426,7 +423,7 @@ footer {
     z-index: 10;
     padding: 3rem 0;
     border-top: 1px solid #f3f4f6;
-    transition: 0.5s;
+    transition: border-color 0.5s;
 }
 
 .dark footer { border-color: rgba(255, 255, 255, 0.05); }
@@ -476,22 +473,12 @@ footer {
 
 /* DNA Canvas */
 #canvas-bg {
+    position: fixed;
+    inset: 0;
     z-index: 0;
     pointer-events: none;
 }
 
 @media (min-width: 1024px) {
     #canvas-bg { left: 20%; }
-}
-
-/* Animations & reveal */
-[data-reveal] {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: 0.8s;
-}
-
-[data-reveal].active {
-    opacity: 1;
-    transform: translateY(0);
 }
