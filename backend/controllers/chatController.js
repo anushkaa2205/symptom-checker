@@ -32,7 +32,6 @@ STRICT RULES:
 - If asking a question or answering a direct question, just output plain text.
 - If giving a verdict, ONLY output the VERDICT|... string. Do not add any other text.
 - Provide a verdict after a maximum of 3-4 total user turns.`;
-//creates the memory for AI
 const buildPrompt = (message, history) => {
     let prompt = SYSTEM_PROMPT + "\n\n";
     if (history && Array.isArray(history)) {
@@ -44,7 +43,6 @@ const buildPrompt = (message, history) => {
     return prompt;
 };
 
-// Try Groq first (llama-3.3-70b) 
 const tryGroq = async (message, history) => {
     if (!groqClient) {
         groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -67,7 +65,6 @@ const tryGroq = async (message, history) => {
     return completion.choices[0]?.message?.content;
 };
 
-// Fallback to Gemini (gemini-2.5-flash-lite)
 const tryGemini = async (message, history) => {
     if (!geminiClient) {
         geminiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -110,7 +107,6 @@ if (isEmergency) {
         return res.status(400).json({ error: 'Message is required.' });
     }
 
-    // --- Cascade: Groq → Gemini ---
     try {
         console.log('[Chat] Trying Groq (primary)...');
         const reply = await tryGroq(message, history);

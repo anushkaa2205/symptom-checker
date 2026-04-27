@@ -3,16 +3,12 @@ import { XMLParser } from "fast-xml-parser";
 
 const router = express.Router();
 
-// In-memory cache: { data, timestamp }
 let cache = { data: null, timestamp: 0 };
-const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
+const CACHE_TTL = 15 * 60 * 1000; 
 
 const UA =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
-/**
- * Fetch with a timeout. Returns null on failure.
- */
 async function safeFetch(url, timeoutMs = 6000) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -30,9 +26,6 @@ async function safeFetch(url, timeoutMs = 6000) {
     }
 }
 
-/**
- * Scrape og:image from an article page (reads only the first ~50KB).
- */
 async function scrapeOgImage(articleUrl) {
     try {
         const res = await safeFetch(articleUrl, 5000);
@@ -66,9 +59,6 @@ async function scrapeOgImage(articleUrl) {
     }
 }
 
-/**
- * Fetch articles from MedicalXpress RSS (includes media:thumbnail).
- */
 async function fetchMedicalXpress() {
     const rssUrl = "https://medicalxpress.com/rss-feed/";
     const res = await safeFetch(rssUrl, 8000);
@@ -78,7 +68,6 @@ async function fetchMedicalXpress() {
     const parser = new XMLParser({
         ignoreAttributes: false,
         attributeNamePrefix: "@_",
-        // Preserve namespace-prefixed tags
         processEntities: false,
     });
     const parsed = parser.parse(xml);
@@ -86,14 +75,12 @@ async function fetchMedicalXpress() {
     if (!items || !Array.isArray(items)) return [];
 
     return items.slice(0, 10).map((item) => {
-        // Extract thumbnail from media:thumbnail
         let image = null;
         const thumb = item["media:thumbnail"];
         if (thumb) {
             image = typeof thumb === "string" ? thumb : thumb["@_url"] || null;
         }
 
-        // Format date
         let date = "";
         if (item.pubDate) {
             try {
@@ -113,9 +100,6 @@ async function fetchMedicalXpress() {
     });
 }
 
-/**
- * Fetch articles from Google News Health RSS, then scrape og:image from each source.
- */
 async function fetchGoogleNews() {
     const rssUrl =
         "https://news.google.com/rss/topics/CAAqIQgKIhtDQkFTRGdvSUwyMHZNR3QwTlRFU0FtVnVLQUFQAQ?hl=en-IN&gl=IN&ceid=IN:en";
@@ -153,14 +137,12 @@ async function fetchGoogleNews() {
         return { title, source, date, url: item.link || "#", image: null };
     });
 
-    // Scrape og:image from source articles in parallel
     const results = await Promise.allSettled(
         raw.map((a) => scrapeOgImage(a.url))
     );
     raw.forEach((a, i) => {
         const r = results[i];
         if (r.status === "fulfilled" && r.value) {
-            // Skip generic Google News logos
             if (!r.value.includes("googleusercontent.com/J6_coF")) {
                 a.image = r.value;
             }
@@ -170,25 +152,16 @@ async function fetchGoogleNews() {
     return raw;
 }
 
-/**
- * GET /api/news/trending
- * Combines MedicalXpress (with thumbnails) and Google News (scraped og:images).
- * Returns interleaved articles from both sources for variety.
- */
 router.get("/trending", async (req, res) => {
     try {
-        // Serve from cache if fresh
         if (cache.data && Date.now() - cache.timestamp < CACHE_TTL) {
             return res.json({ articles: cache.data });
         }
 
-        // Fetch both sources in parallel
         const [mxArticles, gnArticles] = await Promise.all([
             fetchMedicalXpress().catch(() => []),
             fetchGoogleNews().catch(() => []),
         ]);
-
-        // Interleave: prioritize MX (has images), then GN
         const articles = [];
         const maxLen = Math.max(mxArticles.length, gnArticles.length);
 
@@ -196,8 +169,6 @@ router.get("/trending", async (req, res) => {
             if (i < mxArticles.length) articles.push(mxArticles[i]);
             if (i < gnArticles.length) articles.push(gnArticles[i]);
         }
-
-        // Update cache
         if (articles.length > 0) {
             cache = { data: articles, timestamp: Date.now() };
         }
