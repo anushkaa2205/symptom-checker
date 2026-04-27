@@ -164,10 +164,12 @@ if (container) {
         if (isDark) {
             particleMaterial.color.setHex(0xffffff); 
             particleMaterial.opacity = 0.6;
+            particleMaterial.size = 0.22;
             particleMaterial.blending = THREE.AdditiveBlending;
         } else {
-            particleMaterial.color.setHex(0x3b82f6); 
-            particleMaterial.opacity = 0.4;
+            particleMaterial.color.setHex(0x2563eb);
+            particleMaterial.opacity = 0.7;
+            particleMaterial.size = 0.35;
             particleMaterial.blending = THREE.NormalBlending;
         }
         

@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark overflow-x-hidden">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medora | Premium AI Healthcare</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/tailwind-config.js"></script>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="/css/global.css">
     <script>
@@ -19,96 +17,87 @@
     </script>
 </head>
 
-<body class="bg-[#fafafa] dark:bg-[#02050A] text-gray-900 dark:text-white transition-colors duration-500 overflow-x-hidden font-sans antialiased">
+<body>
     
-    
-    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div class="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-blue-400/10 dark:bg-blue-600/10 blur-[150px] blob-1"></div>
-        <div class="absolute bottom-[10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-400/10 dark:bg-purple-600/10 blur-[150px] blob-2"></div>
-        
-        
-        <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-40 dark:opacity-20"></div>
+    <div class="fixed inset-0 z-0 bg-wrap">
+        <div class="absolute blob blob-1"></div>
+        <div class="absolute blob blob-2"></div>
+        <div class="absolute inset-0 grid-bg"></div>
     </div>
 
-
-    <div id="canvas-bg" class="fixed inset-0 w-full h-full pointer-events-none z-0 lg:left-[20%]"></div>
-
+    <div id="canvas-bg" class="fixed inset-0"></div>
 
     <div id="navbar"></div>
 
-
-    <main class="relative z-10 pt-12 pb-20 lg:pt-20 lg:pb-32 flex items-center min-h-[80vh]">
-        <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
-            <div class="relative flex flex-col items-start hero-section">
-                
-                <h1 class="text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold leading-[1.1] tracking-tight mb-6 text-gray-900 dark:text-white">
+    <main class="relative z-10 hero">
+        <div class="container hero-content">
+            <div class="relative hero-section">
+                <h1>
                     Healthcare, <br>
                     <span class="gradient-text">Redefined</span> <br>
                     with Intelligence.
                 </h1>
                 
-                <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-lg leading-relaxed font-medium">
+                <p>
                     Analyze your symptoms instantly with Medora's clinically-aware AI engine. Get accurate insights and triaging advice in seconds.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                    <a href="/chat" class="bg-blue-600 text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/20 flex items-center justify-center gap-3">
+                <div class="btn-group">
+                    <a href="/chat" class="btn btn-blue">
                         Start Assessment
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </a>
-                    <a href="#how-it-works" class="px-8 py-4 rounded-2xl text-base font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/5 transition flex items-center justify-center">
+                    <a href="#how-it-works" class="btn btn-outline">
                         Learn More
                     </a>
                 </div>
             </div>
             
-            <div class="hidden lg:block"></div>
+            <div class="lg-block"></div>
         </div>
     </main>
 
-
-    <section id="features" class="relative py-24 z-10">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
+    <section id="features" class="relative features z-10">
+        <div class="container">
+            <div class="feature-grid">
                 
-                <div class="feature-card h-full">
-                    <div class="card-box glass-panel p-8 rounded-[32px] border border-gray-100 dark:border-white/5 bg-white/70 dark:bg-white/5 backdrop-blur-xl h-full flex flex-col hover:bg-white dark:hover:bg-white/10 transition-all duration-500 shadow-sm dark:shadow-none">
-                        <div class="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-500/30">
-                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <div class="feature-card">
+                    <div class="card-box">
+                        <div class="icon-box bg-blue">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Smart Analysis</h3>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm font-medium">Deep learning engine trained on vast medical datasets for accurate triaging.</p>
+                        <h3>Smart Analysis</h3>
+                        <p>Deep learning engine trained on vast medical datasets for accurate triaging.</p>
                     </div>
                 </div>
 
-                <div class="feature-card h-full">
-                    <div class="card-box glass-panel p-8 rounded-[32px] border border-gray-100 dark:border-white/5 bg-white/70 dark:bg-white/5 backdrop-blur-xl h-full flex flex-col hover:bg-white dark:hover:bg-white/10 transition-all duration-500 shadow-sm dark:shadow-none">
-                        <div class="w-14 h-14 rounded-2xl bg-purple-600 flex items-center justify-center text-white mb-6 shadow-lg shadow-purple-500/30">
-                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div class="feature-card">
+                    <div class="card-box">
+                        <div class="icon-box bg-purple">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Instant Reports</h3>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm font-medium">Export detailed health insights to share with your primary healthcare provider.</p>
+                        <h3>Instant Reports</h3>
+                        <p>Export detailed health insights to share with your primary healthcare provider.</p>
                     </div>
                 </div>
 
-                <div class="feature-card h-full">
-                    <div class="card-box glass-panel p-8 rounded-[32px] border border-gray-100 dark:border-white/5 bg-white/70 dark:bg-white/5 backdrop-blur-xl h-full flex flex-col hover:bg-white dark:hover:bg-white/10 transition-all duration-500 shadow-sm dark:shadow-none">
-                        <div class="w-14 h-14 rounded-2xl bg-cyan-500 flex items-center justify-center text-white mb-6 shadow-lg shadow-cyan-500/30">
-                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="feature-card">
+                    <div class="card-box">
+                        <div class="icon-box bg-cyan">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Track History</h3>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm font-medium">Monitor your symptoms over time with our encrypted assessment history.</p>
+                        <h3>Track History</h3>
+                        <p>Monitor your symptoms over time with our encrypted assessment history.</p>
                     </div>
                 </div>
 
-                <div class="feature-card h-full">
-                    <div class="card-box glass-panel p-8 rounded-[32px] border border-gray-100 dark:border-white/5 bg-white/70 dark:bg-white/5 backdrop-blur-xl h-full flex flex-col hover:bg-white dark:hover:bg-white/10 transition-all duration-500 shadow-sm dark:shadow-none">
-                        <div class="w-14 h-14 rounded-2xl bg-rose-500 flex items-center justify-center text-white mb-6 shadow-lg shadow-rose-500/30">
-                            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                <div class="feature-card">
+                    <div class="card-box">
+                        <div class="icon-box bg-rose">
+                            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">Expert Guidance</h3>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm font-medium">Actionable advice on next steps based on your analysis results.</p>
+                        <h3>Expert Guidance</h3>
+                        <p>Actionable advice on next steps based on your analysis results.</p>
                     </div>
                 </div>
 
@@ -116,54 +105,51 @@
         </div>
     </section>
 
-
-    <section id="how-it-works" class="py-24 relative overflow-hidden border-y border-gray-100 dark:border-white/5">
-        <div class="max-w-5xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">How it <span class="text-blue-500">Works</span></h2>
-                <p class="text-gray-500 dark:text-gray-400 font-medium max-w-xl mx-auto text-base">A simple three-step process to better health insights.</p>
+    <section id="how-it-works" class="relative steps">
+        <div class="container-sm">
+            <div class="section-title">
+                <h2>How it <span>Works</span></h2>
+                <p>A simple three-step process to better health insights.</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-600/10 border border-blue-200 dark:border-blue-600/20 flex items-center justify-center font-bold text-2xl text-blue-500 mb-6 shadow-sm dark:shadow-[0_0_20px_rgba(59,130,246,0.1)]">1</div>
-                    <h3 class="font-bold text-xl mb-3 text-gray-900 dark:text-white">Input Symptoms</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Describe what you're feeling in natural language.</p>
+            <div class="step-grid">
+                <div class="step-item">
+                    <div class="step-num num-blue">1</div>
+                    <h3>Input Symptoms</h3>
+                    <p>Describe what you're feeling in natural language.</p>
                 </div>
 
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 rounded-full bg-purple-50 dark:bg-purple-600/10 border border-purple-200 dark:border-purple-600/20 flex items-center justify-center font-bold text-2xl text-purple-500 mb-6 shadow-sm dark:shadow-[0_0_20px_rgba(168,85,247,0.1)]">2</div>
-                    <h3 class="font-bold text-xl mb-3 text-gray-900 dark:text-white">AI Processing</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Medora analyzes patterns against medical databases.</p>
+                <div class="step-item">
+                    <div class="step-num num-purple">2</div>
+                    <h3>AI Processing</h3>
+                    <p>Medora analyzes patterns against medical databases.</p>
                 </div>
 
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 rounded-full bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 flex items-center justify-center font-bold text-2xl text-cyan-500 dark:text-cyan-400 mb-6 shadow-sm dark:shadow-[0_0_20px_rgba(6,182,212,0.1)]">3</div>
-                    <h3 class="font-bold text-xl mb-3 text-gray-900 dark:text-white">Get Results</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">Receive instant triaging advice and reports.</p>
+                <div class="step-item">
+                    <div class="step-num num-cyan">3</div>
+                    <h3>Get Results</h3>
+                    <p>Receive instant triaging advice and reports.</p>
                 </div>
             </div>
         </div>
     </section>
 
-
-    <footer class="py-12 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-[#02050A] transition-colors duration-500">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2 font-bold text-lg text-gray-900 dark:text-white">
-                <span class="text-blue-500">✦</span> Medora
+    <footer>
+        <div class="container foot-content">
+            <div class="foot-logo">
+                <span>✦</span> Medora
             </div>
-            <p class="text-sm text-gray-500 font-medium">© 2026 Medora Healthcare. Professional AI Assessment.</p>
-            <div class="flex gap-6 text-sm font-semibold text-gray-500">
-                <a href="/privacy" class="hover:text-blue-500 transition-colors">Privacy</a>
-                <a href="/terms" class="hover:text-blue-500 transition-colors">Terms</a>
+            <p class="foot-copy">© 2026 Medora Healthcare. Professional AI Assessment.</p>
+            <div class="foot-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
             </div>
         </div>
     </footer>
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="js/dna-animation.js"></script>
     <script src="/js/navbar.js"></script>
 </body>
-</html>
+</html>

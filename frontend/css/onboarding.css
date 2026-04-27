@@ -45,7 +45,6 @@ body {
     min-height: calc(100vh - 150px);
 }
 
-/* Left Panel */
 .left-panel {
     display: flex;
     flex-direction: column;
