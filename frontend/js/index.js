@@ -1,7 +1,4 @@
-const themeBtn = document.getElementById('theme-btn');
-const html = document.documentElement;
 
-// Default = DARK mode always
 if (!localStorage.theme) {
     localStorage.theme = 'dark';
 }
