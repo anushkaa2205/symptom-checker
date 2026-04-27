@@ -263,6 +263,11 @@ input:focus, select:focus {
     background: rgba(255, 255, 255, 0.05);
 }
 
+select option {
+    background: var(--bg-page);
+    color: var(--text-primary);
+}
+
 /* Error Messages */
 .err-msg {
     color: #f87171;
