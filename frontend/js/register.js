@@ -15,8 +15,6 @@ function checkPassword(){
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('registerForm');
-
-    // Password Toggle Logic
     document.querySelectorAll('.toggle-password').forEach(btn => {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-target');
@@ -30,11 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const Fname = document.getElementById("Fname").value.trim();
             const Lname = document.getElementById("Lname").value.trim();
             const email = document.getElementById("email").value.trim();
@@ -74,9 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.disabled = false;
                     return;
                 }
-
                 window.location.replace("/onboarding");
-
             } catch (error) {
                 console.error("Register error:", error);
                 alert("Something went wrong. Please try again.");
@@ -85,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
     const googleBtn = document.querySelector('.google-btn');
     if (googleBtn) {
         googleBtn.addEventListener('click', () => {
