@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById(targetId);
             if (input.type === 'password') {
                 input.type = 'text';
-                btn.textContent = '🔒'; // Change icon to locked
+                btn.textContent = '🔒'; 
             } else {
                 input.type = 'password';
                 btn.textContent = '👁️';
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Redirect logic based on profile completion is handled by dashboard/onboarding routes
                 window.location.replace("/onboarding");
 
             } catch (error) {

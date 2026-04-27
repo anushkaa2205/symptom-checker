@@ -1,28 +1,20 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const form = document.getElementById("onboardingForm");
 
-    // Theme Handling
     if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark");
         document.documentElement.setAttribute("data-theme", "dark");
     }
 
-    // Load existing profile data first
     await loadExistingProfile();
 
-    // Update progress after prefilled values load
     updateProgress();
 
-    // Progress updates on input change
     form.addEventListener("input", updateProgress);
 
-    // Form submit handler
     form.addEventListener("submit", handleSubmit);
 });
 
-// ----------------------------
-// Progress Ring Logic
-// ----------------------------
 function updateProgress() {
     const form = document.getElementById("onboardingForm");
     const inputs = form.querySelectorAll(
@@ -58,7 +50,6 @@ function updateProgress() {
         percentText.textContent = `${percent}%`;
     }
 
-    // indicator dots
     const dots =
         document.querySelectorAll(".indicator .dot");
 
@@ -105,9 +96,6 @@ function validateForm() {
     return isValid;
 }
 
-// ----------------------------
-// Load Existing Profile
-// ----------------------------
 async function loadExistingProfile() {
     try {
         const res = await fetch("/api/auth/profile", {
@@ -164,9 +152,6 @@ async function loadExistingProfile() {
     }
 }
 
-// ----------------------------
-// Submit Profile
-// ----------------------------
 async function handleSubmit(e) {
     e.preventDefault();
 

@@ -10,7 +10,6 @@ async function loadNavbar() {
         navbar.innerHTML = "";
         navbar.innerHTML = html;
 
-        // Load CSS if missing
         if (!document.querySelector('link[href="/css/navbar.css"]')) {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
@@ -76,7 +75,6 @@ function setupTheme() {
 
     const savedTheme = localStorage.getItem("theme");
 
-// Default = dark mode
 if (!savedTheme || savedTheme === "dark") {
     document.documentElement.classList.add("dark");
     document.body.classList.add("dark");
@@ -119,7 +117,7 @@ function setupLogout() {
                 credentials: "include"
             });
             if (res.ok) {
-                localStorage.removeItem("theme"); // optional cleanup
+                localStorage.removeItem("theme"); 
                 window.location.href = "/";
                 }
         } catch (error) {

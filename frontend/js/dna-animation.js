@@ -4,7 +4,6 @@ if (container) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     
-    // Position camera to view DNA
     camera.position.set(0, 0, 45);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
@@ -14,9 +13,8 @@ if (container) {
 
     const dnaGroup = new THREE.Group();
 
-    // materials for the nodes
     const nodeMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x2563eb, // blue-600
+        color: 0x2563eb, 
         metalness: 0.1,
         roughness: 0.1,
         clearcoat: 1.0,
@@ -26,7 +24,7 @@ if (container) {
     });
     
     const linkMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xbfdbfe, // blue-200
+        color: 0xbfdbfe, 
         metalness: 0.3,
         roughness: 0.2,
         clearcoat: 0.8,
@@ -38,7 +36,6 @@ if (container) {
     const helixRadius = 3.5;
     const helixHeight = 1.3;
 
-    // Create the smooth backbone curves
     class HelixCurve extends THREE.Curve {
         constructor(scale = 1, offset = 0) {
             super();
@@ -55,7 +52,6 @@ if (container) {
         }
     }
 
-    // Backbones
     const backboneGeo1 = new THREE.TubeGeometry(new HelixCurve(1, 0), 150, 0.4, 16, false);
     const backboneGeo2 = new THREE.TubeGeometry(new HelixCurve(1, Math.PI), 150, 0.4, 16, false);
     
@@ -65,7 +61,6 @@ if (container) {
     dnaGroup.add(backbone1);
     dnaGroup.add(backbone2);
 
-    // Rungs (links) and spheres
     const linkGeo = new THREE.CylinderGeometry(0.15, 0.15, helixRadius * 2, 16);
     const sphereGeo = new THREE.SphereGeometry(0.7, 32, 32);
 
@@ -79,7 +74,6 @@ if (container) {
         const x2 = Math.cos(angle + Math.PI) * helixRadius;
         const z2 = Math.sin(angle + Math.PI) * helixRadius;
 
-        // Spheres on strands
         const node1 = new THREE.Mesh(sphereGeo, nodeMaterial);
         node1.position.set(x1, y, z1);
         dnaGroup.add(node1);
@@ -88,7 +82,6 @@ if (container) {
         node2.position.set(x2, y, z2);
         dnaGroup.add(node2);
 
-        // Connecting rung
         const link = new THREE.Mesh(linkGeo, linkMaterial);
         link.position.set(0, y, 0);
         link.rotation.y = -angle;
@@ -96,13 +89,11 @@ if (container) {
         dnaGroup.add(link);
     }
     
-    // angle the DNA to the right
     dnaGroup.rotation.z = -Math.PI / 6; 
     dnaGroup.position.x = 8;
     dnaGroup.position.y = 0;
     scene.add(dnaGroup);
     
-    // background particles (stars)
     const particleCount = 800;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -115,7 +106,7 @@ if (container) {
     
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
     const particleMaterial = new THREE.PointsMaterial({
-        color: 0xffffff, // Pure white for sparkle
+        color: 0xffffff, 
         size: 0.22,
         transparent: true,
         opacity: 0.8,
@@ -126,7 +117,6 @@ if (container) {
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
-    // lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
     
@@ -138,15 +128,12 @@ if (container) {
     blueLight.position.set(5, 5, 10);
     scene.add(blueLight);
     
-    // Scroll Handling
     let scrollY = 0;
     window.addEventListener('scroll', () => {
         scrollY = window.scrollY;
         
-        // Stabilize position (no horizontal drift)
         const scrollProgress = Math.min(scrollY / 800, 1);
         
-        // Only subtle fade: from 0.9 down to 0.7 for clear branding
         dnaGroup.children.forEach(child => {
             if (child.material) {
                 child.material.opacity = Math.max(0.9 - (scrollProgress * 0.2), 0.7);
@@ -154,7 +141,6 @@ if (container) {
         });
     });
 
-    // Mouse Interaction
     let mouseX = 0;
     let mouseY = 0;
     window.addEventListener('mousemove', (event) => {
@@ -162,7 +148,6 @@ if (container) {
         mouseY = (event.clientY - window.innerHeight / 2) * 0.0005;
     });
     
-    // Animation
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
@@ -176,13 +161,12 @@ if (container) {
         
         const isDark = document.documentElement.classList.contains('dark');
         
-        // Adjust particles for theme
         if (isDark) {
-            particleMaterial.color.setHex(0xffffff); // White sparkle
+            particleMaterial.color.setHex(0xffffff); 
             particleMaterial.opacity = 0.6;
             particleMaterial.blending = THREE.AdditiveBlending;
         } else {
-            particleMaterial.color.setHex(0x3b82f6); // Soft blue sparkle
+            particleMaterial.color.setHex(0x3b82f6); 
             particleMaterial.opacity = 0.4;
             particleMaterial.blending = THREE.NormalBlending;
         }

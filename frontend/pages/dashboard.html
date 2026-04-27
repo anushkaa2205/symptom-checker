@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Dashboard - Medora</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <!-- Background Ambient Effects -->
+
     <div class="ambient-bg"></div>
 
-    <!-- Navigation Header -->
+
     <div id="navbar"></div>
 
     <main class="dashboard-container">
-        <!-- Authentication Prompt -->
+
         <div id="login-prompt" class="login-prompt" style="display: none;">
             <div class="prompt-card glass-panel">
                 <h2>Welcome to Medora</h2>
@@ -29,10 +27,10 @@
             </div>
         </div>
 
-        <!-- Dashboard Main Content -->
+
         <div id="dashboard-content" class="dashboard-content" style="display: none;">
             
-            <!-- Health Insight Hero Banner -->
+
             <header class="hero-card glass-panel">
                 <div class="hero-bg-graphic">
                     <svg viewBox="0 0 400 150" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +55,7 @@
                 </div>
             </header>
 
-            <!-- Key Metrics Overview Grid -->
+
             <section class="metrics-grid">
                 
                 <div class="metric-card glass-panel">
@@ -102,10 +100,10 @@
 
             </section>
 
-            <!-- Secondary Analytics Row -->
+
             <div class="dashboard-secondary-grid">
                 
-                <!-- Quick Actions -->
+
                 <div class="quick-actions-panel glass-panel">
                     <h2>Quick Actions</h2>
                     <div class="action-buttons">
@@ -120,7 +118,7 @@
                     </div>
                 </div>
 
-                <!-- Assessment Donut Chart -->
+
                 <div class="triage-card glass-panel">
                     <h2>Assessment Overview</h2>
                     <p class="triage-desc">Distribution of your health urgency levels.</p>
@@ -147,7 +145,7 @@
                     </div>
                 </div>
 
-                <!-- Health Insights Summary -->
+
                 <div class="insights-summary glass-panel">
                     <h2>Health Insights</h2>
                     <div class="insights-content">
@@ -167,7 +165,7 @@
 
             </div>
 
-            <!-- Full Width History Section -->
+
             <div class="history-section glass-panel">
                 <div class="section-header">
                     <h2>Recent Assessments</h2>
@@ -175,7 +173,6 @@
                 
                 <div class="history-scroll-container">
                     <div class="history-list" id="diagnoses-list">
-                        <!-- Content dynamically injected here -->
                         <div class="empty-state">
                             <p>Loading your history...</p>
                         </div>
@@ -186,7 +183,7 @@
         </div>
     </main>
 
-    <!-- Hidden export container for PDF rendering -->
+
     <div id="hidden-pdf-container" style="display: none;"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>

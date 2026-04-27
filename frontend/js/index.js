@@ -3,7 +3,6 @@ if (!localStorage.theme) {
     localStorage.theme = 'dark';
 }
 
-// Apply saved theme
 if (localStorage.theme === 'dark') {
     html.classList.add('dark');
 } else {
@@ -17,7 +16,6 @@ if (themeBtn) {
     });
 }
 
-// animations
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof gsap !== 'undefined') {
         gsap.from("header", { y: -20, opacity: 0, duration: 1, ease: "power3.out", delay: 0.1 });
@@ -57,11 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
-            // Calculate rotation based on mouse position relative to center
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const rotateX = ((y - centerY) / centerY) * -15; // Max 15 degree tilt
+            const rotateX = ((y - centerY) / centerY) * -15;
             const rotateY = ((x - centerX) / centerX) * 15;
             
             element.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;

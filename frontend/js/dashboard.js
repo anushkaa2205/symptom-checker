@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // References to UI elements
     const loginPrompt = document.getElementById('login-prompt');
     const dashboardContent = document.getElementById('dashboard-content');
     const diagnosesList = document.getElementById('diagnoses-list');
 
-    // Fetch dashboard stats from backend
     async function fetchDashboardData() {
         try {
             const res = await fetch('/api/dashboard/stats', { cache: 'no-store' });
@@ -99,7 +97,6 @@ if (total > 0) {
 
 let urgencyDisplay = "None";
 
-// Only show urgency if assessments actually exist
 if (stats.totalAssessments > 0 && stats.mostCommonUrgency) {
     urgencyDisplay = urgencyMap[stats.mostCommonUrgency] || "None";
 }
@@ -141,7 +138,6 @@ if (urgencyEl) {
             }
         }
 
-        // donut chart
         const redCount = urgencyBreakdown.red || 0;
         const yellowCount = urgencyBreakdown.yellow || 0;
         const greenCount = urgencyBreakdown.green || 0;
@@ -229,7 +225,6 @@ if (urgencyEl) {
             diagnosesList.appendChild(card);
         });
 
-        // Attach PDF download listeners
         document.querySelectorAll('.download-pdf').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const rawData = e.currentTarget.getAttribute('data-diag');
@@ -243,7 +238,6 @@ if (urgencyEl) {
         });
     }
 
-    // Standard PDF Generator Function
     function generatePDFReport(diag) {
         const dateStr = new Date(diag.date).toLocaleString(undefined, {
             year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -344,6 +338,6 @@ if (urgencyEl) {
         }
     }
 
-    // Initialize
+
     fetchDashboardData();
 });

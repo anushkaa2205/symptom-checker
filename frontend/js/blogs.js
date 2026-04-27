@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ─── Expanded Static Data ───
     const articleData = {
         diabetes: {
             id: 'diabetes',
@@ -159,18 +158,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const articles = Object.values(articleData);
     let currentFilter = 'all';
 
-    // ─── UI Elements ───
     const articleGrid = document.getElementById('article-grid');
     const categoryPills = document.querySelectorAll('.pill');
     const trendingTrack = document.getElementById('trending-track');
     const carousel = document.getElementById('trending-carousel');
 
-    // ─── Initialization ───
     renderArticles();
     loadTrending();
     initRevealAnimations();
 
-    // ─── Rendering Logic ───
     function renderArticles() {
         const filtered = articles.filter(a => {
             return currentFilter === 'all' || a.category === currentFilter;
@@ -221,11 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </a>
         `).join('');
-        // Duplicate content for seamless marquee scrolling
         trendingTrack.innerHTML = cardsHTML + cardsHTML;
     }
 
-    // ─── Event Handlers ───
     categoryPills.forEach(pill => {
         pill.addEventListener('click', () => {
             categoryPills.forEach(p => p.classList.remove('active'));
@@ -235,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ─── Modal Logic ───
     const overlay = document.getElementById('article-modal-overlay');
     const modalImg = document.getElementById('modal-hero-img');
     const modalCategory = document.getElementById('modal-category');

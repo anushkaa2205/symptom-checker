@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadProfile();
 
-    // Edit profile button
     const editBtn = document.getElementById("editProfileBtn");
     if (editBtn) {
         editBtn.addEventListener("click", () => {
@@ -9,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Add contact button
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("btn-add")) {
             window.location.href = "/onboarding";
@@ -36,10 +34,6 @@ async function loadProfile() {
 
         const user = await res.json();
         console.log("Profile user data:", user);
-
-        // ------------------------
-        // Basic info
-        // ------------------------
         const fullName = `${user.Fname || ""} ${user.Lname || ""}`.trim();
 
         document.getElementById("userName").textContent =
@@ -54,9 +48,6 @@ async function loadProfile() {
         document.getElementById("avatarInitials").textContent =
             initials.toUpperCase() || "U";
 
-        // ------------------------
-        // Health profile safe handling
-        // ------------------------
         const hp = user.healthProfile ?? {};
 
         document.getElementById("age").textContent =
@@ -71,9 +62,6 @@ async function loadProfile() {
         document.getElementById("weight").textContent =
             hp?.weight ?? "--";
 
-        // ------------------------
-        // Emergency contact
-        // ------------------------
         const emergencyNum = hp?.emergencyContact;
 
         const contactDisplay =
@@ -97,9 +85,6 @@ async function loadProfile() {
             noContactDisplay.style.display = "block";
         }
 
-        // ------------------------
-        // Medical details
-        // ------------------------
         renderPills(
             "allergies",
             hp?.allergies || []
@@ -120,9 +105,6 @@ async function loadProfile() {
             hp?.previousMedicalHistory || []
         );
 
-        // ------------------------
-        // Load assessments
-        // ------------------------
         loadRecentAssessments();
 
     } catch (error) {

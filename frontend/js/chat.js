@@ -10,9 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatHistory = [];
     let currentChatId = null;
     let userName = 'there';
-    
-    // Theme setup is handled by navbar.js, but we can add local tweaks if needed
-    
+        
     async function initGreeting() {
         try {
             const res = await fetch('/api/auth/me');
@@ -32,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initGreeting();
 
-    // Symptom Chip Click Handlers
     document.querySelectorAll('.chip').forEach(chip => {
         chip.addEventListener('click', () => {
             const symptom = chip.getAttribute('data-symptom');
@@ -45,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = chatInput.value.trim();
         if (text === '') return;
         
-        // Hide Hero state on first message
         if (chatHero) {
             chatHero.style.display = 'none';
         }
@@ -168,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const downloadPdfBtn = document.createElement('button');
                 downloadPdfBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download Report';
-                downloadPdfBtn.className = "btn-pdf"; // You can add specific styling in CSS
+                downloadPdfBtn.className = "btn-pdf"; 
                 downloadPdfBtn.style.marginTop = "16px";
                 downloadPdfBtn.style.padding = "10px 16px";
                 downloadPdfBtn.style.background = "rgba(255,255,255,0.1)";
@@ -193,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     if (goLogin) {
-        // save guest chat before redirect
         localStorage.setItem(
             "pendingGuestChat",
             JSON.stringify({
@@ -210,7 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
 }
 
-        // logged in → allow PDF download
         if (typeof generatePDFReport === 'function') {
             generatePDFReport(
                 issue,
@@ -346,7 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentChatId = chat._id;
                 chatHistory = chat.messages || [];
                 
-                // Update active state in sidebar
                 document.querySelectorAll('.recent-chats li').forEach(el => {
                     el.classList.toggle('active', el.getAttribute('data-id') === chatId);
                 });
@@ -365,7 +358,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentChatId = null;
             chatHistory = [];
             
-            // Reset active state in sidebar
             document.querySelectorAll('.recent-chats li').forEach(el => el.classList.remove('active'));
 
             if (chatHero) chatHero.style.display = 'flex';
@@ -390,7 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatIdFromUrl = urlParams.get('id');
     if (chatIdFromUrl) loadChat(chatIdFromUrl);
 
-    // Reuse generatePDFReport logic (unchanged)
     function generatePDFReport(issue, solutionItems, medicineItems, symptomItems) {
         const dateStr = new Date().toLocaleString(undefined, {
             year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -425,8 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        // We don't have urgency explicitly passed here in this older function signature, 
-        // so we'll default to a neutral blue/grey or try to infer it. Let's use neutral blue.
+       
         const urgencyColor = '#0ea5e9';
         const urgencyText = 'Assessment';
 
