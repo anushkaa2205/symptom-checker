@@ -104,9 +104,9 @@ app.get("/auth/google/callback",
             });
 
             if (user.profileCompleted) {
-                return res.redirect("/dashboard");
+                return res.redirect("/dashboard?login=success");
             } else {
-                return res.redirect("/onboarding");
+                return res.redirect("/onboarding?login=success");
             }
 
         } catch (error) {

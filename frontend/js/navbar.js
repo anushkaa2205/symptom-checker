@@ -100,9 +100,10 @@ function setupLogout() {
                 credentials: "include"
             });
             if (res.ok) {
-                localStorage.removeItem("theme"); 
-                window.location.href = "/";
-                }
+                sessionStorage.setItem('pendingToast', JSON.stringify({ message: 'Logged out successfully', type: 'success' }));
+                localStorage.removeItem('theme');
+                window.location.href = '/';
+            }
         } catch (error) {
             console.error("Logout failed", error);
         }

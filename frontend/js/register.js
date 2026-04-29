@@ -12,7 +12,6 @@ function checkPassword(){
         mess.style.color = "#f87171";
     }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('registerForm');
     document.querySelectorAll('.toggle-password').forEach(btn => {
@@ -70,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.disabled = false;
                     return;
                 }
+                sessionStorage.setItem('pendingToast', JSON.stringify({ message: 'Registered successfully', type: 'success' }));
                 window.location.replace("/onboarding");
             } catch (error) {
                 console.error("Register error:", error);

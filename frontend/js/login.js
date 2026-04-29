@@ -72,12 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+                sessionStorage.setItem('pendingToast', JSON.stringify({ message: 'Logged in successfully', type: 'success' }));
+
                 const redirectUrl = localStorage.getItem('redirectUrl');
                 if (redirectUrl) {
                     localStorage.removeItem('redirectUrl');
                     window.location.href = redirectUrl;
                 } else {
-                    window.location.replace("/dashboard");
+                    window.location.replace('/dashboard');
                 }
 
             } catch (error) {
@@ -88,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
     const googleBtn = document.querySelector('.google-btn');
     if (googleBtn) {
         googleBtn.addEventListener('click', () => {
