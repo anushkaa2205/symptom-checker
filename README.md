@@ -25,7 +25,6 @@ Medora is a modern, AI-powered health assessment platform that provides instant 
 - **Structure**: Semantic HTML5
 - **Styling**: Custom Design System (Glassmorphism, Vibrant Glows)
 - **Visuals**: [Three.js](https://threejs.org/) (DNA Animation)
-- **Animations**: [GSAP](https://greensock.com/gsap/) (GreenSock Animation Platform)
 
 ### Backend
 - **Environment**: Node.js
@@ -107,4 +106,6 @@ Distributed under the ISC License.
 ---
 
 ## 👨‍💻 Developed by
-*Anushka, Harshita, and Hasini* (Built for Advanced Agentic Coding)
+*Anushka -  https://www.linkedin.com/in/anushka-a31989344/
+Harshita -  https://www.linkedin.com/in/harshita-mugdha-554a57320/
+Hasini -  https://www.linkedin.com/in/hasini-boddu758/
