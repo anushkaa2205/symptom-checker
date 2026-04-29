@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ─── Expanded Static Data ───
     const articleData = {
         diabetes: {
             id: 'diabetes',
@@ -152,21 +153,172 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h2>Optimizing Your Sleep Hygiene</h2>
                 <p>To improve sleep quality, consistency is key. Going to bed and waking up at the same time every day regulates your circadian rhythm. Additionally, ensuring your bedroom is dark, quiet, and cool (around 65°F/18°C) creates the optimal physiological environment for melatonin production.</p>
             `
+        },
+        hydration: {
+            id: 'hydration',
+            category: 'Lifestyle',
+            tag: 'Nutrition',
+            title: 'Hydration: The Essential Foundation of Vitality',
+            excerpt: 'Water makes up approximately 60% of the human body. Explore how proper hydration affects every system, from cognitive function to joint health.',
+            readTime: '7 min read',
+            image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=800&h=400&fit=crop',
+            content: `
+                <h2>The Biological Role of Water</h2>
+                <p>Every cell, tissue, and organ in your body needs water to work properly. For example, water gets rid of wastes through urination, perspiration and bowel movements; keeps your temperature normal; and lubricates and cushions joints.</p>
+                <p>Lack of water can lead to dehydration—a condition that occurs when you don't have enough water in your body to carry out normal functions. Even mild dehydration can drain your energy and make you tired.</p>
+                
+                <h2>How Much Do You Really Need?</h2>
+                <p>You've probably heard the advice to drink eight glasses of water a day. That's easy to remember, and it’s a reasonable goal. However, most healthy people can stay hydrated by drinking water and other fluids whenever they feel thirsty. For some people, fewer than eight glasses a day might be enough. But other people might need more.</p>
+                
+                <h2>Tips for Staying Hydrated</h2>
+                <ul>
+                    <li><strong>Carry a water bottle:</strong> If you have a bottle with you, it’s easier to remember to drink.</li>
+                    <li><strong>Flavor your water:</strong> Add a slice of lemon or lime to your water. This may improve the taste and help you drink more.</li>
+                    <li><strong>Eat your water:</strong> Many fruits and vegetables have a high water content, such as watermelon and spinach.</li>
+                </ul>
+            `
+        },
+        guthealth: {
+            id: 'guthealth',
+            category: 'Nutrition',
+            tag: 'Mental Health',
+            title: 'The Gut-Brain Axis: How Your Diet Affects Your Mood',
+            excerpt: 'Recent research highlights a profound connection between the gut and the brain. Learn how probiotics and fiber can improve your mental clarity.',
+            readTime: '13 min read',
+            image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=400&fit=crop',
+            content: `
+                <h2>Understanding the Microbiome</h2>
+                <p>The gut microbiome is a vast ecosystem of organisms, including bacteria, yeasts, fungi, viruses and protozoans, that live in your digestive tract. This ecosystem is as unique to you as your fingerprint and plays a critical role in your overall health.</p>
+                <p>The "gut-brain axis" is a term for the communication network that connects your gut and brain. These two organs are connected both physically and biochemically in a number of different ways, including through the vagus nerve.</p>
+                
+                <h2>Serotonin Production</h2>
+                <p>Did you know that about 95% of your body's serotonin—a neurotransmitter that helps regulate sleep and appetite, mediate moods, and inhibit pain—is produced in your gastrointestinal tract? Because your gastrointestinal tract is lined with a hundred million nerve cells, it makes sense that the inner workings of your digestive system don’t just help you digest food, but also guide your emotions.</p>
+                
+                <h2>Foods for a Happy Gut</h2>
+                <ul>
+                    <li><strong>Fermented Foods:</strong> Yogurt, kefir, sauerkraut, and kimchi are rich in beneficial bacteria.</li>
+                    <li><strong>Prebiotic Fibers:</strong> Garlic, onions, and bananas provide the "fuel" for your good bacteria.</li>
+                    <li><strong>Polyphenols:</strong> Cocoa, green tea, and olive oil have anti-inflammatory properties that support the gut lining.</li>
+                </ul>
+            `
+        },
+        skincare: {
+            id: 'skincare',
+            category: 'Wellness',
+            tag: 'Dermatology',
+            title: 'Sun Protection and Skin Cancer Prevention',
+            excerpt: 'Skin cancer is one of the most preventable forms of cancer. Understand UV radiation and the importance of daily SPF application.',
+            readTime: '9 min read',
+            image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&h=400&fit=crop',
+            content: `
+                <h2>The Danger of UV Radiation</h2>
+                <p>Ultraviolet (UV) radiation is a form of non-ionizing radiation that is emitted by the sun and artificial sources, such as tanning beds. While it has some benefits for people, including the creation of Vitamin D, it can also cause health risks including skin cancer and premature aging.</p>
+                
+                <h2>Types of Skin Cancer</h2>
+                <p>The three most common types of skin cancer are basal cell carcinoma, squamous cell carcinoma, and melanoma. Melanoma is the most dangerous because it is much more likely to spread to other parts of the body if not caught early.</p>
+                
+                <h2>The ABCDE Rule for Moles</h2>
+                <ul>
+                    <li><strong>Asymmetry:</strong> One half of the mole does not match the other.</li>
+                    <li><strong>Border:</strong> The edges are irregular, ragged, notched, or blurred.</li>
+                    <li><strong>Color:</strong> The color is not the same all over.</li>
+                    <li><strong>Diameter:</strong> The spot is larger than 6 millimeters across.</li>
+                    <li><strong>Evolving:</strong> The mole is changing in size, shape, or color.</li>
+                </ul>
+                
+                <h2>Prevention Strategies</h2>
+                <p>Use a broad-spectrum sunscreen with an SPF of at least 30, even on cloudy days. Reapply every two hours, or more often if you're swimming or sweating. Additionally, wear protective clothing and seek shade during the sun's peak hours (10 a.m. to 4 p.m.).</p>
+            `
+        },
+        posture: {
+            id: 'posture',
+            category: 'Lifestyle',
+            tag: 'Ergonomics',
+            title: 'Posture and Ergonomics in the Digital Age',
+            excerpt: 'Modern life often involves hours of sitting. Learn how to optimize your workspace and maintain spinal health to prevent chronic pain.',
+            readTime: '10 min read',
+            image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=400&fit=crop',
+            content: `
+                <h2>The Cost of "Tech Neck"</h2>
+                <p>As we spend more time hunched over laptops and smartphones, many of us are developing "tech neck"—a repetitive stress injury caused by leaning the head forward for long periods. This can lead to headaches, neck pain, and even permanent changes in spinal alignment.</p>
+                
+                <h2>Setting Up Your Workspace</h2>
+                <p>Creating an ergonomic environment can significantly reduce strain:</p>
+                <ul>
+                    <li><strong>Monitor Height:</strong> The top third of your screen should be at eye level.</li>
+                    <li><strong>Chair Support:</strong> Use a chair that supports your lower back's natural curve (lumbar support).</li>
+                    <li><strong>The 90-Degree Rule:</strong> Your elbows, hips, and knees should all ideally be at 90-degree angles while sitting.</li>
+                </ul>
+                
+                <h2>The Importance of Movement</h2>
+                <p>Even with a perfect setup, sitting for too long is harmful. Follow the 20-20-20 rule for your eyes (every 20 minutes, look 20 feet away for 20 seconds) and make sure to stand up and stretch every hour. Small, frequent movements are better for your joints than one long gym session followed by 8 hours of sitting.</p>
+            `
+        },
+        superfoods: {
+            id: 'superfoods',
+            category: 'Nutrition',
+            tag: 'Dietary Science',
+            title: 'Superfoods: Separating Marketing from Medical Fact',
+            excerpt: 'The term "superfood" is everywhere. We analyze the specific nutrient profiles of berries, leafy greens, and fatty fish based on clinical evidence.',
+            readTime: '12 min read',
+            image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop',
+            content: `
+                <h2>What Makes a Food "Super"?</h2>
+                <p>While "superfood" is a marketing term rather than a scientific classification, it generally refers to foods that have a very high density of nutrients, antioxidants, or healthy fats relative to their calorie count.</p>
+                
+                <h2>Top Science-Backed Options</h2>
+                <ul>
+                    <li><strong>Blueberries:</strong> High in anthocyanins, which may help protect the heart and reduce cognitive decline.</li>
+                    <li><strong>Kale and Spinach:</strong> Loaded with vitamins A, C, and K, as well as fiber and calcium.</li>
+                    <li><strong>Salmon:</strong> An excellent source of omega-3 fatty acids, which are crucial for brain health and reducing inflammation.</li>
+                    <li><strong>Chia Seeds:</strong> Packed with fiber and alpha-linolenic acid, an essential plant-based omega-3.</li>
+                </ul>
+                
+                <h2>Variety Over Intensity</h2>
+                <p>The key to a healthy diet isn't eating huge amounts of one specific "superfood." Instead, focusing on a diverse range of colorful whole foods ensures you get a broad spectrum of micronutrients. No single food can provide everything your body needs.</p>
+            `
+        },
+        walking: {
+            id: 'walking',
+            category: 'Lifestyle',
+            tag: 'Physical Activity',
+            title: 'The Simple Power of a Daily Walk',
+            excerpt: 'You don’t need a gym membership to improve your health. Discover why 30 minutes of walking daily is one of the best medicines available.',
+            readTime: '8 min read',
+            image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&h=400&fit=crop',
+            content: `
+                <h2>A Low-Impact Powerhouse</h2>
+                <p>Walking is often overlooked because it seems too simple. However, it is a low-impact form of exercise that can be done at any age. Regular brisk walking helps maintain a healthy weight, improves cardiovascular fitness, and strengthens bones and muscles.</p>
+                
+                <h2>Mental Health Benefits</h2>
+                <p>Beyond the physical, walking—especially in nature—has a profound impact on stress levels. It increases the production of endorphins and provides a "moving meditation" that can help clear the mind and improve creative thinking.</p>
+                
+                <h2>How to Get More Steps</h2>
+                <ul>
+                    <li><strong>The "Phone Walk":</strong> Take your non-video meetings while walking around the room or outside.</li>
+                    <li><strong>Park Further Away:</strong> Deliberately choose the furthest spot in the parking lot.</li>
+                    <li><strong>Take the Stairs:</strong> Even two flights of stairs provide a significant cardiovascular "burst."</li>
+                </ul>
+                <p>Aim for at least 150 minutes of moderate-intensity activity per week, as recommended by major health organizations. That’s just 22 minutes a day!</p>
+            `
         }
     };
 
     const articles = Object.values(articleData);
     let currentFilter = 'all';
 
+    // ─── UI Elements ───
     const articleGrid = document.getElementById('article-grid');
     const categoryPills = document.querySelectorAll('.pill');
     const trendingTrack = document.getElementById('trending-track');
     const carousel = document.getElementById('trending-carousel');
 
+    //Initialization
     renderArticles();
     loadTrending();
     initRevealAnimations();
 
+    // Rendering Logic 
     function renderArticles() {
         const filtered = articles.filter(a => {
             return currentFilter === 'all' || a.category === currentFilter;
@@ -217,9 +369,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </a>
         `).join('');
+        // Duplicate content for seamless marquee scrolling
         trendingTrack.innerHTML = cardsHTML + cardsHTML;
     }
 
+    // ─── Event Handlers ───
     categoryPills.forEach(pill => {
         pill.addEventListener('click', () => {
             categoryPills.forEach(p => p.classList.remove('active'));
@@ -229,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ─── Modal Logic ───
     const overlay = document.getElementById('article-modal-overlay');
     const modalImg = document.getElementById('modal-hero-img');
     const modalCategory = document.getElementById('modal-category');
