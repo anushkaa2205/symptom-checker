@@ -127,9 +127,22 @@ document.addEventListener('DOMContentLoaded', () => {
         contentDiv.className = 'message-content';
         
         if (sender === 'bot') {
-            if (text.startsWith('VERDICT|')) {
+            const verdictIndex = text.indexOf('VERDICT|');
+            if (verdictIndex !== -1) {
+                const conversationalPart = text.substring(0, verdictIndex).trim();
+                const verdictPart = text.substring(verdictIndex);
+                
+                // If there's conversational text before the verdict, append it first
+                if (conversationalPart) {
+                    const introDiv = document.createElement('div');
+                    introDiv.className = 'message-intro';
+                    introDiv.style.marginBottom = '12px';
+                    introDiv.innerHTML = typeof marked !== 'undefined' ? marked.parse(conversationalPart) : conversationalPart;
+                    contentDiv.appendChild(introDiv);
+                }
+
                 // Parse verdict string
-                const parts = text.split('|');
+                const parts = verdictPart.split('|');
                 const urgency = parts[1] ? parts[1].trim().toLowerCase() : 'green';
                 const issue = parts[2] || 'Assessment Complete';
                 const solutionRaw = parts[3] || 'Consult a medical professional for more details.';
@@ -153,7 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 messageDiv.classList.add('verdict-bubble', `verdict-${urgency}`);
                 
-                contentDiv.innerHTML = `
+                const verdictCard = document.createElement('div');
+                verdictCard.className = 'verdict-card';
+                verdictCard.innerHTML = `
                     <div class="verdict-header">
                         <span class="verdict-icon"></span>
                         <span class="verdict-title">Assessment Verdict</span>
@@ -166,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     ${medicineHTML}
                 `;
+                contentDiv.appendChild(verdictCard);
 
                 const downloadPdfBtn = document.createElement('button');
                 downloadPdfBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download Report';
@@ -217,7 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 contentDiv.innerHTML = typeof marked !== 'undefined' ? marked.parse(text) : text;
             }
-        } else {
+        }
+ else {
             contentDiv.textContent = text;
             
             // Add Edit Button for User Messages
