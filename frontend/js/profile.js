@@ -62,8 +62,7 @@ async function loadProfile() {
         document.getElementById("weight").textContent =
             hp?.weight ?? "--";
 
-        const emergencyNum = hp?.emergencyContact;
-
+        const emergencyNum = hp?.emergencyContact?.phone || "";
         const contactDisplay =
             document.getElementById("contactDisplay");
 

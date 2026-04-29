@@ -22,7 +22,6 @@
             <p>
                 Medora uses your medical history and vitals to provide accurate, personalized health assessments.
             </p>
-
             <div class="health-visual-container">
                 <div class="progress-ring">
                     <div class="ring-core">
@@ -40,17 +39,37 @@
 
         <div class="right-panel">
             <div class="form-card-glass">
+
+                <div class="step-tracker">
+                    <div class="step-node active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <span class="step-label">Vitals</span>
+                    </div>
+                    <div class="step-connector" id="connector-1"></div>
+                    <div class="step-node" data-step="2">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">History</span>
+                    </div>
+                    <div class="step-connector" id="connector-2"></div>
+                    <div class="step-node" data-step="3">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Emergency</span>
+                    </div>
+                </div>
+
                 <form id="onboardingForm" novalidate>
-                    <div class="form-section active" data-section="1">
+
+                    <div class="step-section" data-step="1">
                         <div class="section-header">
+                            <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                             <span class="section-num">01</span>
                             <h3>Basic Health Vitals</h3>
                         </div>
-                        
+
                         <div class="input-group">
                             <label for="age">Age (Years) <span class="req">*</span></label>
-                            <input type="number" id="age" placeholder="e.g. 25" required>
-                            <div class="err-msg" id="err-age">Please enter a valid age</div>
+                            <input type="number" id="age" placeholder="e.g. 25" required min="1" max="120">
+                            <div class="err-msg" id="err-age">Please enter a valid age (1–120)</div>
                         </div>
 
                         <div class="input-group">
@@ -61,73 +80,118 @@
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
                             </select>
-                            <div class="err-msg" id="err-gender">Selection required</div>
+                            <div class="err-msg" id="err-gender">Please select your gender</div>
                         </div>
 
                         <div class="row">
                             <div class="input-group">
                                 <label for="height">Height (cm) <span class="req">*</span></label>
-                                <input type="number" id="height" placeholder="175" required>
-                                <div class="err-msg" id="err-height">Required</div>
+                                <input type="number" id="height" placeholder="175" required min="50" max="300">
+                                <div class="err-msg" id="err-height">Enter a valid height (50–300 cm)</div>
                             </div>
                             <div class="input-group">
                                 <label for="weight">Weight (kg) <span class="req">*</span></label>
-                                <input type="number" id="weight" placeholder="70" required>
-                                <div class="err-msg" id="err-weight">Required</div>
+                                <input type="number" id="weight" placeholder="70" required min="10" max="500">
+                                <div class="err-msg" id="err-weight">Enter a valid weight (10–500 kg)</div>
+                            </div>
+                        </div>
+
+                        <div class="bmi-card" id="bmiCard">
+                            <div class="bmi-label-row">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <span class="bmi-title">BMI Calculator</span>
+                            </div>
+                            <div class="bmi-result-row">
+                                <span class="bmi-value" id="bmiValue">—</span>
+                                <span class="bmi-category" id="bmiCategory">Enter height &amp; weight</span>
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label for="bloodGroup">Blood Group</label>
                             <input type="text" id="bloodGroup" placeholder="e.g. A+">
+                            <span class="helper-text">Common types: A+, A−, B+, B−, O+, O−, AB+, AB−</span>
                         </div>
                     </div>
 
-                    <div class="form-section" data-section="2">
+                    <div class="step-section hidden" data-step="2">
                         <div class="section-header">
+                            <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                             <span class="section-num">02</span>
                             <h3>Medical History</h3>
                         </div>
-                        
+
                         <div class="input-group">
                             <label for="allergies">Known Allergies</label>
-                            <input type="text" id="allergies" placeholder="e.g. Penicillin, Peanuts (comma separated)">
+                            <input type="text" id="allergies" placeholder="e.g. Penicillin, Peanuts">
+                            <span class="helper-text">Separate multiple allergies with commas</span>
                         </div>
 
                         <div class="input-group">
                             <label for="medications">Current Medications</label>
                             <input type="text" id="medications" placeholder="e.g. Metformin, Aspirin">
+                            <span class="helper-text">Separate multiple medications with commas</span>
                         </div>
 
                         <div class="input-group">
                             <label for="chronicConditions">Chronic Conditions</label>
                             <input type="text" id="chronicConditions" placeholder="e.g. Type 2 Diabetes, Hypertension">
+                            <span class="helper-text">Separate multiple conditions with commas</span>
                         </div>
 
                         <div class="input-group">
-                            <label for="previousMedicalHistory">Surgical & Past History</label>
+                            <label for="previousMedicalHistory">Surgical &amp; Past History</label>
                             <input type="text" id="previousMedicalHistory" placeholder="e.g. Appendix Surgery, Fractures">
+                            <span class="helper-text">Separate multiple entries with commas</span>
                         </div>
                     </div>
 
-                    <div class="form-section" data-section="3">
+                    <div class="step-section hidden" data-step="3">
                         <div class="section-header">
+                            <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.37a16 16 0 0 0 6.29 6.29l1.46-1.46a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 15.92z"/></svg>
                             <span class="section-num">03</span>
                             <h3>Emergency Contact</h3>
                         </div>
+
                         <div class="input-group">
                             <label for="emergencyContact">Contact Number</label>
                             <input type="text" id="emergencyContact" placeholder="+1 (555) 000-0000">
+                            <span class="helper-text">A number we can reach in case of an emergency</span>
                         </div>
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-complete">
+                        <button type="button" class="btn-prev hidden" id="btnPrev">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                            Previous
+                        </button>
+                        <button type="button" class="btn-next" id="btnNext">
+                            Next
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                        <button type="submit" class="btn-complete hidden" id="btnComplete">
                             Complete Setup
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-modal" id="successModal">
+        <div class="success-card">
+            <div class="success-icon-wrap">
+                <svg class="success-checkmark" viewBox="0 0 52 52" fill="none">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" stroke-width="2"/>
+                    <path class="checkmark-check" d="M14 27l8 8 16-16" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="success-title">Profile Completed!</h2>
+            <p class="success-sub">Your health profile has been saved successfully.</p>
+            <div class="success-redirect">
+                <span class="redirect-dot"></span>
+                Redirecting to your profile...
             </div>
         </div>
     </div>
