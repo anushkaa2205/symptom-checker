@@ -479,3 +479,66 @@ body {
     .input-container { padding: 20px; }
     .hero-content h2 { font-size: 32px; }
 }
+
+/* Edit & Delete Buttons */
+.edit-msg-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    align-self: center;
+}
+
+.user-message:hover .edit-msg-btn {
+    opacity: 1;
+}
+
+.edit-msg-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--brand-primary);
+}
+
+.recent-chats li {
+    position: relative;
+}
+
+.delete-chat-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.recent-chats li:hover .delete-chat-btn {
+    opacity: 1;
+}
+
+.delete-chat-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.chat-info {
+    padding-right: 24px;
+}
+

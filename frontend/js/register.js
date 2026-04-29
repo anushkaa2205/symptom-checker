@@ -70,7 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 sessionStorage.setItem('pendingToast', JSON.stringify({ message: 'Registered successfully', type: 'success' }));
-                window.location.replace("/onboarding");
+                const redirectUrl = localStorage.getItem('redirectUrl');
+                if (redirectUrl) {
+                    localStorage.removeItem('redirectUrl');
+                    window.location.replace(redirectUrl);
+                } else {
+                    window.location.replace("/onboarding");
+                }
+
             } catch (error) {
                 console.error("Register error:", error);
                 alert("Something went wrong. Please try again.");

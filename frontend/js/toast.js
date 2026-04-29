@@ -42,6 +42,42 @@
         });
     };
 
+    window.showConfirm = function (message) {
+        return new Promise((resolve) => {
+            const container = getContainer();
+            const toast = document.createElement('div');
+            toast.className = `toast toast-confirm toast-warning`;
+
+            toast.innerHTML = `
+                <div class="toast-confirm-content">
+                    <div class="toast-main">
+                        <span class="toast-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                        <span class="toast-message">${message}</span>
+                    </div>
+                    <div class="toast-actions">
+                        <button class="toast-btn toast-btn-cancel">Cancel</button>
+                        <button class="toast-btn toast-btn-confirm">Confirm</button>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => toast.classList.add('toast-visible'));
+            });
+
+            const handleAction = (val) => {
+                dismissToast(toast);
+                resolve(val);
+            };
+
+            toast.querySelector('.toast-btn-confirm').addEventListener('click', () => handleAction(true));
+            toast.querySelector('.toast-btn-cancel').addEventListener('click', () => handleAction(false));
+        });
+    };
+
+
     function dismissToast(toast) {
         toast.classList.remove('toast-visible');
         toast.classList.add('toast-hiding');

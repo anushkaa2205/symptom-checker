@@ -116,6 +116,61 @@
     color: #fff;
 }
 
+/* ─── Toast Confirm ─────────────────────────────────────── */
+.toast-confirm {
+    max-width: 400px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.toast-confirm-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.toast-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+.toast-actions {
+    display: flex;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast-btn {
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.toast-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.toast-btn-confirm {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.toast-btn-confirm:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.toast-btn-cancel {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
 @media (max-width: 480px) {
     #toast-container {
         top: 12px;

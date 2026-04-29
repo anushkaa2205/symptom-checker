@@ -187,3 +187,15 @@ export const saveChat = async (req, res) => {
         res.status(500).json({ error: "Failed to save chat" });
     }
 };
+
+export const deleteChat = async (req, res) => {
+    try {
+        const chat = await Chat.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
+        if (!chat) return res.status(404).json({ error: "Chat not found" });
+        res.json({ success: true, message: "Chat deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting chat:", error);
+        res.status(500).json({ error: "Failed to delete chat" });
+    }
+};
+

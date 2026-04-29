@@ -38,14 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    async function sendMessage() {
-        const text = chatInput.value.trim();
+    async function sendMessage(overrideText) {
+        const text = overrideText || chatInput.value.trim();
         if (text === '') return;
         
         if (chatHero) {
             chatHero.style.display = 'none';
         }
         
+        chatHistory.push({ sender: 'user', text: text });
         appendMessage('user', text);
         chatInput.value = '';
         
@@ -74,8 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, history: chatHistory })
+                body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) }) // send history WITHOUT the latest user message because backend might append it or expect it separately (checking chatController...)
             });
+            
+            // Wait, chatController expects req.body.message AND req.body.history. 
+            // It builds prompt from both. So history should NOT include the current message.
+            // My previous sendMessage code sent `history: chatHistory` which was empty for the first message.
+            // After push, it would include the current message. 
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => null);
@@ -87,11 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const indicator = document.getElementById('typing-indicator');
             if (indicator) indicator.remove();
             
-            chatHistory.push({ sender: 'user', text: text });
             chatHistory.push({ sender: 'bot', text: data.reply });
-            
             appendMessage('bot', data.reply);
             saveCurrentChat();
+
             
         } catch (error) {
             console.error(error);
@@ -178,53 +183,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 downloadPdfBtn.style.alignItems = "center";
                 
                 downloadPdfBtn.addEventListener('click', async () => {
-    try {
-        const authRes = await fetch('/api/auth/me', {
-            credentials: 'include'
-        });
+                    try {
+                        const authRes = await fetch('/api/auth/me', { credentials: 'include' });
 
-        if (!authRes.ok) {
-    const goLogin = confirm(
-        "Please login to download your medical report.\n\nYour current assessment will be saved."
-    );
+                        if (!authRes.ok) {
+                            if (typeof showToast === 'function') {
+                                showToast("Please login to download the report.", "warning");
+                            }
+                            
+                            localStorage.setItem("pendingGuestChat", JSON.stringify({
+                                history: chatHistory,
+                                timestamp: Date.now()
+                            }));
+                            sessionStorage.setItem("pendingDownloadIntent", JSON.stringify({
+                                issue, solutionItems, medicineItems, symptomItems
+                            }));
+                            localStorage.setItem("redirectUrl", "/chat");
+                            
+                            setTimeout(() => {
+                                window.location.href = "/login";
+                            }, 1500);
+                            return;
+                        }
 
-    if (goLogin) {
-        localStorage.setItem(
-            "pendingGuestChat",
-            JSON.stringify({
-                history: chatHistory,
-                timestamp: Date.now()
-            })
-        );
+                        triggerDownload(issue, solutionItems, medicineItems, symptomItems);
 
-        localStorage.setItem("redirectAfterLogin", "/chat");
-
-        window.location.href = "/login";
-    }
-
-    return;
-}
-
-        if (typeof generatePDFReport === 'function') {
-            generatePDFReport(
-                issue,
-                solutionItems,
-                medicineItems,
-                symptomItems
-            );
-        }
-
-    } catch (error) {
-        console.error("Auth check failed:", error);
-        alert("Something went wrong. Please try again.");
-    }
-});
+                    } catch (error) {
+                        console.error("Auth check failed:", error);
+                        if (typeof showToast === 'function') showToast("Something went wrong.", "error");
+                    }
+                });
                 contentDiv.appendChild(downloadPdfBtn);
             } else {
                 contentDiv.innerHTML = typeof marked !== 'undefined' ? marked.parse(text) : text;
             }
         } else {
             contentDiv.textContent = text;
+            
+            // Add Edit Button for User Messages
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-msg-btn';
+            editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
+            editBtn.title = 'Edit message';
+            editBtn.addEventListener('click', () => editMessage(messageDiv, text));
+            messageDiv.appendChild(editBtn);
         }
 
         messageDiv.appendChild(contentDiv);
@@ -232,6 +234,39 @@ document.addEventListener('DOMContentLoaded', () => {
         if(chatContainer){
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }
+
+    function triggerDownload(issue, solutionItems, medicineItems, symptomItems) {
+        if (typeof generatePDFReport === 'function') {
+            generatePDFReport(issue, solutionItems, medicineItems, symptomItems);
+            if (typeof showToast === 'function') showToast("PDF downloaded successfully.", "success");
+        }
+    }
+
+    function editMessage(msgDiv, oldText) {
+        const index = Array.from(chatContainer.children).indexOf(msgDiv);
+        // Find index in chatHistory (user messages are at even indices if it starts with user, but let's be careful)
+        // Actually, we can just truncate chatHistory to the point before this message
+        
+        chatInput.value = oldText;
+        chatInput.focus();
+        
+        // Remove this message and everything after it from DOM
+        while (chatContainer.children.length > index) {
+            chatContainer.lastChild.remove();
+        }
+        
+        // Truncate chatHistory
+        // Find the index of this message in chatHistory by matching text and sender
+        const historyIndex = chatHistory.findIndex((m, i) => m.sender === 'user' && m.text === oldText);
+        if (historyIndex !== -1) {
+            chatHistory = chatHistory.slice(0, historyIndex);
+        }
+        
+        if (chatHistory.length === 0 && chatHero) {
+            chatHero.style.display = 'flex';
+            chatContainer.appendChild(chatHero);
         }
     }
 
@@ -268,31 +303,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!authRes.ok) return;
 
         const pendingChat = localStorage.getItem("pendingGuestChat");
-
         if (!pendingChat) return;
 
         const parsed = JSON.parse(pendingChat);
 
-        console.log("Pending chat being restored:", parsed.history);
-
         const saveRes = await fetch('/api/chat/save', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({
-                history: parsed.history
-            })
+            body: JSON.stringify({ history: parsed.history })
         });
 
         if (saveRes.ok) {
             const savedData = await saveRes.json();
-
             localStorage.removeItem("pendingGuestChat");
-            localStorage.removeItem("redirectAfterLogin");
+            localStorage.removeItem("redirectUrl");
+            
+            // Restore UI
+            currentChatId = savedData.chatId;
+            chatHistory = parsed.history;
+            if (chatHero) chatHero.style.display = 'none';
+            if (chatContainer) {
+                chatContainer.innerHTML = '';
+                chatHistory.forEach(msg => appendMessage(msg.sender, msg.text));
+            }
 
-            window.location.href = "/dashboard";
+            // Check for pending download
+            const pendingDownload = sessionStorage.getItem("pendingDownloadIntent");
+            if (pendingDownload) {
+                const { issue, solutionItems, medicineItems, symptomItems } = JSON.parse(pendingDownload);
+                setTimeout(() => {
+                    triggerDownload(issue, solutionItems, medicineItems, symptomItems);
+                    sessionStorage.removeItem("pendingDownloadIntent");
+                }, 1000);
+            }
         }
 
     } catch (err) {
@@ -324,12 +368,49 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="chat-title">${chat.title || 'Assessment'}</span>
                             <span class="chat-date">${date}</span>
                         </div>
+                        <button class="delete-chat-btn" title="Delete session">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
                     `;
-                    li.addEventListener('click', () => loadChat(chat._id));
+                    
+                    li.querySelector('.chat-info').addEventListener('click', () => loadChat(chat._id));
+                    li.querySelector('.chat-icon').addEventListener('click', () => loadChat(chat._id));
+                    
+                    li.querySelector('.delete-chat-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteChatSession(chat._id);
+                    });
+                    
                     recentChatsList.appendChild(li);
                 });
             }
         } catch (err) { console.error("Failed to fetch history", err); }
+    }
+
+    async function deleteChatSession(chatId) {
+        const confirmed = await showConfirm("Are you sure you want to delete this chat session?");
+        if (!confirmed) return;
+
+        
+        try {
+            const res = await fetch(`/api/chat/${chatId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            
+            if (res.ok) {
+                if (typeof showToast === 'function') showToast("Chat deleted successfully", "success");
+                if (currentChatId === chatId) {
+                    newChatBtn.click();
+                }
+                fetchRecentChats();
+            } else {
+                if (typeof showToast === 'function') showToast("Failed to delete chat", "error");
+            }
+        } catch (err) {
+            console.error(err);
+            if (typeof showToast === 'function') showToast("An error occurred", "error");
+        }
     }
 
     async function loadChat(chatId) {
