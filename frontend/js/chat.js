@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     li.querySelector('.delete-chat-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
-                        deleteChatSession(chat._id);
+                        deleteChatSession(chat._id, chat.title || 'Assessment', date);
                     });
                     
                     recentChatsList.appendChild(li);
@@ -387,17 +387,49 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) { console.error("Failed to fetch history", err); }
     }
 
-    async function deleteChatSession(chatId) {
-        const confirmed = await showConfirm("Are you sure you want to delete this chat session?");
+    function showConfirm(title, date) {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById('deleteModalOverlay');
+            const previewTitle = document.getElementById('deletePreviewTitle');
+            const previewDate = document.getElementById('deletePreviewDate');
+            const cancelBtn = document.getElementById('deleteModalCancel');
+            const confirmBtn = document.getElementById('deleteModalConfirm');
+
+            if (previewTitle) previewTitle.textContent = title || 'Assessment';
+            if (previewDate) previewDate.textContent = date || '';
+
+            overlay.classList.add('visible');
+
+            function close(result) {
+                overlay.classList.remove('visible');
+                cancelBtn.removeEventListener('click', onCancel);
+                confirmBtn.removeEventListener('click', onConfirm);
+                overlay.removeEventListener('click', onOverlayClick);
+                resolve(result);
+            }
+
+            function onCancel() { close(false); }
+            function onConfirm() { close(true); }
+            function onOverlayClick(e) {
+                if (e.target === overlay) close(false);
+            }
+
+            cancelBtn.addEventListener('click', onCancel);
+            confirmBtn.addEventListener('click', onConfirm);
+            overlay.addEventListener('click', onOverlayClick);
+        });
+    }
+
+    async function deleteChatSession(chatId, chatTitle, chatDate) {
+        const confirmed = await showConfirm(chatTitle, chatDate);
         if (!confirmed) return;
 
-        
         try {
             const res = await fetch(`/api/chat/${chatId}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
-            
+
             if (res.ok) {
                 if (typeof showToast === 'function') showToast("Chat deleted successfully", "success");
                 if (currentChatId === chatId) {

@@ -70,6 +70,32 @@
         </main>
     </div>
 
+    <div class="delete-modal-overlay" id="deleteModalOverlay">
+        <div class="delete-modal-card" id="deleteModalCard">
+            <div class="delete-modal-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </div>
+            <h2 class="delete-modal-title">Are you sure?</h2>
+            <p class="delete-modal-sub">This assessment chat will be permanently deleted.</p>
+            <div class="delete-preview-card" id="deletePreviewCard">
+                <div class="delete-preview-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="delete-preview-info">
+                    <span class="delete-preview-title" id="deletePreviewTitle">Assessment</span>
+                    <span class="delete-preview-date" id="deletePreviewDate"></span>
+                </div>
+            </div>
+            <div class="delete-modal-actions">
+                <button class="delete-modal-cancel" id="deleteModalCancel">Cancel</button>
+                <button class="delete-modal-confirm" id="deleteModalConfirm">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    Delete Chat
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/navbar.js"></script>
     <script src="/js/toast.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
