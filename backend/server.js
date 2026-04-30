@@ -18,6 +18,7 @@ connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+app.set('trust proxy', false)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
   max: 40,
