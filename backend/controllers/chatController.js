@@ -32,8 +32,16 @@ STRICT RULES:
 - If asking a question or answering a direct question, just output plain text.
 - If giving a verdict, ONLY output the VERDICT|... string. Do not add any other text.
 - Provide a verdict after a maximum of 3-4 total user turns.`;
-const buildPrompt = (message, history) => {
-    let prompt = SYSTEM_PROMPT + "\n\n";
+
+const buildPrompt = (message, history, historicalContext = "") => {
+    let prompt = SYSTEM_PROMPT;
+    
+    if (historicalContext) {
+        prompt += `\n\n${historicalContext}`;
+    }
+
+    prompt += "\n\n";
+
     if (history && Array.isArray(history)) {
         history.forEach(msg => {
             prompt += `${msg.sender === 'user' ? 'User' : 'Assistant'}: ${msg.text}\n`;
@@ -43,12 +51,12 @@ const buildPrompt = (message, history) => {
     return prompt;
 };
 
-const tryGroq = async (message, history) => {
+const tryGroq = async (message, history, historicalContext = "") => {
     if (!groqClient) {
         groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
     }
 
-    const messages = [{ role: 'system', content: SYSTEM_PROMPT }];
+    const messages = [{ role: 'system', content: SYSTEM_PROMPT + (historicalContext ? `\n\n${historicalContext}` : "") }];
     if (history && Array.isArray(history)) {
         history.forEach(msg => {
             messages.push({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.text });
@@ -65,18 +73,33 @@ const tryGroq = async (message, history) => {
     return completion.choices[0]?.message?.content;
 };
 
-const tryGemini = async (message, history) => {
+const tryGemini = async (message, history, historicalContext = "") => {
     if (!geminiClient) {
         geminiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     }
 
-    const prompt = buildPrompt(message, history);
+    const prompt = buildPrompt(message, history, historicalContext);
     const response = await geminiClient.models.generateContent({
-        model: 'gemini-2.5-flash-lite',
+        model: 'gemini-2.0-flash-lite',
         contents: prompt,
     });
 
     return response.text;
+};
+
+const extractSummaryFromVerdict = (history) => {
+    if (!history || history.length === 0) return "";
+    const lastBotMsg = [...history].reverse().find(m => m.sender === 'bot' && m.text.includes('VERDICT|'));
+    if (lastBotMsg) {
+        const parts = lastBotMsg.text.split('|');
+        const issue = parts[2] || '';
+        const symptoms = parts[5] || '';
+        if (issue || symptoms) {
+            const cleanSymptoms = symptoms.replace(/~/g, ', ');
+            return `User had ${issue}. Reported symptoms: ${cleanSymptoms}.`;
+        }
+    }
+    return "";
 };
 
 export const generateChatResponse = async (req, res) => {
@@ -108,8 +131,24 @@ if (isEmergency) {
     }
 
     try {
+        let historicalContext = "";
+        if (req.user?._id) {
+            const pastChats = await Chat.find({ 
+                userId: req.user._id, 
+                summary: { $ne: "" } 
+            })
+            .sort({ updatedAt: -1 })
+            .limit(3);
+
+            if (pastChats.length > 0) {
+                historicalContext = "--- RECENT PAST ASSESSMENTS ---\n" + 
+                    pastChats.map(c => `[Past Session]: ${c.summary}`).join('\n') + 
+                    "\nCheck if current symptoms are connected to these past issues.";
+            }
+        }
+
         console.log('[Chat] Trying Groq (primary)...');
-        const reply = await tryGroq(message, history);
+        const reply = await tryGroq(message, history, historicalContext);
         console.log('[Chat] Groq succeeded.');
         return res.json({ reply, source: 'groq' });
     } catch (groqError) {
@@ -117,7 +156,18 @@ if (isEmergency) {
     }
 
     try {
-        const reply = await tryGemini(message, history);
+        let historicalContext = "";
+        if (req.user?._id) {
+            const pastChats = await Chat.find({ userId: req.user._id, summary: { $ne: "" } })
+                .sort({ updatedAt: -1 })
+                .limit(3);
+            if (pastChats.length > 0) {
+                historicalContext = "--- RECENT PAST ASSESSMENTS ---\n" + 
+                    pastChats.map(c => `[Past Session]: ${c.summary}`).join('\n') + 
+                    "\nCheck if current symptoms are connected to these past issues.";
+            }
+        }
+        const reply = await tryGemini(message, history, historicalContext);
         console.log('[Chat] Gemini fallback succeeded.');
         return res.json({ reply, source: 'gemini' });
     } catch (geminiError) {
@@ -163,10 +213,13 @@ export const saveChat = async (req, res) => {
         }
 
         let chat;
+        const summary = extractSummaryFromVerdict(history);
+
         if (chatId) {
             chat = await Chat.findOne({ _id: chatId, userId: req.user._id });
             if (!chat) return res.status(404).json({ error: "Chat not found" });
             chat.messages = history;
+            if (summary) chat.summary = summary;
             await chat.save();
         } else {
             // Generate a simple title from the first user message
@@ -177,6 +230,7 @@ export const saveChat = async (req, res) => {
             chat = new Chat({
                 userId: req.user._id,
                 title: title,
+                summary: summary,
                 messages: history
             });
             await chat.save();
@@ -196,6 +250,24 @@ export const deleteChat = async (req, res) => {
     } catch (error) {
         console.error("Error deleting chat:", error);
         res.status(500).json({ error: "Failed to delete chat" });
+    }
+};
+
+export const getRecentHistory = async (req, res) => {
+    try {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const chats = await Chat.find({ 
+            userId: req.user._id,
+            updatedAt: { $gte: thirtyDaysAgo }
+        })
+        .sort({ updatedAt: -1 });
+        
+        res.json(chats);
+    } catch (error) {
+        console.error("Error fetching 30-day history:", error);
+        res.status(500).json({ error: "Failed to fetch history" });
     }
 };
 

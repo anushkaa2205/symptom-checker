@@ -9,6 +9,10 @@ const chatSchema = new mongoose.Schema({
     type: String,
     default: "New Assessment"
   },
+  summary: {
+    type: String,
+    default: ""
+  },
   messages: [
   {
     sender: {

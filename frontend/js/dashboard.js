@@ -40,20 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = (urgencyBreakdown.green || 0) + (urgencyBreakdown.yellow || 0) + (urgencyBreakdown.red || 0);
         let dominantUrgency = null;
 
-if (total > 0) {
-    if (
-        urgencyBreakdown.red > urgencyBreakdown.yellow &&
-        urgencyBreakdown.red > urgencyBreakdown.green
-    ) {
-        dominantUrgency = 'red';
-    } else if (
-        urgencyBreakdown.yellow > urgencyBreakdown.green
-    ) {
-        dominantUrgency = 'yellow';
-    } else {
-        dominantUrgency = 'green';
-    }
-}
+        if (total > 0) {
+            if (urgencyBreakdown.red > urgencyBreakdown.yellow && urgencyBreakdown.red > urgencyBreakdown.green) {
+                dominantUrgency = 'red';
+            } else if (urgencyBreakdown.yellow > urgencyBreakdown.green) {
+                dominantUrgency = 'yellow';
+            } else {
+                dominantUrgency = 'green';
+            }
+        }
 
         const insightTextEl = document.getElementById('hero-insight-text');
         const riskTextEl = document.getElementById('hero-risk-text');
@@ -90,34 +85,33 @@ if (total > 0) {
         if (symptomEl) symptomEl.setAttribute('title', freqSymptom);
         
         const urgencyMap = {
-    red: "Critical",
-    yellow: "Moderate",
-    green: "Routine"
-};
+            red: "Critical",
+            yellow: "Moderate",
+            green: "Routine"
+        };
 
-let urgencyDisplay = "None";
+        let urgencyDisplay = "None";
 
-if (stats.totalAssessments > 0 && stats.mostCommonUrgency) {
-    urgencyDisplay = urgencyMap[stats.mostCommonUrgency] || "None";
-}
-
-const urgencyEl = document.getElementById('stat-urgency');
-
-if (urgencyEl) {
-    urgencyEl.textContent = urgencyDisplay;
-
-    urgencyEl.classList.remove('text-red', 'text-yellow', 'text-green');
-
-    if (stats.totalAssessments > 0) {
-        if (stats.mostCommonUrgency === 'red') {
-            urgencyEl.classList.add('text-red');
-        } else if (stats.mostCommonUrgency === 'yellow') {
-            urgencyEl.classList.add('text-yellow');
-        } else if (stats.mostCommonUrgency === 'green') {
-            urgencyEl.classList.add('text-green');
+        if (stats.totalAssessments > 0 && stats.mostCommonUrgency) {
+            urgencyDisplay = urgencyMap[stats.mostCommonUrgency] || "None";
         }
-    }
-}
+
+        const urgencyEl = document.getElementById('stat-urgency');
+
+        if (urgencyEl) {
+            urgencyEl.textContent = urgencyDisplay;
+            urgencyEl.classList.remove('text-red', 'text-yellow', 'text-green');
+            if (stats.totalAssessments > 0) {
+                if (stats.mostCommonUrgency === 'red') {
+                    urgencyEl.classList.add('text-red');
+                } else if (stats.mostCommonUrgency === 'yellow') {
+                    urgencyEl.classList.add('text-yellow');
+                } else if (stats.mostCommonUrgency === 'green') {
+                    urgencyEl.classList.add('text-green');
+                }
+            }
+        }
+
         let lastDateStr = 'Never';
         if (stats.lastAssessmentDate) {
             lastDateStr = new Date(stats.lastAssessmentDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
@@ -269,8 +263,7 @@ if (urgencyEl) {
 
         const reportDiv = document.createElement('div');
         reportDiv.innerHTML = `
-            <div style="font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 20px; background: #fff;">
-                <!-- Header -->
+            <div style="font-family: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 20px; background: #fff;">
                 <div style="border-bottom: 3px solid #0ea5e9; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
                         <h1 style="color: #0ea5e9; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px;">MEDORA</h1>
@@ -282,7 +275,6 @@ if (urgencyEl) {
                     </div>
                 </div>
 
-                <!-- Assessment Verdict Banner -->
                 <div style="background-color: #f8fafc; border-left: 4px solid ${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
                     <div style="flex: 1;">
                         <h2 style="margin: 0 0 6px; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Assessment Verdict</h2>
@@ -296,7 +288,6 @@ if (urgencyEl) {
                 </div>
 
                 <div style="display: flex; flex-direction: column;">
-                    <!-- Symptoms Section -->
                     <div style="margin-bottom: 25px;">
                         <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Reported Symptoms</h3>
                         <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
@@ -304,7 +295,6 @@ if (urgencyEl) {
                         </ul>
                     </div>
 
-                    <!-- Action Plan Section -->
                     <div style="margin-bottom: 25px;">
                         <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Action Plan</h3>
                         <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
@@ -312,11 +302,9 @@ if (urgencyEl) {
                         </ul>
                     </div>
                     
-                    <!-- Medicines Section -->
                     ${medicinesSection}
                 </div>
 
-                <!-- Footer Disclaimer -->
                 <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; line-height: 1.6; text-align: justify; background-color: #f8fafc; padding: 15px; border-radius: 6px;">
                     <p style="margin: 0;"><strong>Disclaimer:</strong> This report is generated by Medora's AI assessment system and is intended for informational purposes only. It is <strong>NOT</strong> a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of a medical emergency, immediately contact your local emergency services.</p>
                 </div>
@@ -332,12 +320,14 @@ if (urgencyEl) {
         };
 
         if (typeof html2pdf !== 'undefined') {
-            html2pdf().set(opt).from(reportDiv).save();
+            if (window.showToast) window.showToast('Preparing your report...', 'info');
+            html2pdf().set(opt).from(reportDiv).save().then(() => {
+                if (window.showToast) window.showToast('Report downloaded successfully!', 'success');
+            });
         } else {
             alert('PDF library failed to load. Please try again.');
         }
     }
-
 
     fetchDashboardData();
 });

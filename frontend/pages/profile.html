@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | Medora</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/profile.css">
 </head>
-
 <body>
     <div class="ambient-bg"></div>
     <div id="navbar"></div>
@@ -28,8 +25,7 @@
                     <p id="userEmail" class="email-muted">Loading...</p>
                     <div class="action-buttons">
                         <button class="btn-edit" id="editProfileBtn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
@@ -91,25 +87,15 @@
                     </div>
                 </div>
             </section>
-            <section class="card-glass recent-assessments">
-                <div class="card-header">
-                    <h2>Recent Health Assessments</h2>
-                </div>
-                <div id="assessmentGrid" class="assessment-mini-grid">
-                    <p class="empty-msg">Fetching assessment history...</p>
-                </div>
-            </section>
+
             <div class="card-glass emergency-sidebar" id="emergencyCard">
                 <div class="card-header">
                     <h3>Emergency Contact</h3>
                 </div>
                 <div class="emergency-info" id="emergencyContent">
                     <div class="emergency-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444"
-                            stroke-width="2">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                            </path>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                         </svg>
                     </div>
                     <div id="contactDisplay">
@@ -121,34 +107,24 @@
                     </div>
                 </div>
             </div>
-            <div class="card-glass health-summary-sidebar">
+
+            <section class="card-glass recent-assessments">
                 <div class="card-header">
-                    <h3>Health Summary</h3>
-                </div>
-                <div class="summary-metrics">
-                    <div class="summary-metric">
-                        <div class="metric-icon">📊</div>
-                        <div class="metric-info">
-                            <span class="label">Total Assessments</span>
-                            <span class="val" id="totalAssessments">0</span>
-                        </div>
-                    </div>
-                    <div class="summary-metric">
-                        <div class="metric-icon">📅</div>
-                        <div class="metric-info">
-                            <span class="label">Last Activity</span>
-                            <span class="val" id="lastCheckDate">Never</span>
-                        </div>
-                    </div>
-                    <div class="summary-metric">
-                        <div class="metric-icon">🧠</div>
-                        <div class="metric-info">
-                            <span class="label">Top Symptom</span>
-                            <span class="val" id="topSymptom">General Checkup</span>
-                        </div>
+                    <h2>Recent Health Assessments</h2>
+                    <div class="history-dropdown-wrap">
+                        <button id="viewHistoryBtn" class="btn-history-dropdown">
+                            <span>History (30 Days)</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
                     </div>
                 </div>
-            </div>
+                <div id="assessmentGrid" class="assessment-mini-grid">
+                    <p class="empty-msg">Fetching assessment history...</p>
+                </div>
+                <div id="historyCollapse" class="history-collapse">
+                    <div id="extendedAssessmentGrid" class="assessment-mini-grid"></div>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -171,6 +147,31 @@
             </div>
         </div>
     </div>
+    <div class="delete-modal-overlay" id="deleteChatModalOverlay">
+        <div class="delete-modal-card">
+            <div class="delete-modal-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </div>
+            <h2 class="delete-modal-title">Delete Assessment?</h2>
+            <p class="delete-modal-sub">This record will be permanently removed from your history.</p>
+            <div class="delete-preview-card">
+                <div class="delete-preview-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="delete-preview-info">
+                    <span class="delete-preview-title" id="deleteChatPreviewTitle">Assessment</span>
+                    <span class="delete-preview-date" id="deleteChatPreviewDate"></span>
+                </div>
+            </div>
+            <div class="delete-modal-actions">
+                <button class="btn btn-cancel" id="cancelDeleteChatBtn">Cancel</button>
+                <button class="btn btn-confirm-delete" id="confirmDeleteChatBtn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    Delete Chat
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/js/toast.js"></script>
 </body>
-
 </html>

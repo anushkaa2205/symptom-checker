@@ -19,60 +19,54 @@ export const getDashboardStats = async (req, res) => {
             let medicineItems = [];
 
             if (verdictMsg && verdictMsg.text.startsWith("VERDICT|")) {
-    const parts = verdictMsg.text.split('|');
+                const parts = verdictMsg.text.split('|');
 
-    if (parts.length >= 6) {
-        urgency = parts[1]?.trim().toLowerCase() || 'green';
-        issue = parts[2]?.trim() || chat.title;
+                if (parts.length >= 6) {
+                    urgency = parts[1]?.trim().toLowerCase() || 'green';
+                    issue = parts[2]?.trim() || chat.title;
 
-        const solutionRaw = parts[3] || '';
-        const medicinesRaw = parts[4] || 'None';
-        const symptomsRaw = parts[5] || 'None';
+                    const solutionRaw = parts[3] || '';
+                    const medicinesRaw = parts[4] || 'None';
+                    const symptomsRaw = parts[5] || 'None';
 
-        solutionItems = solutionRaw
-            .split('~')
-            .filter(item => item.trim() !== '');
+                    solutionItems = solutionRaw
+                        .split('~')
+                        .filter(item => item.trim() !== '');
 
-        medicineItems = medicinesRaw
-            .split('~')
-            .filter(item =>
-                item.trim() !== '' &&
-                item.trim().toLowerCase() !== 'none'
-            );
+                    medicineItems = medicinesRaw
+                        .split('~')
+                        .filter(item =>
+                            item.trim() !== '' &&
+                            item.trim().toLowerCase() !== 'none'
+                        );
 
-        symptomsSummary = symptomsRaw
-            .split('~')
-            .filter(item =>
-                item.trim() !== '' &&
-                item.trim().toLowerCase() !== 'none'
-            );
+                    symptomsSummary = symptomsRaw
+                        .split('~')
+                        .filter(item =>
+                            item.trim() !== '' &&
+                            item.trim().toLowerCase() !== 'none'
+                        );
 
-        if (urgencyBreakdown[urgency] !== undefined) {
-            urgencyBreakdown[urgency]++;
-        } else {
-            urgencyBreakdown['green']++;
-        }
+                    if (urgencyBreakdown[urgency] !== undefined) {
+                        urgencyBreakdown[urgency]++;
+                    } else {
+                        urgencyBreakdown['green']++;
+                    }
 
-        for (const symptom of symptomsSummary) {
-            const s = symptom.trim().toLowerCase();
-
-            if (s) {
-                symptomCounts[s] =
-                    (symptomCounts[s] || 0) + 1;
+                    for (const symptom of symptomsSummary) {
+                        const s = symptom.trim().toLowerCase();
+                        if (s) {
+                            symptomCounts[s] = (symptomCounts[s] || 0) + 1;
+                        }
+                    }
+                } else {
+                    urgencyBreakdown['green']++;
+                }
+            } else {
+                urgencyBreakdown['green']++;
             }
-        }
 
-    } else {
-        console.log("Invalid verdict format:", verdictMsg.text);
-
-        urgencyBreakdown['green']++;
-    }
-
-} else {
-    urgencyBreakdown['green']++;
-}
-
-            if (recentDiagnoses.length < 5) {
+            if (recentDiagnoses.length < 6) {
                 recentDiagnoses.push({
                     _id: chat._id,
                     title: issue,
@@ -98,20 +92,17 @@ export const getDashboardStats = async (req, res) => {
 
         const monthlyAssessments = chats.filter(chat => {
             const date = new Date(chat.createdAt);
-
             return (
                 date.getMonth() === currentMonth &&
                 date.getFullYear() === currentYear
             );
         }).length;
 
-        const lastAssessmentDate =
-            chats.length > 0 ? chats[0].updatedAt : null;
+        const lastAssessmentDate = chats.length > 0 ? chats[0].updatedAt : null;
 
-        const mostCommonUrgency =
-            Object.keys(urgencyBreakdown).reduce((a, b) =>
-                urgencyBreakdown[a] > urgencyBreakdown[b] ? a : b
-            );
+        const mostCommonUrgency = Object.keys(urgencyBreakdown).reduce((a, b) =>
+            urgencyBreakdown[a] > urgencyBreakdown[b] ? a : b
+        );
 
         res.json({
             user: {

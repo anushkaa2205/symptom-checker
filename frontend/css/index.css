@@ -65,6 +65,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 @keyframes shine {
@@ -455,7 +456,9 @@ footer {
     font-size: 1.125rem;
 }
 
-.foot-logo span { color: #3b82f6; }
+.foot-logo .logo-text { 
+    color: white; 
+}
 
 .foot-copy {
     font-size: 0.875rem;
@@ -468,6 +471,78 @@ footer {
     gap: 1.5rem;
     font-size: 0.875rem;
     font-weight: 600;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.foot-links a {
+    color: #6b7280;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.foot-links a:hover { color: #3b82f6; }
+
+/* Expert CTA */
+.expert-cta {
+    padding: 6rem 0;
+}
+
+.cta-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    padding: 3.5rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    text-align: left;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.cta-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #e11d48, #be123c);
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 10px 20px rgba(225, 29, 72, 0.3);
+}
+
+.cta-text {
+    flex: 1;
+}
+
+.cta-text h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.025em;
+}
+
+.cta-text p {
+    color: #94a3b8;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 650px;
+}
+
+@media (max-width: 1024px) {
+    .cta-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 3rem 2rem;
+        gap: 2rem;
+    }
+    .cta-text p {
+        margin: 0 auto;
+    }
 }
 
 .foot-links a {

@@ -87,35 +87,48 @@ app.get('/privacy', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/pages/privacy.html'));
 });
 app.get("/auth/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
+    passport.authenticate("google", { scope: ["profile", "email"], prompt: "select_account" })
 );
-app.get("/auth/google/callback",
-    passport.authenticate("google", { session: false }),
-    async (req, res) => {
-        try {
-            const { token, userId } = req.user;
+app.get("/auth/google/callback", (req, res, next) => {
+    passport.authenticate("google", { session: false }, async (err, user, info) => {
+        if (err) {
+            console.error('[Auth] Passport Auth Error:', err);
+            return res.redirect("/login?error=passport_err");
+        }
+        if (!user) {
+            console.error('[Auth] No user returned from Passport:', info);
+            return res.redirect("/login?error=no_user");
+        }
 
-            const user = await User.findById(userId);
+        try {
+            console.log('[Auth] Google Callback processing for user:', user.userId);
+            const { token, userId } = user;
+
+            const dbUser = await User.findById(userId);
+            if (!dbUser) {
+                console.error('[Auth] User not found in DB after OAuth:', userId);
+                return res.redirect("/login?error=db_error");
+            }
 
             res.cookie("token", token, {
                 httpOnly: true,
-                sameSite: "strict",
-                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                secure: false,
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
 
-            if (user.profileCompleted) {
+            if (dbUser.profileCompleted) {
                 return res.redirect("/dashboard?login=success");
             } else {
                 return res.redirect("/onboarding?login=success");
             }
 
         } catch (error) {
-            console.error(error);
-            res.redirect("/login");
+            console.error('[Auth] Callback Logic Error:', error.message);
+            res.redirect("/login?error=callback_error");
         }
-    }
-);
+    })(req, res, next);
+});
 app.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out successfully" });

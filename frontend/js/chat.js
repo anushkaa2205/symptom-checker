@@ -75,14 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) }) // send history WITHOUT the latest user message because backend might append it or expect it separately (checking chatController...)
+                body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) })
             });
             
-            // Wait, chatController expects req.body.message AND req.body.history. 
-            // It builds prompt from both. So history should NOT include the current message.
-            // My previous sendMessage code sent `history: chatHistory` which was empty for the first message.
-            // After push, it would include the current message. 
-
             if (!response.ok) {
                 const errData = await response.json().catch(() => null);
                 throw new Error(errData?.error || 'Failed to get response');
@@ -96,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatHistory.push({ sender: 'bot', text: data.reply });
             appendMessage('bot', data.reply);
             saveCurrentChat();
-
             
         } catch (error) {
             console.error(error);
@@ -133,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const conversationalPart = text.substring(0, verdictIndex).trim();
                 const verdictPart = text.substring(verdictIndex);
                 
-                // If there's conversational text before the verdict, append it first
                 if (conversationalPart) {
                     const introDiv = document.createElement('div');
                     introDiv.className = 'message-intro';
@@ -142,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     contentDiv.appendChild(introDiv);
                 }
 
-                // Parse verdict string
                 const parts = verdictPart.split('|');
                 const urgency = parts[1] ? parts[1].trim().toLowerCase() : 'green';
                 const issue = parts[2] || 'Assessment Complete';
@@ -244,11 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 contentDiv.innerHTML = typeof marked !== 'undefined' ? marked.parse(text) : text;
             }
-        }
- else {
+        } else {
             contentDiv.textContent = text;
             
-            // Add Edit Button for User Messages
             const editBtn = document.createElement('button');
             editBtn.className = 'edit-msg-btn';
             editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>';
@@ -297,19 +287,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function editMessage(msgDiv, oldText) {
         const index = Array.from(chatContainer.children).indexOf(msgDiv);
-        // Find index in chatHistory (user messages are at even indices if it starts with user, but let's be careful)
-        // Actually, we can just truncate chatHistory to the point before this message
-        
         chatInput.value = oldText;
         chatInput.focus();
         
-        // Remove this message and everything after it from DOM
         while (chatContainer.children.length > index) {
             chatContainer.lastChild.remove();
         }
         
-        // Truncate chatHistory
-        // Find the index of this message in chatHistory by matching text and sender
         const historyIndex = chatHistory.findIndex((m, i) => m.sender === 'user' && m.text === oldText);
         if (historyIndex !== -1) {
             chatHistory = chatHistory.slice(0, historyIndex);
@@ -370,7 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem("pendingGuestChat");
             localStorage.removeItem("redirectUrl");
             
-            // Restore UI
             currentChatId = savedData.chatId;
             chatHistory = parsed.history;
             if (chatHero) chatHero.style.display = 'none';
@@ -379,7 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 chatHistory.forEach(msg => appendMessage(msg.sender, msg.text));
             }
 
-            // Check for pending download
             const pendingDownload = sessionStorage.getItem("pendingDownloadIntent");
             if (pendingDownload) {
                 const { issue, solutionItems, medicineItems, symptomItems } = JSON.parse(pendingDownload);
@@ -400,42 +382,68 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/chat/history');
             if (response.ok) {
                 const chats = await response.json();
-                recentChatsList.innerHTML = '';
-                chats.forEach(chat => {
-                    const li = document.createElement('li');
-                    li.setAttribute('data-id', chat._id);
-                    if (currentChatId === chat._id) li.classList.add('active');
-                    
-                    const date = new Date(chat.updatedAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric'
-                    });
-
-                    li.innerHTML = `
-                        <div class="chat-icon">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                        </div>
-                        <div class="chat-info">
-                            <span class="chat-title">${chat.title || 'Assessment'}</span>
-                            <span class="chat-date">${date}</span>
-                        </div>
-                        <button class="delete-chat-btn" title="Delete session">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    `;
-                    
-                    li.querySelector('.chat-info').addEventListener('click', () => loadChat(chat._id));
-                    li.querySelector('.chat-icon').addEventListener('click', () => loadChat(chat._id));
-                    
-                    li.querySelector('.delete-chat-btn').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        deleteChatSession(chat._id, chat.title || 'Assessment', date);
-                    });
-                    
-                    recentChatsList.appendChild(li);
-                });
+                window.allChats = chats;
+                renderRecentChats(chats);
             }
         } catch (err) { console.error("Failed to fetch history", err); }
+    }
+
+    function renderRecentChats(chats) {
+        if (!recentChatsList) return;
+        recentChatsList.innerHTML = '';
+        
+        if (chats.length === 0) {
+            recentChatsList.innerHTML = '<li class="empty-history">No assessments found</li>';
+            return;
+        }
+
+        chats.forEach(chat => {
+            const li = document.createElement('li');
+            li.setAttribute('data-id', chat._id);
+            if (currentChatId === chat._id) li.classList.add('active');
+            
+            const date = new Date(chat.updatedAt).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+
+            li.innerHTML = `
+                <div class="chat-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="chat-info">
+                    <span class="chat-title">${chat.title || 'Assessment'}</span>
+                    <span class="chat-date">${date}</span>
+                </div>
+                <button class="delete-chat-btn" title="Delete session">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+            `;
+            
+            li.querySelector('.chat-info').addEventListener('click', () => loadChat(chat._id));
+            li.querySelector('.chat-icon').addEventListener('click', () => loadChat(chat._id));
+            
+            li.querySelector('.delete-chat-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteChatSession(chat._id, chat.title || 'Assessment', date);
+            });
+            
+            recentChatsList.appendChild(li);
+        });
+    }
+
+    const chatSearch = document.getElementById('chat-search');
+    if (chatSearch) {
+        chatSearch.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!window.allChats) return;
+            
+            const filtered = window.allChats.filter(chat => 
+                (chat.title && chat.title.toLowerCase().includes(query)) ||
+                (chat.summary && chat.summary.toLowerCase().includes(query))
+            );
+            renderRecentChats(filtered);
+        });
     }
 
     function showConfirm(title, date) {
@@ -460,14 +468,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             function onCancel() { close(false); }
-            function onConfirm() { close(true); }
+            function onConfirm() { 
+                confirmBtn.disabled = true;
+                close(true); 
+            }
             function onOverlayClick(e) {
                 if (e.target === overlay) close(false);
             }
 
-            cancelBtn.addEventListener('click', onCancel);
-            confirmBtn.addEventListener('click', onConfirm);
-            overlay.addEventListener('click', onOverlayClick);
+            cancelBtn.addEventListener('click', onCancel, { once: true });
+            confirmBtn.addEventListener('click', onConfirm, { once: true });
+            overlay.addEventListener('click', onOverlayClick, { once: true });
+            
+            confirmBtn.disabled = false;
         });
     }
 
@@ -580,14 +593,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-       
         const urgencyColor = '#0ea5e9';
         const urgencyText = 'Assessment';
 
         const reportDiv = document.createElement('div');
         reportDiv.innerHTML = `
-            <div style="font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 20px; background: #fff;">
-                <!-- Header -->
+            <div style="font-family: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; padding: 20px; background: #fff;">
                 <div style="border-bottom: 3px solid #0ea5e9; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
                         <h1 style="color: #0ea5e9; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px;">MEDORA</h1>
@@ -595,45 +606,40 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div style="text-align: right;">
                         <p style="margin: 0; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Generated on</p>
-                        <p style="margin: 2px 0 0; font-size: 13px; color: #334155; font-weight: 600;">${dateStr}</p>
+                        <p style="margin: 2px 0 0; font-size: 13px; color: #334155; font-weight: 600;">\${dateStr}</p>
                     </div>
                 </div>
 
-                <!-- Assessment Verdict Banner -->
-                <div style="background-color: #f8fafc; border-left: 4px solid ${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
+                <div style="background-color: #f8fafc; border-left: 4px solid \${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
                     <div style="flex: 1;">
                         <h2 style="margin: 0 0 6px; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Assessment Verdict</h2>
-                        <p style="margin: 0; font-size: 18px; color: #0f172a; font-weight: 600; line-height: 1.3;">${issue || 'Unknown'}</p>
+                        <p style="margin: 0; font-size: 18px; color: #0f172a; font-weight: 600; line-height: 1.3;">\${issue || 'Unknown'}</p>
                     </div>
                     <div style="margin-left: 20px; text-align: right;">
-                        <span style="display: inline-block; padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; background-color: ${urgencyColor}20; color: ${urgencyColor}; border: 1px solid ${urgencyColor}40;">
-                            ${urgencyText} Priority
+                        <span style="display: inline-block; padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; background-color: \${urgencyColor}20; color: \${urgencyColor}; border: 1px solid \${urgencyColor}40;">
+                            \${urgencyText} Priority
                         </span>
                     </div>
                 </div>
 
                 <div style="display: flex; flex-direction: column;">
-                    <!-- Symptoms Section -->
                     <div style="margin-bottom: 25px;">
                         <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Reported Symptoms</h3>
                         <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
-                            ${userSymptomsList}
+                            \${userSymptomsList}
                         </ul>
                     </div>
 
-                    <!-- Action Plan Section -->
                     <div style="margin-bottom: 25px;">
                         <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Action Plan</h3>
                         <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
-                            ${solutionsHTML}
+                            \${solutionsHTML}
                         </ul>
                     </div>
                     
-                    <!-- Medicines Section -->
-                    ${medicinesSection}
+                    \${medicinesSection}
                 </div>
 
-                <!-- Footer Disclaimer -->
                 <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; line-height: 1.6; text-align: justify; background-color: #f8fafc; padding: 15px; border-radius: 6px;">
                     <p style="margin: 0;"><strong>Disclaimer:</strong> This report is generated by Medora's AI assessment system and is intended for informational purposes only. It is <strong>NOT</strong> a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. In case of a medical emergency, immediately contact your local emergency services.</p>
                 </div>
