@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
+        let isEmergency = false;
         
         if (sender === 'bot') {
             const verdictIndex = text.indexOf('VERDICT|');
@@ -152,6 +153,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const solutionItems = solutionRaw.split('~').filter(item => item.trim() !== '');
                 const medicineItems = medicinesRaw.split('~').filter(item => item.trim() !== '' && item.trim().toLowerCase() !== 'none');
                 const symptomItems = symptomsRaw.split('~').filter(item => item.trim() !== '' && item.trim().toLowerCase() !== 'none');
+                
+                if (urgency === 'red') {
+                    const textToCheck = (issue + " " + solutionRaw).toLowerCase();
+                    const emergencyKeywords = [
+                        "heart attack", "stroke", "severe breathing", 
+                        "unconscious", "severe bleeding", "emergency", 
+                        "immediate medical attention", "call 911"
+                    ];
+                    isEmergency = emergencyKeywords.some(kw => textToCheck.includes(kw));
+                }
                 
                 let solutionHTML = '<ul style="list-style-type: disc; margin-left: 20px; margin-top: 6px;">';
                 solutionItems.forEach(item => { solutionHTML += `<li style="margin-bottom: 4px;">${item.trim()}</li>`; });
@@ -250,7 +261,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(chatContainer){
             chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (isEmergency) {
+                const emergencyOverlay = document.getElementById('emergencyModalOverlay');
+                const emergencyContinueBtn = document.getElementById('emergencyModalContinue');
+                const emergencyHelpBtn = document.getElementById('emergencyModalHelp');
+                
+                if (emergencyOverlay) {
+                    emergencyOverlay.classList.add('visible');
+                    
+                    emergencyContinueBtn.onclick = () => {
+                        emergencyOverlay.classList.remove('visible');
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    };
+                    
+                    emergencyHelpBtn.onclick = () => {
+                        emergencyOverlay.classList.remove('visible');
+                        if (typeof showToast === 'function') {
+                            showToast("Please contact your local emergency services immediately.", "error");
+                        }
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    };
+                }
+            } else {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
         }
     }
 

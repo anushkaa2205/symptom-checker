@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import Chat from "../models/chat.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -177,5 +178,23 @@ export const getProfile = async (req, res) => {
     res.status(500).json({
       error: error.message
     });
+  }
+};
+
+export const deleteProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    await User.findByIdAndDelete(userId);
+    await Chat.deleteMany({ userId: userId });
+
+    res.cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0)
+    });
+
+    res.json({ message: "Profile deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

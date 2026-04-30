@@ -5,7 +5,8 @@ import {
   getMe,
   logoutUser,
   completeProfile,
-  getProfile
+  getProfile,
+  deleteProfile
 } from "../controllers/authController.js";
 
 import { apiProtect } from '../middleware/authMiddleware.js';
@@ -19,5 +20,6 @@ router.get("/me", apiProtect, getMe);
 
 router.post("/complete-profile", apiProtect, completeProfile);
 router.get("/profile", apiProtect, getProfile);
+router.delete("/delete-profile", apiProtect, deleteProfile);
 
 export default router;

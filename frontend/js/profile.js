@@ -8,6 +8,54 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Delete Profile Modal Logic
+    const deleteProfileBtn = document.getElementById("deleteProfileBtn");
+    const deleteModal = document.getElementById("deleteModal");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+    if (deleteProfileBtn && deleteModal) {
+        deleteProfileBtn.addEventListener("click", () => {
+            deleteModal.classList.add("active");
+        });
+
+        cancelDeleteBtn.addEventListener("click", () => {
+            deleteModal.classList.remove("active");
+        });
+
+        deleteModal.addEventListener("click", (e) => {
+            if (e.target === deleteModal) {
+                deleteModal.classList.remove("active");
+            }
+        });
+
+        confirmDeleteBtn.addEventListener("click", async () => {
+            try {
+                confirmDeleteBtn.textContent = "Deleting...";
+                confirmDeleteBtn.disabled = true;
+
+                const res = await fetch("/api/auth/delete-profile", {
+                    method: "DELETE",
+                    credentials: "include"
+                });
+
+                if (res.ok) {
+                    window.location.href = "/";
+                } else {
+                    const data = await res.json();
+                    alert(data.error || data.message || "Failed to delete profile");
+                    confirmDeleteBtn.textContent = "Delete Profile";
+                    confirmDeleteBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error("Delete profile error:", error);
+                alert("An error occurred. Please try again.");
+                confirmDeleteBtn.textContent = "Delete Profile";
+                confirmDeleteBtn.disabled = false;
+            }
+        });
+    }
+
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("btn-add")) {
             window.location.href = "/onboarding";

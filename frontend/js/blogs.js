@@ -324,8 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return currentFilter === 'all' || a.category === currentFilter;
         });
 
-        articleGrid.innerHTML = filtered.map(a => `
-            <div class="article-card reveal" data-article="${a.id}">
+        articleGrid.innerHTML = filtered.map((a, index) => {
+            const isHidden = index >= 6 ? 'hidden-blog' : '';
+            return `
+            <div class="article-card reveal ${isHidden}" data-article="${a.id}">
                 <div class="article-img-wrap">
                     <img src="${a.image}" alt="${a.title}" class="article-card-img">
                 </div>
@@ -339,13 +341,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
+
+        updateLoadMoreButton();
 
         document.querySelectorAll('.article-card').forEach(card => {
             card.addEventListener('click', () => openModal(card.dataset.article));
         });
         
         initRevealAnimations();
+    }
+
+    function updateLoadMoreButton() {
+        const hiddenCards = document.querySelectorAll('.hidden-blog');
+        const loadMoreContainer = document.getElementById('load-more-container');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        
+        if (!loadMoreContainer || !loadMoreBtn) return;
+
+        if (hiddenCards.length > 0) {
+            loadMoreContainer.style.display = 'block';
+            loadMoreBtn.textContent = 'Load More';
+            loadMoreBtn.classList.remove('no-more');
+        } else {
+            // Option: Hide button or show "No more articles"
+            // The user suggested: "Hide the Load More button OR change it to No more articles"
+            // I'll show "No more articles" but then hide after a filter check if it's empty
+            const totalArticles = articleGrid.querySelectorAll('.article-card').length;
+            if (totalArticles > 6) {
+                loadMoreBtn.textContent = 'No more articles';
+                loadMoreBtn.classList.add('no-more');
+            } else {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+    }
+
+    // Load More Button Handler
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            const hiddenCards = Array.from(document.querySelectorAll('.hidden-blog'));
+            const nextSet = hiddenCards.slice(0, 6);
+            
+            nextSet.forEach((card, index) => {
+                // Remove hidden class
+                card.classList.remove('hidden-blog');
+                
+                // Add a slight delay for each card to stagger the reveal
+                setTimeout(() => {
+                    // Trigger the reveal animation if the IntersectionObserver didn't catch it immediately
+                    card.classList.add('active');
+                }, index * 100);
+            });
+
+            updateLoadMoreButton();
+        });
     }
 
     async function loadTrending() {

@@ -28,7 +28,7 @@ const authLimiter = rateLimit({
 
 const chatLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 30,
+  max: 40,
   message: {
     error: "Too many chat requests. Calm down and try again later."
   }
