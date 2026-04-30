@@ -3,6 +3,11 @@
     --primary-blue: #3B82F6;
     --primary-blue-hover: #2563EB;
 
+    /* BRAND COLORS */
+    --logo-primary: #001F3F;
+    --logo-accent: #7C3AED;
+    --logo-text: #001F3F;
+
     /* BACKGROUND */
     --page-bg: #F3F6FB;
     --card-bg: #FFFFFF;
@@ -27,6 +32,12 @@
 
     --user-text: #FFFFFF;
     --bot-text: #1F2937;
+}
+
+[data-theme="dark"] {
+    --logo-primary: #FFFFFF;
+    --logo-accent: #7C3AED;
+    --logo-text: #FFFFFF;
 }
 
 /* ─── Toast Notifications ─────────────────────────────────────── */

@@ -79,15 +79,24 @@ body {
     align-items: center;
     padding-bottom: 20px;
 }
-
 .panel-logo {
     font-size: 24px;
     font-weight: 800;
     color: white;
     text-decoration: none;
     letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
+.panel-logo svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.panel-logo span {
+    color: white;
+}
 .back-link {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);

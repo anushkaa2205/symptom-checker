@@ -41,17 +41,17 @@ body {
     background: var(--bg-card);
     border-radius: var(--radius-main);
     display: grid;
-    grid-template-columns: 52fr 48fr;
+    grid-template-columns: 1fr 1fr;
     overflow: hidden;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
-    min-height: 680px;
+    min-height: 800px;
 }
 
 /* Left Visual Panel */
 .visual-panel {
     background: url('/assets/background.jpeg') no-repeat center center;
     background-size: cover;
-    padding: 50px 40px;
+    padding: 60px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -85,6 +85,17 @@ body {
     color: white;
     text-decoration: none;
     letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-logo svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.panel-logo span {
+    color: white;
 }
 
 .back-link {
@@ -105,20 +116,21 @@ body {
 .back-link:hover { background: rgba(255, 255, 255, 0.2); }
 
 .panel-footer h2 {
-    font-size: 38px;
+    font-size: 42px;
     font-weight: 700;
     line-height: 1.1;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .panel-footer p {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1.5;
 }
 
 /* Right Form Panel */
 .form-panel {
-    padding: 50px 60px;
+    padding: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -156,13 +168,13 @@ body {
 .register-form {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 16px;
 }
 
 .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 22px;
+    gap: 16px;
 }
 
 .input-group {
@@ -245,7 +257,7 @@ input:focus {
 .divider {
     text-align: center;
     position: relative;
-    margin: 30px 0;
+    margin: 24px 0;
 }
 
 .divider::before {

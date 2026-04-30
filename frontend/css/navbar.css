@@ -28,14 +28,23 @@
 
 .nav-left .logo {
     text-decoration: none;
-    color: #0f172a;
-    font-size: 20px;
+    color: var(--logo-primary);
+    font-size: 22px;
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     letter-spacing: -0.8px;
     transition: transform 0.2s ease;
+}
+
+.brand-logo {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.nav-left .logo:hover .brand-logo {
+    transform: rotate(-5deg) scale(1.1);
 }
 
 .nav-left .logo:hover {
@@ -43,13 +52,11 @@
 }
 
 [data-theme="dark"] .nav-left .logo {
-    color: white;
+    color: var(--logo-primary);
 }
 
 .nav-left .logo span {
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--logo-text);
     font-weight: 800;
 }
 

@@ -1,0 +1,15 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield Icon -->
+  <g class="logo-icon">
+    <path d="M42 15.5C42 12.5 39.5 10 36.5 10H15.5C12.5 10 10 12.5 10 15.5V30C10 42 26 52 26 52C26 52 42 42 42 30V15.5Z" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 31H14L18 20L25 42L31 31H46" stroke="#7C3AED" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Text -->
+  <text x="58" y="42" font-family="Outfit, sans-serif" font-size="34" font-weight="800" fill="currentColor">Medora</text>
+  <style>
+    .logo-icon { color: #001F3F; }
+    @media (prefers-color-scheme: dark) {
+      .logo-icon { color: #FFFFFF; }
+    }
+  </style>
+</svg>
