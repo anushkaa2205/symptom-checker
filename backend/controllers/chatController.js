@@ -5,6 +5,11 @@ import Chat from '../models/chat.js';
 let groqClient;
 let geminiClient;
 
+// Both providers retire models regularly, so the IDs can be overridden from the
+// environment (GROQ_MODEL / GEMINI_MODEL) without a code change.
+const groqModel = () => process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
+const geminiModel = () => process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+
 const SYSTEM_PROMPT = `You are an expert clinical assessment assistant. Your goal is to maximize diagnostic accuracy without asking endless questions. Follow this strict 3-phase assessment protocol:
 1. RED-FLAG CHECK: First, based on the chief complaint, ask 1 highly specific question to rule out dangerous conditions (e.g., check for appendicitis if stomach ache).
 2. DIFFERENTIAL DIAGNOSIS: Once immediate red flags are ruled out, ask 1 or 2 targeted follow-up questions to figure out what the actual issue is (e.g., check for acid reflux, food poisoning, or ulcer for a central stomach ache).
@@ -64,13 +69,20 @@ const tryGroq = async (message, history, historicalContext = "") => {
     }
     messages.push({ role: 'user', content: message });
 
+    const model = groqModel();
     const completion = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model,
         messages,
-        max_tokens: 150,
+        // A full VERDICT line (2-3 explained steps + medicines + symptoms) needs far
+        // more than 150 tokens; the old limit cut verdicts off mid-line.
+        max_completion_tokens: 2048,
+        // gpt-oss models think before answering; keep that short and out of the reply.
+        ...(model.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low', include_reasoning: false } : {}),
     });
 
-    return completion.choices[0]?.message?.content;
+    const reply = completion.choices[0]?.message?.content?.trim();
+    if (!reply) throw new Error('Groq returned an empty reply');
+    return reply;
 };
 
 const tryGemini = async (message, history, historicalContext = "") => {
@@ -80,11 +92,13 @@ const tryGemini = async (message, history, historicalContext = "") => {
 
     const prompt = buildPrompt(message, history, historicalContext);
     const response = await geminiClient.models.generateContent({
-        model: 'gemini-2.0-flash-lite',
+        model: geminiModel(),
         contents: prompt,
     });
 
-    return response.text;
+    const reply = response.text?.trim();
+    if (!reply) throw new Error('Gemini returned an empty reply');
+    return reply;
 };
 
 const extractSummaryFromVerdict = (history) => {
@@ -102,52 +116,55 @@ const extractSummaryFromVerdict = (history) => {
     return "";
 };
 
+const getHistoricalContext = async (userId) => {
+    if (!userId) return "";
+    try {
+        const pastChats = await Chat.find({ userId, summary: { $ne: "" } })
+            .sort({ updatedAt: -1 })
+            .limit(3);
+        if (pastChats.length === 0) return "";
+        return "--- RECENT PAST ASSESSMENTS ---\n" +
+            pastChats.map(c => `[Past Session]: ${c.summary}`).join('\n') +
+            "\nCheck if current symptoms are connected to these past issues.";
+    } catch (err) {
+        // Past context is a nice-to-have; a database hiccup shouldn't block the reply.
+        console.warn('[Chat] Could not load past assessments:', err.message);
+        return "";
+    }
+};
+
 export const generateChatResponse = async (req, res) => {
     const { message, history } = req.body;
-    const emergencyKeywords = [
-  "chest pain",
-  "can't breathe",
-  "difficulty breathing",
-  "seizure",
-  "unconscious",
-  "stroke",
-  "heavy bleeding",
-  "heart attack"
-];
-const isEmergency = emergencyKeywords.some(keyword =>
-   message.toLowerCase().includes(keyword)
-);
-
-if (isEmergency) {
-   return res.json({
-      reply:
-      "Your symptoms may require immediate medical attention. Please go to the nearest hospital or call emergency services immediately.",
-      source: "emergency_override"
-   });
-}
-
-    if (!message) {
+    if (typeof message !== 'string' || !message.trim()) {
         return res.status(400).json({ error: 'Message is required.' });
     }
 
+    const emergencyKeywords = [
+        "chest pain",
+        "can't breathe",
+        "difficulty breathing",
+        "seizure",
+        "unconscious",
+        "stroke",
+        "heavy bleeding",
+        "heart attack"
+    ];
+    const isEmergency = emergencyKeywords.some(keyword =>
+        message.toLowerCase().includes(keyword)
+    );
+
+    if (isEmergency) {
+        return res.json({
+            reply:
+                "Your symptoms may require immediate medical attention. Please go to the nearest hospital or call emergency services immediately.",
+            source: "emergency_override"
+        });
+    }
+
+    const historicalContext = await getHistoricalContext(req.user?._id);
+
     try {
-        let historicalContext = "";
-        if (req.user?._id) {
-            const pastChats = await Chat.find({ 
-                userId: req.user._id, 
-                summary: { $ne: "" } 
-            })
-            .sort({ updatedAt: -1 })
-            .limit(3);
-
-            if (pastChats.length > 0) {
-                historicalContext = "--- RECENT PAST ASSESSMENTS ---\n" + 
-                    pastChats.map(c => `[Past Session]: ${c.summary}`).join('\n') + 
-                    "\nCheck if current symptoms are connected to these past issues.";
-            }
-        }
-
-        console.log('[Chat] Trying Groq (primary)...');
+        console.log(`[Chat] Trying Groq (${groqModel()})...`);
         const reply = await tryGroq(message, history, historicalContext);
         console.log('[Chat] Groq succeeded.');
         return res.json({ reply, source: 'groq' });
@@ -156,17 +173,7 @@ if (isEmergency) {
     }
 
     try {
-        let historicalContext = "";
-        if (req.user?._id) {
-            const pastChats = await Chat.find({ userId: req.user._id, summary: { $ne: "" } })
-                .sort({ updatedAt: -1 })
-                .limit(3);
-            if (pastChats.length > 0) {
-                historicalContext = "--- RECENT PAST ASSESSMENTS ---\n" + 
-                    pastChats.map(c => `[Past Session]: ${c.summary}`).join('\n') + 
-                    "\nCheck if current symptoms are connected to these past issues.";
-            }
-        }
+        console.log(`[Chat] Trying Gemini (${geminiModel()})...`);
         const reply = await tryGemini(message, history, historicalContext);
         console.log('[Chat] Gemini fallback succeeded.');
         return res.json({ reply, source: 'gemini' });

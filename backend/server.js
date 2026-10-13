@@ -18,7 +18,9 @@ connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-app.set('trust proxy', false)
+// Render puts one proxy in front of the app. Trusting it lets the rate limiters see each
+// visitor's real IP (otherwise everyone shares one limit) and lets secure cookies work.
+app.set('trust proxy', 1);
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
   max: 40,
@@ -113,7 +115,7 @@ app.get("/auth/google/callback", (req, res, next) => {
             res.cookie("token", token, {
                 httpOnly: true,
                 sameSite: "lax",
-                secure: false,
+                secure: process.env.NODE_ENV === "production",
                 maxAge: 7 * 24 * 60 * 60 * 1000
             });
 
@@ -137,6 +139,8 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/chat", chatLimiter, chatRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/news", newsRoutes);
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+// Render assigns the port through PORT; 5000 is the local default.
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

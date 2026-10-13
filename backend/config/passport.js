@@ -17,7 +17,10 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
+      // A relative URL is resolved against the host the request came in on, so the
+      // same code works on localhost and on Render. Set GOOGLE_CALLBACK_URL only to override.
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || "/auth/google/callback",
+      proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
