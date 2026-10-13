@@ -14,6 +14,8 @@ import { protect } from "./middleware/authMiddleware.js";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import User from "./models/user.js";
+import mongoose from "mongoose";
+import { warmNewsCache } from "./routes/newsRoutes.js";
 connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,19 +41,30 @@ const chatLimiter = rateLimit({
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
-app.disable("etag");
 
+// Lightweight endpoint for an uptime pinger (cron-job.org / UptimeRobot) to hit every
+// ~10 minutes so Render's free plan doesn't put the server to sleep.
+app.get("/health", (req, res) => {
+    res.set("Cache-Control", "no-store");
+    res.json({
+        status: "ok",
+        db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+        uptimeSeconds: Math.round(process.uptime())
+    });
+});
+
+// Let browsers cache CSS/JS/images instead of re-downloading everything on every page
+// (it used to send no-store for all of them). HTML is always revalidated, which is a
+// cheap 304 when unchanged, so new deploys still show up straight away.
 app.use(express.static(path.join(__dirname, "../frontend"), {
-    etag: false,
-    lastModified: false,
-    setHeaders: (res) => {
-        res.setHeader(
-            "Cache-Control",
-            "no-store, no-cache, must-revalidate, proxy-revalidate"
-        );
-        res.setHeader("Pragma", "no-cache");
-        res.setHeader("Expires", "0");
-        res.setHeader("Surrogate-Control", "no-store");
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".html")) {
+            res.setHeader("Cache-Control", "no-cache");
+        } else if (/[\\/]assets[\\/]|favicon/.test(filePath)) {
+            res.setHeader("Cache-Control", "public, max-age=604800"); // images: 7 days
+        } else {
+            res.setHeader("Cache-Control", "public, max-age=600"); // css/js: 10 min, then revalidate
+        }
     }
 }));
 app.get('/',(req,res)=>{
@@ -143,4 +156,6 @@ app.use("/api/news", newsRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    // Fetch health news in the background so the first Blogs visitor doesn't wait for it.
+    warmNewsCache();
 });

@@ -232,6 +232,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // html2pdf is ~900 KB, so it's only downloaded the first time someone exports a report
+    // instead of on every page load.
+    let html2pdfPromise;
+    function loadHtml2Pdf() {
+        if (typeof html2pdf !== 'undefined') return Promise.resolve();
+        if (!html2pdfPromise) {
+            html2pdfPromise = new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+                s.onload = resolve;
+                s.onerror = () => { html2pdfPromise = null; reject(new Error('html2pdf failed to load')); };
+                document.head.appendChild(s);
+            });
+        }
+        return html2pdfPromise;
+    }
+
     function generatePDFReport(diag) {
         const dateStr = new Date(diag.date).toLocaleString(undefined, {
             year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -319,14 +336,16 @@ document.addEventListener('DOMContentLoaded', () => {
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
 
-        if (typeof html2pdf !== 'undefined') {
-            if (window.showToast) window.showToast('Preparing your report...', 'info');
-            html2pdf().set(opt).from(reportDiv).save().then(() => {
+        if (window.showToast) window.showToast('Preparing your report...', 'info');
+        loadHtml2Pdf()
+            .then(() => html2pdf().set(opt).from(reportDiv).save())
+            .then(() => {
                 if (window.showToast) window.showToast('Report downloaded successfully!', 'success');
+            })
+            .catch(() => {
+                if (window.showToast) window.showToast('PDF library failed to load. Please try again.', 'error');
+                else alert('PDF library failed to load. Please try again.');
             });
-        } else {
-            alert('PDF library failed to load. Please try again.');
-        }
     }
 
     fetchDashboardData();

@@ -152,12 +152,13 @@ async function fetchGoogleNews() {
     return raw;
 }
 
-router.get("/trending", async (req, res) => {
-    try {
-        if (cache.data && Date.now() - cache.timestamp < CACHE_TTL) {
-            return res.json({ articles: cache.data });
-        }
+let refreshing = null;
 
+// Fetches both feeds (and article images) - this can take 10+ seconds, so it's shared:
+// concurrent callers wait on the same refresh instead of starting their own.
+function refreshNews() {
+    if (refreshing) return refreshing;
+    refreshing = (async () => {
         const [mxArticles, gnArticles] = await Promise.all([
             fetchMedicalXpress().catch(() => []),
             fetchGoogleNews().catch(() => []),
@@ -172,7 +173,24 @@ router.get("/trending", async (req, res) => {
         if (articles.length > 0) {
             cache = { data: articles, timestamp: Date.now() };
         }
+        return articles;
+    })().finally(() => { refreshing = null; });
+    return refreshing;
+}
 
+export function warmNewsCache() {
+    refreshNews().catch((err) => console.error("News warm-up failed:", err.message));
+}
+
+router.get("/trending", async (req, res) => {
+    try {
+        if (cache.data) {
+            // Answer instantly from cache; if it's older than the TTL, refresh in the background.
+            if (Date.now() - cache.timestamp >= CACHE_TTL) warmNewsCache();
+            return res.json({ articles: cache.data });
+        }
+
+        const articles = await refreshNews();
         res.json({ articles });
     } catch (err) {
         console.error("News fetch error:", err.message);

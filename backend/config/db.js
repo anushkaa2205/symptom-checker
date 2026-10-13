@@ -1,7 +1,15 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import dns from "dns";
 
 dotenv.config();
+
+// Some home routers / ISP DNS servers refuse the SRV lookup that mongodb+srv:// needs
+// (shows up as "querySrv ECONNREFUSED"). Set DNS_SERVERS=8.8.8.8,1.1.1.1 in .env to use
+// public DNS for these lookups instead. Leave it unset on Render.
+if (process.env.DNS_SERVERS) {
+  dns.setServers(process.env.DNS_SERVERS.split(",").map((s) => s.trim()).filter(Boolean));
+}
 
 const RETRY_DELAY_MS = 15000;
 

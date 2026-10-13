@@ -559,6 +559,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatIdFromUrl = urlParams.get('id');
     if (chatIdFromUrl) loadChat(chatIdFromUrl);
 
+    // html2pdf is ~900 KB, so it's only downloaded the first time someone exports a report
+    // instead of on every page load.
+    let html2pdfPromise;
+    function loadHtml2Pdf() {
+        if (typeof html2pdf !== 'undefined') return Promise.resolve();
+        if (!html2pdfPromise) {
+            html2pdfPromise = new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+                s.onload = resolve;
+                s.onerror = () => { html2pdfPromise = null; reject(new Error('html2pdf failed to load')); };
+                document.head.appendChild(s);
+            });
+        }
+        return html2pdfPromise;
+    }
+
     function generatePDFReport(issue, solutionItems, medicineItems, symptomItems) {
         const dateStr = new Date().toLocaleString(undefined, {
             year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -606,18 +623,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div style="text-align: right;">
                         <p style="margin: 0; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Generated on</p>
-                        <p style="margin: 2px 0 0; font-size: 13px; color: #334155; font-weight: 600;">\${dateStr}</p>
+                        <p style="margin: 2px 0 0; font-size: 13px; color: #334155; font-weight: 600;">${dateStr}</p>
                     </div>
                 </div>
 
-                <div style="background-color: #f8fafc; border-left: 4px solid \${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
+                <div style="background-color: #f8fafc; border-left: 4px solid ${urgencyColor}; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center;">
                     <div style="flex: 1;">
                         <h2 style="margin: 0 0 6px; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Assessment Verdict</h2>
-                        <p style="margin: 0; font-size: 18px; color: #0f172a; font-weight: 600; line-height: 1.3;">\${issue || 'Unknown'}</p>
+                        <p style="margin: 0; font-size: 18px; color: #0f172a; font-weight: 600; line-height: 1.3;">${issue || 'Unknown'}</p>
                     </div>
                     <div style="margin-left: 20px; text-align: right;">
-                        <span style="display: inline-block; padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; background-color: \${urgencyColor}20; color: \${urgencyColor}; border: 1px solid \${urgencyColor}40;">
-                            \${urgencyText} Priority
+                        <span style="display: inline-block; padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; background-color: ${urgencyColor}20; color: ${urgencyColor}; border: 1px solid ${urgencyColor}40;">
+                            ${urgencyText} Priority
                         </span>
                     </div>
                 </div>
@@ -626,18 +643,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="margin-bottom: 25px;">
                         <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Reported Symptoms</h3>
                         <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
-                            \${userSymptomsList}
+                            ${userSymptomsList}
                         </ul>
                     </div>
 
                     <div style="margin-bottom: 25px;">
                         <h3 style="color: #0ea5e9; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 0; margin-bottom: 15px;">Recommended Action Plan</h3>
                         <ul style="margin: 0; padding-left: 20px; color: #334155; line-height: 1.6; font-size: 14px;">
-                            \${solutionsHTML}
+                            ${solutionsHTML}
                         </ul>
                     </div>
                     
-                    \${medicinesSection}
+                    ${medicinesSection}
                 </div>
 
                 <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; line-height: 1.6; text-align: justify; background-color: #f8fafc; padding: 15px; border-radius: 6px;">
@@ -653,6 +670,11 @@ document.addEventListener('DOMContentLoaded', () => {
             html2canvas: { scale: 2, useCORS: true }, 
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
         };
-        if (typeof html2pdf !== 'undefined') html2pdf().set(opt).from(reportDiv).save();
+        if (window.showToast) window.showToast('Preparing your report...', 'info');
+        loadHtml2Pdf()
+            .then(() => html2pdf().set(opt).from(reportDiv).save())
+            .catch(() => {
+                if (window.showToast) window.showToast('Could not load the PDF tool. Please try again.', 'error');
+            });
     }
 });
