@@ -1,12 +1,10 @@
 async function loadNavbar() {
-    const response = await fetch(`/pages/navbar.html?v=${Date.now()}`, {
-    cache: "no-store"
-});
+    const navbar = document.getElementById("navbar");
     if (!navbar) return;
     try {
+        // One request; the server sends no-cache for HTML, so it's revalidated (cheap 304) not re-downloaded.
         const response = await fetch('/pages/navbar.html');
         const html = await response.text();
-        navbar.innerHTML = "";
         navbar.innerHTML = html;
         if (!document.querySelector('link[href="/css/navbar.css"]')) {
             const link = document.createElement('link');
@@ -14,8 +12,9 @@ async function loadNavbar() {
             link.href = '/css/navbar.css';
             document.head.appendChild(link);
         }
-        await checkAuthStatus();
         setupTheme();
+        setupMobileMenu();
+        await checkAuthStatus();
         setupLogout();
         highlightActiveLink();
     } catch (error) {
@@ -25,12 +24,14 @@ async function loadNavbar() {
 async function checkAuthStatus() {
     const navbar = document.getElementById("navbar");
     try {
-        const res = await fetch('/api/auth/me', {
+        // /status always answers 200, so logged-out visitors don't get a 401 error in the console.
+        const res = await fetch('/api/auth/status', {
             method: "GET",
             credentials: "include",
             cache: "no-store"
         });
-        if (res.ok) {
+        const data = res.ok ? await res.json() : { loggedIn: false };
+        if (data.loggedIn) {
             navbar.classList.add("auth-logged-in");
             navbar.classList.remove("auth-logged-out");
         } else {
@@ -90,10 +91,24 @@ if (!savedTheme || savedTheme === "dark") {
         updateIcon();
     });
 }
+function setupMobileMenu() {
+    const nav = document.querySelector(".main-navbar");
+    const btn = document.getElementById("menuToggle");
+    const menu = document.getElementById("navMenu");
+    if (!nav || !btn || !menu) return;
+    const setOpen = (open) => {
+        nav.classList.toggle("menu-open", open);
+        btn.setAttribute("aria-expanded", String(open));
+        btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    };
+    btn.addEventListener("click", () => setOpen(!nav.classList.contains("menu-open")));
+    menu.addEventListener("click", (e) => { if (e.target.closest("a, button")) setOpen(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+    document.addEventListener("click", (e) => { if (!nav.contains(e.target)) setOpen(false); });
+    window.addEventListener("resize", () => { if (window.innerWidth > 768) setOpen(false); });
+}
 function setupLogout() {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (!logoutBtn) return;
-    logoutBtn.addEventListener("click", async () => {
+    document.querySelectorAll("[data-logout]").forEach((logoutBtn) => logoutBtn.addEventListener("click", async () => {
         try {
             const res = await fetch("/api/auth/logout", {
                 method: "POST",
@@ -107,6 +122,6 @@ function setupLogout() {
         } catch (error) {
             console.error("Logout failed", error);
         }
-    });
+    }));
 }
 document.addEventListener("DOMContentLoaded", loadNavbar);

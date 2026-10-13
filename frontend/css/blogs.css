@@ -274,7 +274,7 @@ body {
     flex-direction: column;
 }
 .article-tag {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     color: var(--brand-primary);
@@ -374,12 +374,12 @@ body {
 }
 
 /* Reveal Animations */
-.reveal {
+.js .reveal {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease;
 }
-.reveal.active {
+.js .reveal.active {
     opacity: 1;
     transform: translateY(0);
 }
@@ -431,3 +431,10 @@ body {
     cursor: default;
     pointer-events: none;
 }
+
+/* Article title in the reader modal (an h2 so the page keeps a single h1) */
+#modal-title { font-size: 2em; }
+
+/* Contrast: white on #3b82f6 and slate-500 on navy were below the 4.5:1 readability minimum */
+.pill.active { background: #2563eb; }
+.article-card-footer, .article-card-footer span { color: #94a3b8; }

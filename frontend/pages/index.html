@@ -4,7 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medora | Premium AI Healthcare</title>
+    <meta name="description" content="Describe your symptoms and get instant AI triage advice, a clear next-step plan and a downloadable health report. Free to use.">
+    <meta name="theme-color" content="#02050A">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="canonical" href="https://medora-2uyi.onrender.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Medora">
+    <meta property="og:title" content="Medora | AI Symptom Checker &amp; Health Insights">
+    <meta property="og:description" content="Describe your symptoms and get instant AI triage advice, a clear next-step plan and a downloadable health report. Free to use.">
+    <meta property="og:url" content="https://medora-2uyi.onrender.com/">
+    <meta property="og:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
+    <title>Medora | AI Symptom Checker &amp; Health Insights</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -27,11 +41,12 @@
         <div class="grid-bg"></div>
     </div>
 
-    <div id="canvas-bg"></div>
+    <div id="canvas-bg" aria-hidden="true"></div>
 
     <div id="navbar"></div>
 
-    <main class="hero">
+    <main>
+    <section class="hero">
         <div class="container hero-content">
             <div>
                 <h1>
@@ -61,10 +76,11 @@
             
             <div class="lg-block"></div>
         </div>
-    </main>
+    </section>
 
-    <section id="features" class="features">
+    <section id="features" class="features" aria-labelledby="features-title">
         <div class="container">
+            <h2 id="features-title" class="sr-only">What Medora does</h2>
             <div class="feature-grid">
 
                 <div class="feature-card">
@@ -154,8 +170,7 @@
             </div>
         </div>
     </section>
-
-
+    </main>
 
     <footer>
         <div class="container foot-content">
@@ -179,7 +194,6 @@
     <script src="/js/dna-animation.js"></script>
     <script src="/js/toast.js"></script>
     <script src="/js/navbar.js"></script>
-    <script src="/js/index.js"></script>
 </body>
 
 </html>

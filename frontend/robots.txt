@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /onboarding
+Disallow: /api/
+
+Sitemap: https://medora-2uyi.onrender.com/sitemap.xml

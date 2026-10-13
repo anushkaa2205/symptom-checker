@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chat with Medora&#x27;s AI health assistant: describe your symptoms, answer a few quick questions and get triage advice plus a downloadable report.">
+    <meta name="theme-color" content="#02050A">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="canonical" href="https://medora-2uyi.onrender.com/chat">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Medora">
+    <meta property="og:title" content="Symptom Checker | Medora">
+    <meta property="og:description" content="Chat with Medora&#x27;s AI health assistant: describe your symptoms, answer a few quick questions and get triage advice plus a downloadable report.">
+    <meta property="og:url" content="https://medora-2uyi.onrender.com/chat">
+    <meta property="og:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
     <title>Symptom Checker | Medora</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +30,7 @@
     <div id="navbar"></div>
 
     <div class="container reveal">
-        <aside class="sidebar">
+        <aside class="sidebar" id="chatSidebar" aria-label="Assessment history">
             <button class="new-chat">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 New Assessment
@@ -25,7 +39,7 @@
             <div class="sidebar-section">
                 <span class="section-label">RECENT ASSESSMENTS</span>
                 <div class="search-container">
-                    <input type="text" id="chat-search" placeholder="Search assessments..." autocomplete="off">
+                    <input type="text" id="chat-search" placeholder="Search assessments..." aria-label="Search assessments" autocomplete="off">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </div>
                 <ul class="recent-chats" id="recent-chats-list">
@@ -33,7 +47,14 @@
             </div>
         </aside>
 
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <main class="chat-main">
+            <h1 class="sr-only">Medora symptom checker</h1>
+            <button type="button" class="history-toggle" id="historyToggle" aria-controls="chatSidebar" aria-expanded="false">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 15 15"/></svg>
+                History
+            </button>
             <div class="chat-viewport" id="chat-container">
 
                 <div class="chat-hero" id="chat-hero">
@@ -63,8 +84,8 @@
             <div class="input-container">
                 <div class="input-box-wrap">
                     <div class="input-wrapper">
-                        <input type="text" id="chat-input" placeholder="Describe your symptoms (e.g. Sharp pain in lower back)..." autocomplete="off">
-                        <button id="send-btn" class="send-btn">
+                        <input type="text" id="chat-input" placeholder="Describe your symptoms (e.g. Sharp pain in lower back)..." aria-label="Describe your symptoms" autocomplete="off">
+                        <button id="send-btn" class="send-btn" aria-label="Send message">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
                     </div>
@@ -75,25 +96,25 @@
     </div>
 
     <div class="emergency-modal-overlay" id="emergencyModalOverlay">
-        <div class="emergency-modal-card">
+        <div class="emergency-modal-card" role="alertdialog" aria-modal="true" aria-labelledby="emergencyModalTitle" aria-describedby="emergencyModalDesc">
             <div class="emergency-modal-icon-wrap">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <h2 class="emergency-modal-title">Emergency Alert</h2>
-            <p class="emergency-modal-sub">Your symptoms may indicate a serious medical emergency. Please seek immediate medical attention immediately.</p>
+            <h2 class="emergency-modal-title" id="emergencyModalTitle">Emergency Alert</h2>
+            <p class="emergency-modal-sub" id="emergencyModalDesc">Your symptoms may indicate a serious medical emergency. Please get medical help right away. In India, call <strong>112</strong> (emergency) or <strong>108</strong> (ambulance).</p>
             <div class="emergency-modal-actions">
-                <button class="emergency-modal-help" id="emergencyModalHelp">Seek Medical Help</button>
+                <a class="emergency-modal-help" id="emergencyModalHelp" href="tel:112">Call 112 now</a>
                 <button class="emergency-modal-continue" id="emergencyModalContinue">Continue to View Full Assessment</button>
             </div>
         </div>
     </div>
 
     <div class="delete-modal-overlay" id="deleteModalOverlay">
-        <div class="delete-modal-card" id="deleteModalCard">
+        <div class="delete-modal-card" id="deleteModalCard" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
             <div class="delete-modal-icon-wrap">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </div>
-            <h2 class="delete-modal-title">Are you sure?</h2>
+            <h2 class="delete-modal-title" id="deleteModalTitle">Are you sure?</h2>
             <p class="delete-modal-sub">This assessment chat will be permanently deleted.</p>
             <div class="delete-preview-card" id="deletePreviewCard">
                 <div class="delete-preview-icon">

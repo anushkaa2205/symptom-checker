@@ -148,8 +148,15 @@ app.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out successfully" });
 });
-app.use("/api/auth", authLimiter, authRoutes);
-app.use("/api/chat", chatLimiter, chatRoutes);
+// Limit only the endpoints worth abusing: login/register attempts and AI chat replies.
+// (Previously every /api/auth and /api/chat call counted, so normal browsing -
+// the login check on each page, loading and saving chat history - used up the limit.)
+app.use(["/api/auth/login", "/api/auth/register"], authLimiter);
+app.use("/api/auth", authRoutes);
+app.use("/api/chat", (req, res, next) =>
+    req.method === "POST" && req.path === "/" ? chatLimiter(req, res, next) : next()
+);
+app.use("/api/chat", chatRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/news", newsRoutes);
 // Render assigns the port through PORT; 5000 is the local default.

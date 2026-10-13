@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderTrending(news) {
         const cardsHTML = news.map(n => `
             <a href="${n.url}" target="_blank" class="trending-card-compact">
-                <img src="${n.image || 'https://images.unsplash.com/photo-1505751172107-573225a91200?w=100&h=100&fit=crop'}" class="trending-thumb" onerror="this.src='https://via.placeholder.com/100x100?text=Health'">
+                <img src="${n.image || 'https://images.unsplash.com/photo-1505751172107-573225a91200?w=100&h=100&fit=crop'}" class="trending-thumb" onerror="this.onerror=null; this.src='/assets/logo.svg'" alt="" loading="lazy">
                 <div class="trending-info">
                     <span class="news-source">${n.source}</span>
                     <h4 class="news-title">${n.title}</h4>

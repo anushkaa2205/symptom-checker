@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const targetId = btn.getAttribute('data-target');
             const input = document.getElementById(targetId);
+            const showing = input.type === 'password';
+            btn.setAttribute('aria-label', showing ? 'Hide password' : 'Show password');
+            btn.setAttribute('aria-pressed', String(showing));
             if (input.type === 'password') {
                 input.type = 'text';
                 btn.textContent = '🔒'; 

@@ -10,17 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatHistory = [];
     let currentChatId = null;
     let userName = 'there';
+
+    // Asked once per page load. /status always returns 200, so guests don't trigger
+    // 401 errors, and history/save calls are skipped for them entirely.
+    const authStatusPromise = fetch('/api/auth/status', { cache: 'no-store', credentials: 'include' })
+        .then(res => (res.ok ? res.json() : { loggedIn: false }))
+        .catch(() => ({ loggedIn: false }));
         
     async function initGreeting() {
-        try {
-            const res = await fetch('/api/auth/me');
-            if (res.ok) {
-                const data = await res.json();
-                userName = data.name;
-            }
-        } catch (e) {
-            console.error("Could not fetch user name", e);
-        }
+        const auth = await authStatusPromise;
+        if (auth.loggedIn) userName = auth.name;
         
         const displayName = userName === 'there' ? 'there!' : `${userName}!`;
         if (greetingText) {
@@ -29,6 +28,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     initGreeting();
+
+    // ---- Mobile: assessment history drawer
+    const sidebar = document.getElementById('chatSidebar');
+    const historyToggle = document.getElementById('historyToggle');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+    function setHistoryOpen(open) {
+        if (!sidebar) return;
+        sidebar.classList.toggle('open', open);
+        if (sidebarBackdrop) sidebarBackdrop.classList.toggle('visible', open);
+        if (historyToggle) historyToggle.setAttribute('aria-expanded', String(open));
+    }
+    if (historyToggle) historyToggle.addEventListener('click', () => setHistoryOpen(!sidebar.classList.contains('open')));
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', () => setHistoryOpen(false));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setHistoryOpen(false); });
+    if (recentChatsList) recentChatsList.addEventListener('click', (e) => {
+        if (e.target.closest('.chat-info, .chat-icon')) setHistoryOpen(false);
+    });
+    if (newChatBtn) newChatBtn.addEventListener('click', () => setHistoryOpen(false));
+
+    function openEmergencyModal() {
+        const emergencyOverlay = document.getElementById('emergencyModalOverlay');
+        const emergencyContinueBtn = document.getElementById('emergencyModalContinue');
+        const emergencyHelpBtn = document.getElementById('emergencyModalHelp');
+        if (!emergencyOverlay) return;
+        emergencyOverlay.classList.add('visible');
+        emergencyContinueBtn.onclick = () => {
+            emergencyOverlay.classList.remove('visible');
+            if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+        // It's a tel: link, so phones dial 112; we also close the modal and remind them.
+        emergencyHelpBtn.onclick = () => {
+            emergencyOverlay.classList.remove('visible');
+            if (typeof showToast === 'function') {
+                showToast("Please contact emergency services: 112 (or 108 for an ambulance).", "error");
+            }
+            if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+    }
 
     document.querySelectorAll('.chip').forEach(chip => {
         chip.addEventListener('click', () => {
@@ -90,6 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             chatHistory.push({ sender: 'bot', text: data.reply });
             appendMessage('bot', data.reply);
+            // The reply itself carries the helpline for self-harm messages; the 112 alert is for physical emergencies.
+            if (data.source === 'emergency_override' && data.emergencyType !== 'self_harm') openEmergencyModal();
             saveCurrentChat();
             
         } catch (error) {
@@ -151,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const emergencyKeywords = [
                         "heart attack", "stroke", "severe breathing", 
                         "unconscious", "severe bleeding", "emergency", 
-                        "immediate medical attention", "call 911"
+                        "immediate medical attention", "call 911", "call 112", "call 108", "go to the er"
                     ];
                     isEmergency = emergencyKeywords.some(kw => textToCheck.includes(kw));
                 }
@@ -203,9 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 downloadPdfBtn.addEventListener('click', async () => {
                     try {
-                        const authRes = await fetch('/api/auth/me', { credentials: 'include' });
+                        const auth = await authStatusPromise;
 
-                        if (!authRes.ok) {
+                        if (!auth.loggedIn) {
                             if (typeof showToast === 'function') {
                                 showToast("Please login to download the report.", "warning");
                             }
@@ -252,26 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(chatContainer){
             chatContainer.appendChild(messageDiv);
             if (isEmergency) {
-                const emergencyOverlay = document.getElementById('emergencyModalOverlay');
-                const emergencyContinueBtn = document.getElementById('emergencyModalContinue');
-                const emergencyHelpBtn = document.getElementById('emergencyModalHelp');
-                
-                if (emergencyOverlay) {
-                    emergencyOverlay.classList.add('visible');
-                    
-                    emergencyContinueBtn.onclick = () => {
-                        emergencyOverlay.classList.remove('visible');
-                        chatContainer.scrollTop = chatContainer.scrollHeight;
-                    };
-                    
-                    emergencyHelpBtn.onclick = () => {
-                        emergencyOverlay.classList.remove('visible');
-                        if (typeof showToast === 'function') {
-                            showToast("Please contact your local emergency services immediately.", "error");
-                        }
-                        chatContainer.scrollTop = chatContainer.scrollHeight;
-                    };
-                }
+                openEmergencyModal();
             } else {
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
@@ -307,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function saveCurrentChat() {
     try {
+        if (!(await authStatusPromise).loggedIn) return; // guests: nothing to save server-side
         await fetch('/api/chat/save', {
             method: 'POST',
             headers: {
@@ -331,11 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
     async function restoreGuestChatAfterLogin() {
     try {
-        const authRes = await fetch('/api/auth/me', {
-            credentials: 'include'
-        });
-
-        if (!authRes.ok) return;
+        if (!(await authStatusPromise).loggedIn) return;
 
         const pendingChat = localStorage.getItem("pendingGuestChat");
         if (!pendingChat) return;
@@ -379,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchRecentChats() {
         if (!recentChatsList) return;
         try {
+            if (!(await authStatusPromise).loggedIn) return;
             const response = await fetch('/api/chat/history');
             if (response.ok) {
                 const chats = await response.json();
@@ -545,7 +563,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if(sendBtn) sendBtn.addEventListener('click', sendMessage);
+    // Wrapped so the click event isn't passed in as the message text
+    if(sendBtn) sendBtn.addEventListener('click', () => sendMessage());
     if(chatInput) {
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();

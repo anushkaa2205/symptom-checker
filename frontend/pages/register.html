@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a free Medora account to save your symptom assessments and track your health over time.">
+    <meta name="theme-color" content="#02050A">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="canonical" href="https://medora-2uyi.onrender.com/register">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Medora">
+    <meta property="og:title" content="Create Account | Medora">
+    <meta property="og:description" content="Create a free Medora account to save your symptom assessments and track your health over time.">
+    <meta property="og:url" content="https://medora-2uyi.onrender.com/register">
+    <meta property="og:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
     <title>Create Account | Medora</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,27 +54,27 @@
                     <form class="register-form" id="registerForm">
                         <div class="row">
                             <div class="input-group">
-                                <input type="text" id="Fname" required placeholder="First Name">
+                                <input type="text" id="Fname" required aria-label="First Name" placeholder="First Name">
                             </div>
                             <div class="input-group">
-                                <input type="text" id="Lname" required placeholder="Last Name">
+                                <input type="text" id="Lname" required aria-label="Last Name" placeholder="Last Name">
                             </div>
                         </div>
 
                         <div class="input-group">
-                            <input type="email" id="email" required placeholder="Email Address">
+                            <input type="email" id="email" required aria-label="Email Address" placeholder="Email Address">
                         </div>
 
                         <div class="input-group password-group">
-                            <input type="password" id="password" required placeholder="Create Password">
-                            <button type="button" class="toggle-password" data-target="password">
+                            <input type="password" id="password" required aria-label="Create Password" placeholder="Create Password">
+                            <button type="button" class="toggle-password" data-target="password" aria-label="Show password" aria-pressed="false">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                         </div>
 
                         <div class="input-group password-group">
-                            <input type="password" id="confirmPassword" required placeholder="Confirm Password" onkeyup="checkPassword()">
-                            <button type="button" class="toggle-password" data-target="confirmPassword">
+                            <input type="password" id="confirmPassword" required aria-label="Confirm Password" placeholder="Confirm Password" onkeyup="checkPassword()">
+                            <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Show password" aria-pressed="false">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                             <span id="mess"></span>

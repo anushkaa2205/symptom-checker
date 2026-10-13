@@ -310,3 +310,17 @@ input:focus {
     .visual-panel { display: none; }
     .form-panel { padding: 40px; }
 }
+
+/* Accessibility: readable link/divider contrast and a proper tap size for the eye button */
+.form-header a { color: #a78bfa; }
+.divider span { opacity: 0.9; }
+.toggle-password {
+    right: 8px;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+}

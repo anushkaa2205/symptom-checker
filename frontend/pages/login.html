@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Medora</title>
+    <meta name="description" content="Log in to Medora to see your health dashboard and past symptom assessments.">
+    <meta name="theme-color" content="#02050A">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="canonical" href="https://medora-2uyi.onrender.com/login">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Medora">
+    <meta property="og:title" content="Log In | Medora">
+    <meta property="og:description" content="Log in to Medora to see your health dashboard and past symptom assessments.">
+    <meta property="og:url" content="https://medora-2uyi.onrender.com/login">
+    <meta property="og:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://medora-2uyi.onrender.com/assets/og-image.jpg">
+    <title>Log In | Medora</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
@@ -41,13 +55,13 @@
 
                     <form class="login-form" id="loginForm" novalidate>
                         <div class="input-group">
-                            <input type="email" id="email" required placeholder="Email Address">
+                            <input type="email" id="email" required aria-label="Email Address" placeholder="Email Address">
                             <span class="error-msg" id="emailError"></span>
                         </div>
 
                         <div class="input-group password-group">
-                            <input type="password" id="password" required placeholder="Enter password">
-                            <button type="button" class="toggle-password" data-target="password">
+                            <input type="password" id="password" required aria-label="Enter password" placeholder="Enter password">
+                            <button type="button" class="toggle-password" data-target="password" aria-label="Show password" aria-pressed="false">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                         </div>

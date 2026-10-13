@@ -1,6 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import Groq from 'groq-sdk';
 import Chat from '../models/chat.js';
+import { detectEmergency, emergencyReply } from '../utils/emergency.js';
 
 let groqClient;
 let geminiClient;
@@ -139,25 +140,13 @@ export const generateChatResponse = async (req, res) => {
         return res.status(400).json({ error: 'Message is required.' });
     }
 
-    const emergencyKeywords = [
-        "chest pain",
-        "can't breathe",
-        "difficulty breathing",
-        "seizure",
-        "unconscious",
-        "stroke",
-        "heavy bleeding",
-        "heart attack"
-    ];
-    const isEmergency = emergencyKeywords.some(keyword =>
-        message.toLowerCase().includes(keyword)
-    );
-
-    if (isEmergency) {
+    const emergency = detectEmergency(message);
+    if (emergency) {
+        console.log(`[Chat] Emergency override (${emergency.type}): "${emergency.matched}"`);
         return res.json({
-            reply:
-                "Your symptoms may require immediate medical attention. Please go to the nearest hospital or call emergency services immediately.",
-            source: "emergency_override"
+            reply: emergencyReply(emergency.type),
+            source: "emergency_override",
+            emergencyType: emergency.type
         });
     }
 

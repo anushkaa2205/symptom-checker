@@ -22,6 +22,7 @@ body {
     font-family: 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    margin: 0; /* default 8px margin + width:100% made the page 16px wider than phones */
 }
 
 .dark body {
@@ -104,7 +105,7 @@ body {
     background: #eff6ff;
     border: 1px solid #dbeafe;
     color: #2563eb;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -242,6 +243,8 @@ body {
     color: #6b7280;
     text-decoration: none;
     transition: 0.3s;
+    display: inline-block;
+    padding: 8px 4px;
 }
 
 .foot-links a:hover { color: #3b82f6; }
@@ -280,3 +283,7 @@ body {
 .legal-badge:hover {
     box-shadow: 0 0 16px rgba(59, 130, 246, 0.15);
 }
+
+/* Contrast: footer grey was too faint on the dark background */
+.dark .foot-copy, .dark .foot-links a { color: #9ca3af; }
+.dark .foot-links a:hover { color: #60a5fa; }

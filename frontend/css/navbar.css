@@ -206,6 +206,93 @@
     .nav-item { padding: 8px 12px; }
 }
 
+/* ---------- Mobile menu ---------- */
+.menu-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #475569;
+}
+
+[data-theme="dark"] .menu-btn {
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+}
+
+.menu-btn .icon-close { display: none; }
+.main-navbar.menu-open .menu-btn .icon-open { display: none; }
+.main-navbar.menu-open .menu-btn .icon-close { display: block; }
+
+.nav-logout {
+    background: none;
+    border: none;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* Items that only belong in the mobile menu stay hidden on wider screens
+   (the id selector outranks the auth display rules above). */
+@media (min-width: 769px) {
+    #navbar .main-navbar .mobile-only { display: none !important; }
+}
+
 @media (max-width: 768px) {
-    .nav-center { display: none; }
+    .main-navbar { padding: 0 16px; }
+    .menu-btn { display: flex; }
+
+    /* Header keeps logo + theme + menu; the rest moves into the menu */
+    #navbar .nav-right .logout-btn,
+    #navbar .nav-right .cta-btn { display: none !important; }
+
+    .nav-center {
+        display: none;
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 12px 16px 20px;
+        background: rgba(255, 255, 255, 0.97);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+        max-height: calc(100vh - 72px);
+        overflow-y: auto;
+    }
+
+    [data-theme="dark"] .nav-center {
+        background: rgba(11, 15, 26, 0.98);
+        border-bottom-color: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .main-navbar.menu-open .nav-center { display: flex; }
+
+    #navbar .nav-center .nav-item {
+        display: block;
+        padding: 14px 16px;
+        font-size: 16px;
+    }
+
+    /* Respect the auth rules inside the menu too */
+    #navbar.auth-logged-in .nav-center [data-auth="logged-out"],
+    #navbar.auth-logged-out .nav-center [data-auth="logged-in"],
+    #navbar:not(.auth-logged-in):not(.auth-logged-out) .nav-center [data-auth] { display: none !important; }
+
+    #navbar .nav-center .nav-cta {
+        margin-top: 8px;
+        text-align: center;
+        color: white;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    #navbar .nav-center .nav-logout { color: #ef4444; }
 }
